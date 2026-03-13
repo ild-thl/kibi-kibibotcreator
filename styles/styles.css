@@ -117,7 +117,7 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 999px;
-  background: transparent url("./wheel-ring.svg") center center no-repeat;
+  background: transparent url("../assets/wheel-ring.svg") center center no-repeat;
   background-size: contain;
 }
 
