@@ -1,0 +1,225 @@
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.card-select:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.15);
+}
+
+.card-select.selected {
+  border-color: #007AFF;
+  background: rgba(0, 122, 255, 0.06);
+}
+
+.btn-primary {
+  background: #007AFF;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.step-enter {
+  animation: stepIn 0.35s ease-out;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+.modal-card {
+  position: relative;
+  z-index: 41;
+  min-width: 320px;
+  max-width: 420px;
+  padding: 1.75rem 2rem;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
+  animation: modalPop 260ms ease-out;
+}
+
+@keyframes modalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(12px);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.06) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.wizard-step-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1.3fr;
+  gap: 2.5rem;
+  align-items: flex-start;
+}
+
+.wizard-col-left,
+.wizard-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wizard-col-center {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.wizard-question-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.75rem;
+}
+
+.wizard-wheel {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  margin: 0 auto;
+}
+
+.wizard-wheel-outer {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: transparent url("./wheel-ring.svg") center center no-repeat;
+  background-size: contain;
+}
+
+.wizard-wheel-inner {
+  position: absolute;
+  inset: 22%;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.wizard-wheel-avatar {
+  position: absolute;
+  top: 21%;
+  left: 24%;
+  width: 56%;
+  height: 56%;
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.wizard-wheel-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wizard-wheel-node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 2px solid rgba(70, 70, 70, 0.8); /* Grundlinie */
+  transform: translate(-50%, -50%);
+  /* zweite „Linie“ unten rechts für ungleichmäßigen Rand */
+  box-shadow:
+    1px 2px 0 0 #333333,
+    0 2px 3px rgba(0, 0, 0, 0.18);
+  transition: background-color 150ms ease-out,
+              box-shadow 150ms ease-out,
+              border-color 150ms ease-out;
+}
+
+.wizard-wheel-node--active {
+  background: #4caf50;
+  border-color: #2f7d32;
+  width: 70px;
+  height: 70px;
+  /* gleicher „gezeichneter“ Rand wie bei den weißen Kreisen, nur etwas stärker */
+  box-shadow:
+    1px 2px 0 0 #2b5b2b,
+    0 3px 4px rgba(0, 0, 0, 0.22);
+  animation: wizardNodePop 260ms ease-out;
+}
+
+@keyframes wizardNodePop {
+  0% {
+    width: 60px;
+    height: 60px;
+  }
+  55% {
+    width: 88px;
+    height: 88px;
+  }
+  100% {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+/* Verteilung entlang des Rings, um ca. 20° gegen den Uhrzeigersinn gedreht */
+.wizard-wheel-node--1 { transform: translate(-50%, -50%) rotate(-120deg) translate(172px) rotate(120deg); }
+.wizard-wheel-node--2 { transform: translate(-50%, -50%) rotate(-80deg) translate(172px) rotate(80deg); }
+.wizard-wheel-node--3 { transform: translate(-50%, -50%) rotate(-40deg) translate(172px) rotate(40deg); }
+.wizard-wheel-node--4 { transform: translate(-50%, -50%) rotate(0deg) translate(172px) rotate(0deg); }
+.wizard-wheel-node--5 { transform: translate(-50%, -50%) rotate(40deg) translate(172px) rotate(-40deg); }
+.wizard-wheel-node--6 { transform: translate(-50%, -50%) rotate(80deg) translate(172px) rotate(-80deg); }
+.wizard-wheel-node--7 { transform: translate(-50%, -50%) rotate(120deg) translate(172px) rotate(-120deg); }
+.wizard-wheel-node--8 { transform: translate(-50%, -50%) rotate(160deg) translate(172px) rotate(-160deg); }
+
+.wizard-wheel-band {
+  position: absolute;
+  inset: 14%;
+  border-radius: 999px;
+  border: 24px solid transparent; /* visueller Ring kommt aus SVG */
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .wizard-step-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-wheel {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+

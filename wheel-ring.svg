@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360">
+  <defs>
+  
+    <mask id="ringMaskBase">
+      <rect x="0" y="0" width="360" height="360" fill="black" />
+      <circle cx="180" cy="180" r="160" fill="white" />
+      <circle cx="180" cy="188" r="133" fill="black" />
+    </mask>
+
+    
+
+    <mask id="ringMaskTop">
+      <rect x="0" y="0" width="360" height="360" fill="black" />
+      <circle cx="180" cy="180" r="155" fill="white" />
+      <circle cx="188" cy="172" r="135" fill="black" />
+      <circle cx="168" cy="143" r="110" fill="black" />
+      <circle cx="120" cy="153" r="110" fill="black" />
+    </mask>
+    
+  </defs>
+
+
+  <g transform="rotate(225 180 180)">
+    <rect x="0" y="0" width="360" height="360"
+          fill="#cbe7f9"
+          mask="url(#ringMaskBase)" />
+    <g transform="rotate(135 180 180)">
+      <rect x="0" y="0" width="360" height="360"
+            fill="#99d1f2"
+            mask="url(#ringMaskTop)" />
+    </g>
+    <g transform="translate(-90,-220) scale(1)">
+          <polygon points="260,260 260,235 235,260"
+                  fill="#99d1f2" />
+    </g>
+  </g>
+</svg>
