@@ -166,8 +166,30 @@
         <h2 class="text-lg font-medium text-gray-800 mb-4">Persönlichkeit & Ton</h2>
         <div class="wizard-step-grid">
           <div class="wizard-col-left">
-            <p class="wizard-question-title">Wie soll sich dein Avatar anfühlen?</p>
-            <p class="text-sm text-gray-500">Mehrfachauswahl möglich – wähle alles, was passt.</p>
+            <p class="wizard-question-title mb-4">Wie soll sich dein Avatar anfühlen?</p>
+            <div class="space-y-4">
+              <div>
+                <p class="text-sm font-medium text-gray-700 mb-1">Anrede</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_greeting" data-value="Duzen">Duzen</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_greeting" data-value="Siezen">Siezen</button>
+                </div>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700 mb-1">Humor</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_humor" data-value="Humorvoll">Humorvoll</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_humor" data-value="Ernst">Ernst</button>
+                </div>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700 mb-1">Antwortstil</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_answer" data-value="Kurz &amp; knapp">Kurz &amp; knapp</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_answer" data-value="Ausführlich">Ausführlich</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="wizard-col-center">
@@ -193,15 +215,21 @@
           </div>
 
           <div class="wizard-col-right">
-            <div class="flex flex-wrap gap-2">
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="Duzen">Duzen</button>
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="Siezen">Siezen</button>
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="locker">locker</button>
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="kurzgehalten">kurzgehalten</button>
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="freundlich">freundlich</button>
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="ausführlich">ausführlich</button>
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="streng">streng</button>
-              <button type="button" class="card-select px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality" data-multi="true" data-value="ironisch">ironisch</button>
+            <div class="space-y-4">
+              <div>
+                <p class="text-sm font-medium text-gray-700 mb-1">Ton</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_tone" data-value="Locker">Locker</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_tone" data-value="Professionell">Professionell</button>
+                </div>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700 mb-1">Stil</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_style" data-value="Persönlich">Persönlich</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_style" data-value="Sachlich">Sachlich</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

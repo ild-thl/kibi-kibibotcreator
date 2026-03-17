@@ -8,8 +8,12 @@
     // Schritt 2
     role: '',                    // Rolle des Avatars
     name: '',                    // Name des Avatars (frei oder Vorschlag)
-    // Schritt 3
-    personality: [],             // Mehrfachauswahl (Duzen, Siezen, locker, ...)
+    // Schritt 3 – Persönlichkeit & Ton
+    personality_greeting: '',    // Anrede: Duzen / Siezen
+    personality_humor: '',       // Humor: Humorvoll / ernst
+    personality_answer: '',      // Antwortstil: Kurz & knapp / Ausführlich
+    personality_tone: '',        // Ton: Locker / Professionell
+    personality_style: '',       // Stil: Persönlich / Sachlich
     // Schritt 4
     interaction_style: [],       // Mehrfachauswahl (Schritt-für-Schritt, Direkt, ...)
     // Schritt 5
@@ -354,11 +358,21 @@
     if (state.role) {
       document.querySelector('.card-select[data-field="role"][data-value="' + state.role + '"]')?.classList.add('selected');
     }
-    // Schritt 3
-    if (Array.isArray(state.personality)) {
-      state.personality.forEach(function (val) {
-        document.querySelector('.card-select[data-field="personality"][data-value="' + val + '"]')?.classList.add('selected');
-      });
+    // Schritt 3 – Persönlichkeit & Ton
+    if (state.personality_greeting) {
+      document.querySelector('.card-select[data-field="personality_greeting"][data-value="' + state.personality_greeting + '"]')?.classList.add('selected');
+    }
+    if (state.personality_humor) {
+      document.querySelector('.card-select[data-field="personality_humor"][data-value="' + state.personality_humor + '"]')?.classList.add('selected');
+    }
+    if (state.personality_answer) {
+      document.querySelector('.card-select[data-field="personality_answer"][data-value="' + state.personality_answer + '"]')?.classList.add('selected');
+    }
+    if (state.personality_tone) {
+      document.querySelector('.card-select[data-field="personality_tone"][data-value="' + state.personality_tone + '"]')?.classList.add('selected');
+    }
+    if (state.personality_style) {
+      document.querySelector('.card-select[data-field="personality_style"][data-value="' + state.personality_style + '"]')?.classList.add('selected');
     }
     // Schritt 4
     if (Array.isArray(state.interaction_style)) {
@@ -401,9 +415,15 @@
       }
       return !!state.role && !!state.name;
     }
-    // Schritt 3: Persönlichkeit & Ton (Mehrfachauswahl)
+    // Schritt 3: Persönlichkeit & Ton – alle 5 Kategorien müssen gewählt sein
     if (state.currentStep === 3) {
-      return Array.isArray(state.personality) && state.personality.length > 0;
+      return !!(
+        state.personality_greeting &&
+        state.personality_humor &&
+        state.personality_answer &&
+        state.personality_tone &&
+        state.personality_style
+      );
     }
     // Schritt 4: Arbeitsweise & Interaktion (Mehrfachauswahl)
     if (state.currentStep === 4) {
@@ -510,8 +530,14 @@
     document.getElementById('summaryHelp').textContent = state.help_context || '–';
     document.getElementById('summaryRole').textContent = state.role || '–';
     document.getElementById('summaryName').textContent = state.name || '–';
+    var personalityParts = [];
+    if (state.personality_greeting) personalityParts.push('Anrede: ' + state.personality_greeting);
+    if (state.personality_humor) personalityParts.push('Humor: ' + state.personality_humor);
+    if (state.personality_answer) personalityParts.push('Antwortstil: ' + state.personality_answer);
+    if (state.personality_tone) personalityParts.push('Ton: ' + state.personality_tone);
+    if (state.personality_style) personalityParts.push('Stil: ' + state.personality_style);
     document.getElementById('summaryPersonality').textContent =
-      Array.isArray(state.personality) && state.personality.length ? state.personality.join(', ') : '–';
+      personalityParts.length ? personalityParts.join(' | ') : '–';
     document.getElementById('summaryInteraction').textContent =
       Array.isArray(state.interaction_style) && state.interaction_style.length ? state.interaction_style.join(', ') : '–';
     document.getElementById('summaryKnowledge').textContent =
@@ -542,7 +568,11 @@
     params.set('avatar_mouth', state.avatarMouth);
     params.set('avatar_clothing', state.avatarClothing);
     params.set('avatar_accessories', state.avatarAccessories);
-    params.set('personality', Array.isArray(state.personality) ? state.personality.join(',') : '');
+    params.set('personality_greeting', state.personality_greeting || '');
+    params.set('personality_humor', state.personality_humor || '');
+    params.set('personality_answer', state.personality_answer || '');
+    params.set('personality_tone', state.personality_tone || '');
+    params.set('personality_style', state.personality_style || '');
     params.set('interaction_style', Array.isArray(state.interaction_style) ? state.interaction_style.join(',') : '');
     params.set('knowledge', Array.isArray(state.knowledge) ? state.knowledge.join(',') : '');
     params.set('feedback', state.feedback);
