@@ -233,12 +233,20 @@
       state.avatarTop = frisurOpts[0].value;
     }
 
+    // Gesichtsausdruck automatisch aus Schritt 3 (Humor) ableiten
+    if (!state.avatarMouth) {
+      if (state.personality_humor === 'Humorvoll') {
+        state.avatarMouth = 'smile';      // Lächelnd
+      } else if (state.personality_humor === 'Ernst') {
+        state.avatarMouth = 'serious';    // Ernst
+      }
+    }
+
     renderAvatarOption('avatarSkinColor', avatarSkinColors, 'avatarSkinColor', 'skin');
     renderAvatarOption('avatarFrisur', frisurOpts, 'avatarTop', 'top');
     renderAvatarOption('avatarHeadwear', avatarHeadwearOpts, 'avatarHeadwear', 'headwear');
     renderAvatarOption('avatarHairColor', avatarHairColors, 'avatarHairColor', 'hair');
     renderAvatarOption('avatarFacialHair', avatarFacialHairOpts, 'avatarFacialHair', 'facialHair');
-    renderAvatarOption('avatarMouth', avatarMouthOpts, 'avatarMouth', 'mouth');
     renderAvatarOption('avatarClothing', avatarClothingOpts, 'avatarClothing', 'clothing');
     renderAvatarOption('avatarAccessories', avatarAccessoriesOpts, 'avatarAccessories', 'acc');
   }
@@ -326,6 +334,20 @@
           this.classList.add('selected');
           const value = this.dataset.value;
           state[field] = value;
+
+          // Wenn Humor (Schritt 3) geändert wird, Gesichtsausdruck synchronisieren
+          if (field === 'personality_humor') {
+            if (value === 'Humorvoll') {
+              state.avatarMouth = 'smile';
+            } else if (value === 'Ernst') {
+              state.avatarMouth = 'serious';
+            } else {
+              state.avatarMouth = null;
+            }
+            if (state.avatarInitialized) {
+              updateAvatarPreview();
+            }
+          }
 
           // Spezielle Behandlung für Namensvorschläge
           if (field === 'nameChoice') {
