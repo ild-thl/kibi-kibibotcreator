@@ -16,15 +16,15 @@
     knowledge: [],               // Mehrfachauswahl (kennt Studiengang, Modulplan, ...)
     // Schritt 6
     feedback: '',                // Reaktion bei Fehlern/Problemen
-    // Schritt 7 – Avatar-Optik
-    avatarSkinColor: '',
-    avatarTop: '',
-    avatarHeadwear: '',
-    avatarHairColor: '',
-    avatarFacialHair: '',
-    avatarMouth: '',
-    avatarClothing: '',
-    avatarAccessories: '',
+    // Schritt 7 – Avatar-Optik (null = noch nichts gewählt)
+    avatarSkinColor: null,
+    avatarTop: null,
+    avatarHeadwear: null,
+    avatarHairColor: null,
+    avatarFacialHair: null,
+    avatarMouth: null,
+    avatarClothing: null,
+    avatarAccessories: null,
     // Schritt 8 – Datenschutz
     privacy: [],                 // Mehrfachauswahl Datenschutzoptionen
     // Avatar wurde aktiv erzeugt (Nutzerinteraktion)
@@ -209,7 +209,12 @@
     }).join('');
     container.querySelectorAll('.avatar-opt').forEach(function (b) {
       var val = b.dataset.value || '';
-      if (val === (state[stateKey] || '')) b.classList.add('selected');
+      var current = state[stateKey];
+      // Nur markieren, wenn bereits explizit ein (ggf. auch leerer) Wert gesetzt wurde.
+      // Anfangszustand: current === null -> nichts vorselektiert.
+      if (current !== null && current !== undefined && val === String(current)) {
+        b.classList.add('selected');
+      }
       b.addEventListener('click', onAvatarOptClick);
     });
   }
@@ -218,15 +223,11 @@
     const g = state.gender || 'divers';
     const frisurOpts = avatarFrisurByGender[g] || avatarFrisurByGender['divers'];
     const validTops = frisurOpts.map(function (o) { return o.value; });
-    if (!validTops.includes(state.avatarTop) && frisurOpts[0]) state.avatarTop = frisurOpts[0].value;
-    if (!state.avatarTop && frisurOpts[0]) state.avatarTop = frisurOpts[0].value;
-    if (!state.avatarHairColor) state.avatarHairColor = 'b58143';
-    if (!state.avatarSkinColor) state.avatarSkinColor = 'edb98a';
-    if (!state.avatarMouth) state.avatarMouth = 'smile';
-    if (!state.avatarClothing) state.avatarClothing = 'shirtCrewNeck';
-    if (state.avatarAccessories === undefined) state.avatarAccessories = '';
-    if (state.avatarFacialHair === undefined) state.avatarFacialHair = '';
-    if (state.avatarHeadwear === undefined) state.avatarHeadwear = '';
+    // Nur anpassen, wenn der Nutzer bereits eine Frisur gewählt hat und sie
+    // nach einem Gender-Wechsel nicht mehr gültig ist.
+    if (state.avatarInitialized && state.avatarTop && !validTops.includes(state.avatarTop) && frisurOpts[0]) {
+      state.avatarTop = frisurOpts[0].value;
+    }
 
     renderAvatarOption('avatarSkinColor', avatarSkinColors, 'avatarSkinColor', 'skin');
     renderAvatarOption('avatarFrisur', frisurOpts, 'avatarTop', 'top');
@@ -414,9 +415,18 @@
     if (state.currentStep === 6) {
       return !!state.feedback;
     }
-    // Schritt 7: Avatar – Standardwerte werden automatisch gesetzt, daher immer gültig
+    // Schritt 7: Avatar – nur gültig, wenn alle Bereiche gewählt wurden
     if (state.currentStep === 7) {
-      return true;
+      return !!(
+        state.avatarSkinColor !== null &&
+        state.avatarTop !== null &&
+        state.avatarHeadwear !== null &&
+        state.avatarHairColor !== null &&
+        state.avatarFacialHair !== null &&
+        state.avatarMouth !== null &&
+        state.avatarClothing !== null &&
+        state.avatarAccessories !== null
+      );
     }
     // Schritt 8: Datenschutz (Mehrfachauswahl)
     if (state.currentStep === 8) {
