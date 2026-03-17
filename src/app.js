@@ -1,5 +1,5 @@
 (function () {
-  const TOTAL_STEPS = 9;
+  const TOTAL_STEPS = 9; // 1–8 Fragen + 9 = Zusammenfassung (Startseite ist Schritt 0)
   const state = {
     id: '',
     // Schritt 1
@@ -29,7 +29,7 @@
     privacy: [],                 // Mehrfachauswahl Datenschutzoptionen
     // Avatar wurde aktiv erzeugt (Nutzerinteraktion)
     avatarInitialized: false,
-    currentStep: 1
+    currentStep: 0
   };
 
   // Avatar-Optionen (DiceBear 9.x avataaars – Schema-konforme Werte)
@@ -159,6 +159,21 @@
     state.id = params.get('id') || '';
   }
 
+  function getFirstIncompleteStep() {
+    var originalStep = state.currentStep;
+    // Prüfe nur die inhaltlichen Schritte 1–8
+    for (var s = 1; s <= 8; s++) {
+      state.currentStep = s;
+      if (!isCurrentStepValid()) {
+        state.currentStep = originalStep;
+        return s;
+      }
+    }
+    // Wenn alle Schritte gültig sind, zur Zusammenfassung
+    state.currentStep = originalStep;
+    return TOTAL_STEPS;
+  }
+
   function buildAvatarUrl() {
     const topValue = state.avatarHeadwear || state.avatarTop || 'shortFlat';
     const seed = (state.name || state.id || 'avatar') + topValue + state.avatarHairColor + state.avatarSkinColor;
@@ -251,13 +266,27 @@
   }
 
   function updateUI() {
-    document.querySelectorAll('.wizard-step').forEach(function (el, i) {
-      el.classList.toggle('hidden', i + 1 !== state.currentStep);
+    document.querySelectorAll('.wizard-step').forEach(function (el) {
+      var id = el.id || '';
+      var n = 0;
+      if (id.indexOf('step') === 0) {
+        n = parseInt(id.replace('step', ''), 10) || 0;
+      }
+      el.classList.toggle('hidden', n !== state.currentStep);
     });
-    document.getElementById('currentStep').textContent = state.currentStep;
-    document.getElementById('totalSteps').textContent = TOTAL_STEPS;
-    document.getElementById('progressBar').style.width = (state.currentStep / TOTAL_STEPS * 100) + '%';
-    document.getElementById('btnBack').classList.toggle('hidden', state.currentStep <= 1);
+
+    var currentLabel = document.getElementById('currentStep');
+    var totalLabel = document.getElementById('totalSteps');
+    if (currentLabel) currentLabel.textContent = state.currentStep === 0 ? 'Start' : String(state.currentStep);
+    if (totalLabel) totalLabel.textContent = TOTAL_STEPS;
+
+    var progress = document.getElementById('progressBar');
+    if (progress) {
+      var ratio = state.currentStep === 0 ? 0 : (state.currentStep / TOTAL_STEPS);
+      progress.style.width = (ratio * 100) + '%';
+    }
+
+    document.getElementById('btnBack').classList.toggle('hidden', state.currentStep === 0);
     document.getElementById('btnNext').classList.toggle('hidden', state.currentStep === TOTAL_STEPS);
     document.getElementById('wizardContent').classList.add('step-enter');
     // Avatar-Schritt ist jetzt Schritt 7
@@ -353,6 +382,10 @@
   }
 
   function isCurrentStepValid() {
+    // Startseite benötigt keine Eingabe
+    if (state.currentStep === 0) {
+      return true;
+    }
     // Schritt 1: Einsatz & Zweck
     if (state.currentStep === 1) {
       return !!state.usage_context && !!state.help_context;
@@ -408,7 +441,7 @@
 
   function goToStep(targetStep) {
     targetStep = Number(targetStep);
-    if (!targetStep || targetStep < 1 || targetStep > TOTAL_STEPS) return;
+    if (targetStep < 0 || targetStep > TOTAL_STEPS) return;
     if (targetStep === state.currentStep) return;
 
     // Rückwärts immer erlaubt
@@ -452,7 +485,7 @@
   }
 
   function back() {
-    if (state.currentStep > 1) {
+    if (state.currentStep > 0) {
       state.currentStep--;
       updateUI();
       restoreSelections();
@@ -524,8 +557,20 @@
     document.querySelectorAll('.wizard-wheel-node[data-step]').forEach(function (node) {
       node.style.cursor = 'pointer';
       node.addEventListener('click', function () {
-        var step = this.getAttribute('data-step');
-        goToStep(step);
+        var stepAttr = this.getAttribute('data-step');
+        var stepNum = Number(stepAttr);
+        if (stepNum === 0) {
+          // Wenn der Start-Kreis gerade aktiv ist: zum ersten offenen Schritt springen,
+          // sonst einfach auf die Startseite (Schritt 0) zurück.
+          if (this.classList.contains('wizard-wheel-node--active')) {
+            var target = getFirstIncompleteStep();
+            goToStep(target);
+          } else {
+            goToStep(0);
+          }
+        } else {
+          goToStep(stepNum);
+        }
       });
     });
     if (inputName) {

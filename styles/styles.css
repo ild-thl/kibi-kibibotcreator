@@ -158,6 +158,7 @@ body {
   background: #ffffff;
   border: 2px solid rgba(70, 70, 70, 0.8); /* Grundlinie */
   transform: translate(-50%, -50%);
+  z-index: 2;
   /* zweite „Linie“ unten rechts für ungleichmäßigen Rand */
   box-shadow:
     1px 2px 0 0 #333333,
@@ -176,6 +177,7 @@ body {
   box-shadow:
     1px 2px 0 0 #2b5b2b,
     0 3px 4px rgba(0, 0, 0, 0.22);
+  z-index: 3;
   animation: wizardNodePop 260ms ease-out;
 }
 
@@ -194,6 +196,22 @@ body {
   }
 }
 
+.wizard-wheel-node-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #333333;
+  pointer-events: none;
+}
+
+.wizard-wheel-node--active .wizard-wheel-node-label {
+  color: #ffffff;
+}
+
 /* Verteilung entlang des Rings, um ca. 20° gegen den Uhrzeigersinn gedreht */
 .wizard-wheel-node--1 { transform: translate(-50%, -50%) rotate(-120deg) translate(172px) rotate(120deg); }
 .wizard-wheel-node--2 { transform: translate(-50%, -50%) rotate(-80deg) translate(172px) rotate(80deg); }
@@ -203,6 +221,14 @@ body {
 .wizard-wheel-node--6 { transform: translate(-50%, -50%) rotate(80deg) translate(172px) rotate(-80deg); }
 .wizard-wheel-node--7 { transform: translate(-50%, -50%) rotate(120deg) translate(172px) rotate(-120deg); }
 .wizard-wheel-node--8 { transform: translate(-50%, -50%) rotate(160deg) translate(172px) rotate(-160deg); }
+
+.wizard-wheel-node--0 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 999px;
+  transform: translate(-50%, -50%) rotate(-160deg) translate(172px) rotate(160deg);
+}
 
 .wizard-wheel-band {
   position: absolute;
