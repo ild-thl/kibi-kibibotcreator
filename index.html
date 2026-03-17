@@ -486,12 +486,16 @@
     </div>
 
     <!-- Navigation -->
-    <footer class="fixed bottom-0 left-0 right-0 bg-[#f5f5f7]/95 backdrop-blur border-t border-gray-200 py-4 px-6 safe-area-pb">
-      <div class="w-screen mx-auto flex gap-3 px-16">
-        <button type="button" id="btnBack" class="flex-1 py-3.5 rounded-2xl border-2 border-gray-200 bg-white font-medium text-gray-700 hover:bg-gray-50 transition-colors hidden">Zurück</button>
-        <button type="button" id="btnNext" class="flex-1 py-3.5 rounded-2xl bg-[#007AFF] text-white font-semibold hover:bg-[#0056b3] transition-colors">Weiter</button>
-      </div>
-    </footer>
+    <button type="button" id="btnBack"
+            class="wizard-nav-arrow wizard-nav-arrow--left hidden"
+            aria-label="Zurück">
+      ‹
+    </button>
+    <button type="button" id="btnNext"
+            class="wizard-nav-arrow wizard-nav-arrow--right"
+            aria-label="Weiter">
+      ›
+    </button>
   </div>
 
   <script src="./src/app.js"></script>

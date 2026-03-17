@@ -238,6 +238,42 @@ body {
   box-sizing: border-box;
 }
 
+.wizard-nav-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 600;
+  background: #ffffff;
+  color: #007aff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out, color 150ms ease-out;
+  z-index: 40;
+}
+
+.wizard-nav-arrow--left {
+  left: 24px;
+}
+
+.wizard-nav-arrow--right {
+  right: 24px;
+}
+
+.wizard-nav-arrow:hover {
+  transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+  background: #007aff;
+  color: #ffffff;
+}
+
 @media (max-width: 1024px) {
   .wizard-step-grid {
     grid-template-columns: 1fr;
