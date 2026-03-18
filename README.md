@@ -55,10 +55,29 @@ Update the API endpoint in `src/config.js`:
 ```js
 window.APP_CONFIG = {
   apiBaseUrl: "https://your-target-url.example/api",
+
+  // Optional: allow using test mode via URL (see below)
+  enableTestMode: false,
 };
 ```
 
 When the wizard is completed, the app calls the configured endpoint with the collected values as **query parameters**.
+
+## Test mode
+
+For UI development and quick checks (especially of **Step 7 / avatar appearance**) there is a simple test mode:
+
+- **Enable test mode via config + URL**
+  - In `src/config.js`, set `enableTestMode: true`.
+  - Then add `?test=1` to the URL, e.g. `index.html?test=1`.
+  - Only when **both** are true (`enableTestMode === true` **and** `?test=1`) is test mode active.
+
+- If `enableTestMode` is `false` (default), the URL parameter is ignored and test mode is always off.
+
+When test mode is active:
+
+- **All validations are skipped** – every step is treated as valid.
+- You can jump directly to any step via the wheel (for example, from the start page straight to Step 7) without filling out previous steps.
 
 ## Notes / behavior
 

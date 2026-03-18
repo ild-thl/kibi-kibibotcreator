@@ -2,6 +2,7 @@
   const TOTAL_STEPS = 9; // 1–8 Fragen + 9 = Zusammenfassung (Startseite ist Schritt 0)
   const state = {
     id: '',
+    testMode: false,
     // Schritt 1
     usage_context: '',           // Für was soll Dein Avatar eingesetzt werden?
     help_context: '',            // Wobei soll Dir der Avatar helfen?
@@ -105,13 +106,10 @@
   };
   const avatarHeadwearOpts = [
     { label: 'Keine', value: '' },
-    { label: 'Hut', value: 'hat' },
+    { label: 'Basecap', value: 'hat' },
     { label: 'Hijab', value: 'hijab' },
     { label: 'Turban', value: 'turban' },
-    { label: 'Wintermütze', value: 'winterHat1' },
-    { label: 'Wintermütze 2', value: 'winterHat02' },
-    { label: 'Wintermütze 3', value: 'winterHat03' },
-    { label: 'Wintermütze 4', value: 'winterHat04' }
+    { label: 'Wollmütze', value: 'winterHat1' }
   ];
   const avatarHairColors = [
     { label: 'Schwarz', value: '2c1b18' },
@@ -161,6 +159,18 @@
   function readUrlParams() {
     const params = new URLSearchParams(window.location.search);
     state.id = params.get('id') || '';
+    // Testmodus:
+    // - Nur aktiv, wenn in der URL ?test=1 gesetzt ist
+    // - UND window.APP_CONFIG.enableTestMode === true
+    // In allen anderen Fällen ist testMode false.
+    state.testMode = false;
+    if (
+      window.APP_CONFIG &&
+      window.APP_CONFIG.enableTestMode === true &&
+      params.get('test') === '1'
+    ) {
+      state.testMode = true;
+    }
   }
 
   function getFirstIncompleteStep() {
@@ -424,6 +434,11 @@
   }
 
   function isCurrentStepValid() {
+    // Testmodus: alle Schritte immer als gültig behandeln
+    if (state.testMode) {
+      return true;
+    }
+
     // Startseite benötigt keine Eingabe
     if (state.currentStep === 0) {
       return true;
