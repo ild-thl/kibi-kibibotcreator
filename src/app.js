@@ -184,6 +184,9 @@
     const p = new URLSearchParams({
       seed: seed,
       top: topValue,
+      // Keep gaze consistent across variants
+      eyes: 'default',
+      eyebrows: 'default',
       hairColor: state.avatarHairColor || 'b58143',
       skinColor: state.avatarSkinColor || 'edb98a',
       mouth: state.avatarMouth || 'smile',
