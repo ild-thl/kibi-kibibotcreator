@@ -106,10 +106,9 @@
   };
   const avatarHeadwearOpts = [
     { label: 'Keine', value: '' },
-    { label: 'Basecap', value: 'hat' },
+    { label: 'Wollmütze', value: 'winterHat03' },
     { label: 'Hijab', value: 'hijab' },
-    { label: 'Turban', value: 'turban' },
-    { label: 'Wollmütze', value: 'winterHat1' }
+    { label: 'Turban', value: 'turban' }
   ];
   const avatarHairColors = [
     { label: 'Schwarz', value: '2c1b18' },
