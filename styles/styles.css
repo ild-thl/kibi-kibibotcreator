@@ -130,8 +130,8 @@ body {
 
 .wizard-wheel-avatar {
   position: absolute;
-  top: 21%;
-  left: 24%;
+  top: 21.5%;
+  left: 26.75%;
   width: 56%;
   height: 56%;
   border-radius: 999px;
@@ -216,11 +216,11 @@ body {
 .wizard-wheel-node--1 { transform: translate(-50%, -50%) rotate(-50deg) translate(172px) rotate(50deg); }
 .wizard-wheel-node--2 { transform: translate(-50%, -50%) rotate(-10deg) translate(172px) rotate(10deg); }
 .wizard-wheel-node--3 { transform: translate(-50%, -50%) rotate(30deg) translate(172px) rotate(-30deg); }
-.wizard-wheel-node--4 { transform: translate(-50%, -50%) rotate(70deg) translate(172px) rotate(-70deg); }
-.wizard-wheel-node--5 { transform: translate(-50%, -50%) rotate(110deg) translate(172px) rotate(-110deg); }
-.wizard-wheel-node--6 { transform: translate(-50%, -50%) rotate(150deg) translate(172px) rotate(-150deg); }
-.wizard-wheel-node--7 { transform: translate(-50%, -50%) rotate(190deg) translate(172px) rotate(-190deg); }
-.wizard-wheel-node--8 { transform: translate(-50%, -50%) rotate(230deg) translate(172px) rotate(-230deg); }
+.wizard-wheel-node--4 { transform: translate(-50%, -50%) rotate(70deg) translate(165px) rotate(-70deg); }
+.wizard-wheel-node--5 { transform: translate(-50%, -50%) rotate(110deg) translate(156px) rotate(-110deg); }
+.wizard-wheel-node--6 { transform: translate(-50%, -50%) rotate(150deg) translate(152px) rotate(-150deg); }
+.wizard-wheel-node--7 { transform: translate(-50%, -50%) rotate(190deg) translate(152px) rotate(-190deg); }
+.wizard-wheel-node--8 { transform: translate(-50%, -50%) rotate(230deg) translate(158px) rotate(-230deg); }
 
 .wizard-wheel-node--0 {
   position: absolute;
@@ -228,7 +228,7 @@ body {
   left: 50%;
   border-radius: 999px;
   /* Start-Kreis genau oben auf dem Wheel */
-  transform: translate(-50%, -50%) rotate(-90deg) translate(172px) rotate(90deg);
+  transform: translate(-50%, -50%) rotate(-90deg) translate(165px) rotate(90deg);
 }
 
 .wizard-wheel-band {
