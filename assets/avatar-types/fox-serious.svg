@@ -1,10 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <rect width="256" height="256" rx="40" fill="#fff7ed"/>
-  <polygon points="72,78 98,34 118,88" fill="#c2410c"/>
-  <polygon points="184,78 158,34 138,88" fill="#c2410c"/>
-  <circle cx="128" cy="132" r="64" fill="#f97316"/>
-  <circle cx="104" cy="126" r="10" fill="#1f2937"/>
-  <circle cx="152" cy="126" r="10" fill="#1f2937"/>
-  <line x1="104" y1="166" x2="152" y2="166" stroke="#1f2937" stroke-width="8" stroke-linecap="round"/>
-  <text x="128" y="34" font-size="20" text-anchor="middle" fill="#9a3412" font-family="Arial">FOX SERIOUS</text>
+  <rect width="256" height="256" rx="42" fill="#fff7ed"/>
+  <polygon points="66,100 96,44 118,102" fill="#9a3412"/>
+  <polygon points="190,100 160,44 138,102" fill="#9a3412"/>
+  <polygon points="128,66 196,170 60,170" fill="#ea580c"/>
+  <polygon points="128,92 170,156 86,156" fill="#ffedd5"/>
+  <circle cx="108" cy="132" r="9" fill="#0f172a"/>
+  <circle cx="148" cy="132" r="9" fill="#0f172a"/>
+  <path d="M114 146 L128 158 L142 146" stroke="#0f172a" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="110" y1="172" x2="146" y2="172" stroke="#0f172a" stroke-width="7" stroke-linecap="round"/>
 </svg>

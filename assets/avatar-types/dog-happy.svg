@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
-  <rect width="256" height="256" rx="40" fill="#fef3c7"/>
-  <ellipse cx="76" cy="112" rx="26" ry="36" fill="#92400e"/>
-  <ellipse cx="180" cy="112" rx="26" ry="36" fill="#92400e"/>
-  <circle cx="128" cy="132" r="64" fill="#d97706"/>
-  <circle cx="104" cy="126" r="10" fill="#1f2937"/>
-  <circle cx="152" cy="126" r="10" fill="#1f2937"/>
-  <path d="M100 164 Q128 188 156 164" stroke="#1f2937" stroke-width="8" fill="none" stroke-linecap="round"/>
-  <text x="128" y="34" font-size="20" text-anchor="middle" fill="#78350f" font-family="Arial">DOG HAPPY</text>
+  <rect width="256" height="256" rx="42" fill="#fef3c7"/>
+  <ellipse cx="72" cy="130" rx="28" ry="42" fill="#78350f"/>
+  <ellipse cx="184" cy="130" rx="28" ry="42" fill="#78350f"/>
+  <circle cx="128" cy="140" r="70" fill="#d97706"/>
+  <circle cx="102" cy="130" r="10" fill="#0f172a"/>
+  <circle cx="154" cy="130" r="10" fill="#0f172a"/>
+  <ellipse cx="128" cy="154" rx="12" ry="8" fill="#1f2937"/>
+  <path d="M104 174 Q128 196 152 174" stroke="#0f172a" stroke-width="8" fill="none" stroke-linecap="round"/>
 </svg>
