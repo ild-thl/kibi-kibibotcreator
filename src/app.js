@@ -358,10 +358,15 @@
       progress.style.width = (ratio * 100) + '%';
     }
 
+    var navBarEl = document.getElementById('wizardNavBar');
     var backBtnEl = document.getElementById('btnBack');
     var nextBtnEl = document.getElementById('btnNext');
+    var saveBtnEl = document.getElementById('btnSave');
+    if (navBarEl) navBarEl.classList.toggle('hidden', state.currentStep === 0);
     if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
     if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === TOTAL_STEPS);
+    if (nextBtnEl) nextBtnEl.textContent = state.currentStep === (TOTAL_STEPS - 1) ? 'Zusammenfassung' : 'Weiter';
+    if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== TOTAL_STEPS);
     document.getElementById('wizardContent').classList.add('step-enter');
     // Avatar-Schritt ist jetzt Schritt 7
     if (state.currentStep === 7) renderAvatarStep();
