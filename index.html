@@ -498,22 +498,30 @@
 
       <!-- Schritt 9: Zusammenfassung -->
       <section id="step9" class="wizard-step hidden">
-        <div class="rounded-2xl bg-white border border-gray-200 p-6 mb-6">
-          <h2 class="text-lg font-medium text-gray-800 mb-4">Zusammenfassung</h2>
-          <div class="flex justify-center mb-4">
-            <img id="summaryAvatar" src="" alt="Avatar" class="w-20 h-20 rounded-full object-cover border-2 border-gray-200" />
+        <div class="summary-layout">
+          <div class="summary-left">
+            <h2 class="summary-title">Dein personalisierter Avatar ist bereit</h2>
+            <p class="summary-subtitle">Du kannst Deinen Avatar jetzt nutzen oder exportieren!</p>
+            <div class="summary-avatar-frame">
+              <img id="summaryAvatar" src="" alt="Avatar" class="summary-avatar-image" />
+            </div>
           </div>
-          <dl class="space-y-2 text-sm">
-            <div><dt class="text-gray-500">Einsatz</dt><dd id="summaryUsage" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Hilfestellung</dt><dd id="summaryHelp" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Rolle</dt><dd id="summaryRole" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Name</dt><dd id="summaryName" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Persönlichkeit & Ton</dt><dd id="summaryPersonality" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Interaktion</dt><dd id="summaryInteraction" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Wissen & Kompetenz</dt><dd id="summaryKnowledge" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Lernen & Feedback</dt><dd id="summaryFeedback" class="font-medium">–</dd></div>
-            <div><dt class="text-gray-500">Datenschutz</dt><dd id="summaryPrivacy" class="font-medium">–</dd></div>
-          </dl>
+
+          <div class="summary-bubble">
+            <span class="summary-bubble-pointer"></span>
+            <h3 class="summary-box-title">Zusammenfassung</h3>
+            <dl class="summary-list">
+              <div><dt>Einsatz</dt><dd id="summaryUsage">–</dd></div>
+              <div><dt>Hilfestellung</dt><dd id="summaryHelp">–</dd></div>
+              <div><dt>Rolle</dt><dd id="summaryRole">–</dd></div>
+              <div><dt>Name</dt><dd id="summaryName">–</dd></div>
+              <div><dt>Persönlichkeit und Ton</dt><dd id="summaryPersonality">–</dd></div>
+              <div><dt>Interaktion</dt><dd id="summaryInteraction">–</dd></div>
+              <div><dt>Wissen und Kompetenz</dt><dd id="summaryKnowledge">–</dd></div>
+              <div><dt>Lernen und Feedback</dt><dd id="summaryFeedback">–</dd></div>
+              <div><dt>Datenschutz</dt><dd id="summaryPrivacy">–</dd></div>
+            </dl>
+          </div>
         </div>
       </section>
     </main>
