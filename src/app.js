@@ -337,6 +337,92 @@
     });
   }
 
+  function isWizardComplete() {
+    const input = document.getElementById('inputName');
+    if (input) state.name = input.value.trim();
+
+    const step1 = !!state.usage_context && !!state.help_context;
+    const step2 = !!state.role && !!state.name;
+    const step3 = !!(
+      state.personality_greeting &&
+      state.personality_humor &&
+      state.personality_answer &&
+      state.personality_tone &&
+      state.personality_style
+    );
+    const step4 = Array.isArray(state.interaction_style) && state.interaction_style.length > 0;
+    const step5 = Array.isArray(state.knowledge) && state.knowledge.length > 0;
+    const step6 = !!state.feedback;
+    const step7 = state.avatarType !== 'human'
+      ? !!state.avatarType
+      : !!(
+          state.avatarSkinColor !== null &&
+          state.avatarTop !== null &&
+          state.avatarHeadwear !== null &&
+          state.avatarHairColor !== null &&
+          state.avatarFacialHair !== null &&
+          state.avatarMouth !== null &&
+          state.avatarClothing !== null &&
+          state.avatarAccessories !== null
+        );
+    const step8 = Array.isArray(state.privacy) && state.privacy.length > 0;
+
+    return step1 && step2 && step3 && step4 && step5 && step6 && step7 && step8;
+  }
+
+  function updateSettingsActions() {
+    const exportBtn = document.getElementById('settingsExport');
+    if (!exportBtn) return;
+    const canExport = isWizardComplete();
+    exportBtn.disabled = !canExport;
+    exportBtn.title = canExport ? 'Wizard-Daten exportieren' : 'Export erst möglich, wenn alle Schritte abgeschlossen sind';
+  }
+
+  function buildExportPayload() {
+    return {
+      exportedAt: new Date().toISOString(),
+      usage_context: state.usage_context,
+      help_context: state.help_context,
+      role: state.role,
+      name: state.name,
+      avatar_url: buildAvatarUrl(),
+      avatar_type: state.avatarType || 'human',
+      avatar_skin_color: state.avatarSkinColor,
+      avatar_top: state.avatarTop,
+      avatar_headwear: state.avatarHeadwear,
+      avatar_hair_color: state.avatarHairColor,
+      avatar_facial_hair: state.avatarFacialHair,
+      avatar_mouth: state.avatarMouth,
+      avatar_clothing: state.avatarClothing,
+      avatar_accessories: state.avatarAccessories,
+      personality_greeting: state.personality_greeting || '',
+      personality_humor: state.personality_humor || '',
+      personality_answer: state.personality_answer || '',
+      personality_tone: state.personality_tone || '',
+      personality_style: state.personality_style || '',
+      interaction_style: Array.isArray(state.interaction_style) ? state.interaction_style.slice() : [],
+      knowledge: Array.isArray(state.knowledge) ? state.knowledge.slice() : [],
+      feedback: state.feedback,
+      privacy: Array.isArray(state.privacy) ? state.privacy.slice() : []
+    };
+  }
+
+  function exportWizardData() {
+    if (!isWizardComplete()) return;
+    const payload = buildExportPayload();
+    const content = JSON.stringify(payload, null, 2);
+    const blob = new Blob([content], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'avatar-export-' + ts + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   function updateUI() {
     document.querySelectorAll('.wizard-step').forEach(function (el) {
       var id = el.id || '';
@@ -369,6 +455,7 @@
     if (nextBtnEl) nextBtnEl.textContent = state.currentStep === (TOTAL_STEPS - 1) ? 'Zusammenfassung' : 'Weiter';
     if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== TOTAL_STEPS);
     if (settingsBtnEl) settingsBtnEl.classList.toggle('hidden', state.currentStep === 0);
+    updateSettingsActions();
     document.getElementById('wizardContent').classList.add('step-enter');
     // Avatar-Schritt ist jetzt Schritt 7
     if (state.currentStep === 7) renderAvatarStep();
@@ -741,6 +828,7 @@
   function showSettingsModal() {
     var modal = document.getElementById('settingsModal');
     if (!modal) return;
+    updateSettingsActions();
     modal.classList.remove('hidden');
   }
 
@@ -760,6 +848,7 @@
     const backBtn = document.getElementById('btnBack');
     const saveBtn = document.getElementById('btnSave');
     const settingsBtn = document.getElementById('btnSettings');
+    const settingsExport = document.getElementById('settingsExport');
     const settingsResetAvatar = document.getElementById('settingsResetAvatar');
     const settingsCancel = document.getElementById('settingsCancel');
     const settingsModal = document.getElementById('settingsModal');
@@ -771,6 +860,12 @@
     if (backBtn) backBtn.addEventListener('click', back);
     if (saveBtn) saveBtn.addEventListener('click', save);
     if (settingsBtn) settingsBtn.addEventListener('click', showSettingsModal);
+    if (settingsExport) {
+      settingsExport.addEventListener('click', function () {
+        exportWizardData();
+        hideSettingsModal();
+      });
+    }
     if (settingsResetAvatar) {
       settingsResetAvatar.addEventListener('click', function () {
         resetAvatar();
@@ -821,7 +916,10 @@
     }
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') hideValidationMessage();
+      if (e.key === 'Escape') {
+        hideValidationMessage();
+        hideSettingsModal();
+      }
     });
   }
 
