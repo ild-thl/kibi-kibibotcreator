@@ -48,6 +48,13 @@ Using a server avoids potential browser restrictions around local files.
 - VS Code extension “Live Server”
 - or any simple server (e.g. Python, Node, IIS)
 
+### Option C: Use the included Node server
+
+- Run `node server.js` in the project folder
+- Open `http://localhost:3000`
+
+This is especially important if you use **Lottie animations** (`assets/avatar-animations/*.json`), because `file://` loading will block XMLHttpRequests due to browser CORS rules.
+
 ## Configuration
 
 Update the API endpoint in `src/config.js`:

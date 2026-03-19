@@ -38,6 +38,20 @@
     currentStep: 0
   };
 
+  // Lottie-Instanzen für Avatar-Animationen (je Schritt / Wheel)
+  var avatarLottieInstances = [];
+
+  function clearAvatarLottie() {
+    avatarLottieInstances.forEach(function (inst) {
+      try { inst.destroy(); } catch (e) {}
+    });
+    avatarLottieInstances = [];
+    document.querySelectorAll('.avatar-lottie-root').forEach(function (el) { el.remove(); });
+    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      img.style.display = 'block';
+    });
+  }
+
   // Avatar-Optionen (DiceBear 9.x avataaars – Schema-konforme Werte)
   const avatarSkinColors = [
     { label: 'Sehr hell', value: 'ffdbb4' },
@@ -319,6 +333,8 @@
 
   function updateAvatarPreview() {
     if (!state.avatarInitialized) return;
+    // Wenn der Nutzer den Avatar generiert, darf keine Lottie-Animation mehr darüber liegen
+    clearAvatarLottie();
     const url = buildAvatarUrl();
     const main = document.getElementById('avatarPreview');
     if (main) {
@@ -334,6 +350,76 @@
         this.src = './assets/avatar-placeholder.png';
       };
       img.src = url;
+    });
+  }
+
+  function getAvatarAnimationUrl(stepNum) {
+    return './assets/avatar-animations/step' + stepNum + '.json';
+  }
+
+  function syncWheelAvatarAnimation() {
+    var activeStep = document.querySelector('.wizard-step:not(.hidden)');
+    if (!activeStep) return;
+
+    // Wenn der Avatar bereits erzeugt wurde (Schritt 7), dann keine Lottie drüber legen.
+    var shouldShowAnimation = !(state.currentStep === 7 && state.avatarInitialized);
+
+    clearAvatarLottie();
+
+    if (!shouldShowAnimation) return;
+    if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
+    // Bei file:// wird der JSON-Load von Lottie über XHR/Fetch durch CORS blockiert.
+    // Dann lassen wir einfach den Dummy sichtbar (kein Lottie).
+    if (window.location && window.location.protocol === 'file:') return;
+
+    var animationUrl = getAvatarAnimationUrl(state.currentStep);
+    var wheelAvatars = activeStep.querySelectorAll('.wizard-wheel-avatar');
+
+    wheelAvatars.forEach(function (wheelAvatar) {
+      var img = wheelAvatar.querySelector('img');
+      if (!img) return;
+
+      img.style.display = 'none';
+
+      var root = document.createElement('div');
+      root.className = 'avatar-lottie-root';
+      wheelAvatar.appendChild(root);
+
+      var anim = window.lottie.loadAnimation({
+        container: root,
+        renderer: 'svg',
+        loop: false,
+        autoplay: true,
+        path: animationUrl
+      });
+
+      avatarLottieInstances.push(anim);
+
+      var fallback = function () {
+        // eslint-disable-next-line no-console
+        console.warn('Lottie animation failed for', animationUrl, 'on step', state.currentStep);
+        try { anim.destroy(); } catch (e) {}
+        avatarLottieInstances = avatarLottieInstances.filter(function (x) { return x !== anim; });
+        root.remove();
+        img.style.display = 'block';
+      };
+
+      // Fallback, falls die JSON nicht existiert oder nicht geladen werden kann
+      try {
+        anim.addEventListener('data_failed', fallback);
+        anim.addEventListener('config_error', fallback);
+        anim.addEventListener('error', fallback);
+      } catch (e) {}
+
+      // Zusätzlicher Guard: wenn nach kurzer Zeit nichts geladen wurde,
+      // gehen wir von einem Ladefehler aus (z.B. file:// Einschränkungen).
+      setTimeout(function () {
+        try {
+          if (!anim || anim.isLoaded === false) fallback();
+        } catch (e) {
+          // Wenn isLoaded nicht existiert, lassen wir die normalen Events laufen
+        }
+      }, 1200);
     });
   }
 
@@ -459,6 +545,7 @@
     document.getElementById('wizardContent').classList.add('step-enter');
     // Avatar-Schritt ist jetzt Schritt 7
     if (state.currentStep === 7) renderAvatarStep();
+    syncWheelAvatarAnimation();
   }
 
   function bindCardSelects() {
