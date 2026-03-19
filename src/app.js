@@ -5,7 +5,7 @@
     testMode: false,
     // Schritt 1
     usage_context: '',           // Für was soll Dein Avatar eingesetzt werden?
-    help_context: '',            // Wobei soll Dir der Avatar helfen?
+    help_context: [],           // Wobei soll Dir der Avatar helfen? (Mehrfachauswahl)
     // Schritt 2
     role: '',                    // Rolle des Avatars
     name: '',                    // Name des Avatars (frei oder Vorschlag)
@@ -427,7 +427,8 @@
     const input = document.getElementById('inputName');
     if (input) state.name = input.value.trim();
 
-    const step1 = !!state.usage_context && !!state.help_context;
+    const step1 = !!state.usage_context &&
+      (Array.isArray(state.help_context) ? state.help_context.length > 0 : !!state.help_context);
     const step2 = !!state.role && !!state.name;
     const step3 = !!(
       state.personality_greeting &&
@@ -619,7 +620,11 @@
     if (state.usage_context) {
       document.querySelector('.card-select[data-field="usage_context"][data-value="' + state.usage_context + '"]')?.classList.add('selected');
     }
-    if (state.help_context) {
+    if (Array.isArray(state.help_context)) {
+      state.help_context.forEach(function (val) {
+        document.querySelector('.card-select[data-field="help_context"][data-value="' + val + '"]')?.classList.add('selected');
+      });
+    } else if (state.help_context) {
       document.querySelector('.card-select[data-field="help_context"][data-value="' + state.help_context + '"]')?.classList.add('selected');
     }
     // Schritt 2
@@ -684,7 +689,8 @@
     }
     // Schritt 1: Einsatz & Zweck
     if (state.currentStep === 1) {
-      return !!state.usage_context && !!state.help_context;
+      var okHelp = Array.isArray(state.help_context) ? state.help_context.length > 0 : !!state.help_context;
+      return !!state.usage_context && okHelp;
     }
     // Schritt 2: Rolle & Name
     if (state.currentStep === 2) {
@@ -809,7 +815,10 @@
 
   function updateSummary() {
     document.getElementById('summaryUsage').textContent = state.usage_context || '–';
-    document.getElementById('summaryHelp').textContent = state.help_context || '–';
+    document.getElementById('summaryHelp').textContent =
+      Array.isArray(state.help_context)
+        ? (state.help_context.length ? state.help_context.join(', ') : '–')
+        : (state.help_context || '–');
     document.getElementById('summaryRole').textContent = state.role || '–';
     document.getElementById('summaryName').textContent = state.name || '–';
     var personalityParts = [];
@@ -838,7 +847,7 @@
     const params = new URLSearchParams();
     if (state.id) params.set('id', state.id);
     params.set('usage_context', state.usage_context);
-    params.set('help_context', state.help_context);
+    params.set('help_context', Array.isArray(state.help_context) ? state.help_context.join(',') : state.help_context);
     params.set('role', state.role);
     params.set('name', state.name);
     params.set('avatar_url', buildAvatarUrl());
@@ -866,7 +875,7 @@
   function resetAvatar() {
     // Kompletten Wizard-Zustand zurücksetzen
     state.usage_context = '';
-    state.help_context = '';
+    state.help_context = [];
     state.role = '';
     state.name = '';
     state.personality_greeting = '';
