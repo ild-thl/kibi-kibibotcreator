@@ -22,6 +22,7 @@
     // Schritt 6
     feedback: '',                // Reaktion bei Fehlern/Problemen
     // Schritt 7 – Avatar-Optik (null = noch nichts gewählt)
+    avatarType: 'human',
     avatarSkinColor: null,
     avatarTop: null,
     avatarHeadwear: null,
@@ -188,6 +189,35 @@
   }
 
   function buildAvatarUrl() {
+    const avatarType = state.avatarType || 'human';
+    const humorMood = state.personality_humor === 'Ernst' ? 'serious' : 'happy';
+
+    if (avatarType !== 'human') {
+      // Variante 1: Tiere/Monster als lokale Assets mit 2 Stimmungen pro Typ
+      // Erwartete Dateien (Beispiele):
+      // ./assets/avatar-types/cat-happy.svg
+      // ./assets/avatar-types/cat-serious.svg
+      var localTypes = ['monster', 'cat', 'dog', 'fox', 'panda', 'owl'];
+      if (localTypes.indexOf(avatarType) >= 0) {
+        return './assets/avatar-types/' + avatarType + '-' + humorMood + '.svg';
+      }
+
+      // Roboter bleibt über DiceBear, mit fixen Parametern.
+      if (avatarType === 'robot') {
+        const seed = (state.name || state.id || 'avatar') + '-robot';
+        const pRobot = new URLSearchParams({ seed: seed });
+        pRobot.append('baseColor', 'ffb300');
+        pRobot.append('eyes', 'roundFrame02');
+        pRobot.append('face', 'square01');
+        pRobot.append('mouth', 'smile02');
+        pRobot.append('sides', 'squareAssymetric');
+        return 'https://api.dicebear.com/9.x/bottts/svg?' + pRobot.toString();
+      }
+
+      // Sicherheits-Fallback
+      return './assets/avatar-types/monster-' + humorMood + '.svg';
+    }
+
     const topValue = state.avatarHeadwear || state.avatarTop || 'shortFlat';
     const seed = (state.name || state.id || 'avatar') + topValue + state.avatarHairColor + state.avatarSkinColor;
     const p = new URLSearchParams({
@@ -236,6 +266,7 @@
   }
 
   function renderAvatarStep() {
+    if (!state.avatarType) state.avatarType = 'human';
     const g = state.gender || 'divers';
     const frisurOpts = avatarFrisurByGender[g] || avatarFrisurByGender['divers'];
     const validTops = frisurOpts.map(function (o) { return o.value; });
@@ -253,6 +284,12 @@
         state.avatarMouth = 'serious';    // Ernst
       }
     }
+
+    // Nicht-menschliche Avatare: Detailoptionen ausblenden
+    var showHumanOptions = state.avatarType === 'human';
+    document.querySelectorAll('.avatar-human-only').forEach(function (el) {
+      el.classList.toggle('hidden', !showHumanOptions);
+    });
 
     renderAvatarOption('avatarSkinColor', avatarSkinColors, 'avatarSkinColor', 'skin');
     renderAvatarOption('avatarFrisur', frisurOpts, 'avatarTop', 'top');
@@ -284,8 +321,18 @@
     if (!state.avatarInitialized) return;
     const url = buildAvatarUrl();
     const main = document.getElementById('avatarPreview');
-    if (main) main.src = url;
+    if (main) {
+      main.onerror = function () {
+        this.onerror = null;
+        this.src = './assets/avatar-placeholder.png';
+      };
+      main.src = url;
+    }
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      img.onerror = function () {
+        this.onerror = null;
+        this.src = './assets/avatar-placeholder.png';
+      };
       img.src = url;
     });
   }
@@ -361,6 +408,14 @@
             }
           }
 
+          if (field === 'avatarType') {
+            state.avatarInitialized = true;
+            if (state.currentStep === 7) {
+              renderAvatarStep();
+            }
+            updateAvatarPreview();
+          }
+
           // Spezielle Behandlung für Namensvorschläge
           if (field === 'nameChoice') {
             const suggestion = this.dataset.suggestion || '';
@@ -391,6 +446,10 @@
     if (inputName) inputName.value = state.name;
     if (state.role) {
       document.querySelector('.card-select[data-field="role"][data-value="' + state.role + '"]')?.classList.add('selected');
+    }
+    // Schritt 7: Avatar-Typ
+    if (state.avatarType) {
+      document.querySelector('.card-select[data-field="avatarType"][data-value="' + state.avatarType + '"]')?.classList.add('selected');
     }
     // Schritt 3 – Persönlichkeit & Ton
     if (state.personality_greeting) {
@@ -478,6 +537,9 @@
     }
     // Schritt 7: Avatar – nur gültig, wenn alle Bereiche gewählt wurden
     if (state.currentStep === 7) {
+      if (state.avatarType !== 'human') {
+        return !!state.avatarType;
+      }
       return !!(
         state.avatarSkinColor !== null &&
         state.avatarTop !== null &&
@@ -599,6 +661,7 @@
     params.set('role', state.role);
     params.set('name', state.name);
     params.set('avatar_url', buildAvatarUrl());
+    params.set('avatar_type', state.avatarType || 'human');
     params.set('avatar_skin_color', state.avatarSkinColor);
     params.set('avatar_top', state.avatarTop);
     params.set('avatar_headwear', state.avatarHeadwear);

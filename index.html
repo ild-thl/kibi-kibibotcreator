@@ -369,20 +369,41 @@
             <p class="wizard-question-title mb-4">Wie soll dein Avatar aussehen?</p>
             <div class="space-y-4">
               <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">Avatar-Typ</label>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="human">Mensch</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="robot">Roboter</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="monster">Monster</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="cat">Katze</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="dog">Hund</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="fox">Fuchs</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="panda">Panda</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="avatarType" data-value="owl">Eule</button>
+                </div>
+              </div>
+              <div class="avatar-human-only">
+              <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2">Hautfarbe</label>
                 <div id="avatarSkinColor" class="flex flex-wrap gap-2"></div>
               </div>
+              </div>
+              <div class="avatar-human-only">
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2">Haarfarbe</label>
                 <div id="avatarHairColor" class="flex flex-wrap gap-2"></div>
               </div>
+              </div>
+              <div class="avatar-human-only">
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2">Frisur</label>
                 <div id="avatarFrisur" class="flex flex-wrap gap-2"></div>
               </div>
+              </div>
+              <div class="avatar-human-only">
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2">Bart</label>
                 <div id="avatarFacialHair" class="flex flex-wrap gap-2"></div>
+              </div>
               </div>
             </div>
           </div>
@@ -411,17 +432,23 @@
 
           <div class="wizard-col-right">
             <div class="space-y-4">
+              <div class="avatar-human-only">
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2">Kopfbedeckung</label>
                 <div id="avatarHeadwear" class="flex flex-wrap gap-2"></div>
               </div>
+              </div>
+              <div class="avatar-human-only">
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2">Kleidung</label>
                 <div id="avatarClothing" class="flex flex-wrap gap-2"></div>
               </div>
+              </div>
+              <div class="avatar-human-only">
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2">Accessoires</label>
                 <div id="avatarAccessories" class="flex flex-wrap gap-2"></div>
+              </div>
               </div>
             </div>
           </div>
