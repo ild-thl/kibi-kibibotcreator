@@ -14,8 +14,13 @@
 <body class="bg-[#f5f5f7] min-h-screen text-gray-900 antialiased">
   <div class="w-screen mx-auto px-16 py-12 pb-28">
     <!-- Header -->
-    <header class="text-center mb-12">
+    <header class="relative mb-12 flex items-start justify-center">
       <h1 class="text-2xl font-semibold tracking-tight text-gray-900">Dein Avatar für Studium und Lehre!</h1>
+      <button type="button" id="btnSettings"
+              class="settings-gear hidden"
+              aria-label="Einstellungen">
+        ⚙
+      </button>
     </header>
 
     <main id="wizardContent" class="step-enter">
@@ -548,6 +553,25 @@
         <button type="button" id="btnSave" class="flex-1 py-3.5 rounded-2xl bg-[#16a34a] text-white font-semibold hover:bg-[#15803d] transition-colors hidden">Abschließen</button>
       </div>
     </footer>
+
+    <!-- Einstellungs-Popup -->
+    <div id="settingsModal" class="settings-modal hidden">
+      <div class="settings-backdrop"></div>
+      <div class="settings-card">
+        <p class="settings-title">Einstellungen</p>
+        <p class="settings-text">Was möchtest du tun?</p>
+        <div class="settings-actions">
+          <button type="button" id="settingsResetAvatar"
+                  class="px-5 py-2.5 rounded-2xl bg-[#ef4444] text-white font-semibold text-sm hover:bg-[#b91c1c] transition-colors">
+            Avatar zurücksetzen
+          </button>
+          <button type="button" id="settingsCancel"
+                  class="px-5 py-2.5 rounded-2xl border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+            Abbrechen
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="./src/app.js"></script>

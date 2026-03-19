@@ -362,11 +362,13 @@
     var backBtnEl = document.getElementById('btnBack');
     var nextBtnEl = document.getElementById('btnNext');
     var saveBtnEl = document.getElementById('btnSave');
+    var settingsBtnEl = document.getElementById('btnSettings');
     if (navBarEl) navBarEl.classList.toggle('hidden', state.currentStep === 0);
     if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
     if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === TOTAL_STEPS);
     if (nextBtnEl) nextBtnEl.textContent = state.currentStep === (TOTAL_STEPS - 1) ? 'Zusammenfassung' : 'Weiter';
     if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== TOTAL_STEPS);
+    if (settingsBtnEl) settingsBtnEl.classList.toggle('hidden', state.currentStep === 0);
     document.getElementById('wizardContent').classList.add('step-enter');
     // Avatar-Schritt ist jetzt Schritt 7
     if (state.currentStep === 7) renderAvatarStep();
@@ -687,6 +689,67 @@
     window.location.href = base + '?' + params.toString();
   }
 
+  function resetAvatar() {
+    // Kompletten Wizard-Zustand zurücksetzen
+    state.usage_context = '';
+    state.help_context = '';
+    state.role = '';
+    state.name = '';
+    state.personality_greeting = '';
+    state.personality_humor = '';
+    state.personality_answer = '';
+    state.personality_tone = '';
+    state.personality_style = '';
+    state.interaction_style = [];
+    state.knowledge = [];
+    state.feedback = '';
+    state.privacy = [];
+
+    // Avatar-Grundzustand wiederherstellen
+    state.avatarType = 'human';
+    state.avatarSkinColor = null;
+    state.avatarTop = null;
+    state.avatarHeadwear = null;
+    state.avatarHairColor = null;
+    state.avatarFacialHair = null;
+    state.avatarMouth = null;
+    state.avatarClothing = null;
+    state.avatarAccessories = null;
+    state.avatarInitialized = false;
+    state.currentStep = 0;
+
+    // UI-Selektionen leeren
+    document.querySelectorAll('.card-select.selected, .avatar-opt.selected').forEach(function (el) {
+      el.classList.remove('selected');
+    });
+
+    hideValidationMessage();
+
+    // Avatar-Vorschauen zurück auf Platzhalter
+    const main = document.getElementById('avatarPreview');
+    if (main) main.src = './assets/avatar-placeholder.png';
+    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      img.src = './assets/avatar-placeholder.png';
+    });
+    const sumImg = document.getElementById('summaryAvatar');
+    if (sumImg) sumImg.src = './assets/avatar-placeholder.png';
+
+    updateUI();
+    restoreSelections();
+  }
+
+  function showSettingsModal() {
+    var modal = document.getElementById('settingsModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+  }
+
+  function hideSettingsModal() {
+    var modal = document.getElementById('settingsModal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+  }
+
   function init() {
     readUrlParams();
     updateUI();
@@ -696,6 +759,10 @@
     const nextBtn = document.getElementById('btnNext');
     const backBtn = document.getElementById('btnBack');
     const saveBtn = document.getElementById('btnSave');
+    const settingsBtn = document.getElementById('btnSettings');
+    const settingsResetAvatar = document.getElementById('settingsResetAvatar');
+    const settingsCancel = document.getElementById('settingsCancel');
+    const settingsModal = document.getElementById('settingsModal');
     const inputName = document.getElementById('inputName');
     const validationOk = document.getElementById('validationOk');
     const validationModal = document.getElementById('validationModal');
@@ -703,6 +770,21 @@
     if (nextBtn) nextBtn.addEventListener('click', next);
     if (backBtn) backBtn.addEventListener('click', back);
     if (saveBtn) saveBtn.addEventListener('click', save);
+    if (settingsBtn) settingsBtn.addEventListener('click', showSettingsModal);
+    if (settingsResetAvatar) {
+      settingsResetAvatar.addEventListener('click', function () {
+        resetAvatar();
+        hideSettingsModal();
+      });
+    }
+    if (settingsCancel) settingsCancel.addEventListener('click', hideSettingsModal);
+    if (settingsModal) {
+      settingsModal.addEventListener('click', function (e) {
+        if (e.target === settingsModal || e.target.classList.contains('settings-backdrop')) {
+          hideSettingsModal();
+        }
+      });
+    }
     document.querySelectorAll('.wizard-wheel-node[data-step]').forEach(function (node) {
       node.style.cursor = 'pointer';
       node.addEventListener('click', function () {
