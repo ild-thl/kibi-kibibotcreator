@@ -246,8 +246,12 @@
         <h2 class="text-lg font-medium text-gray-800 mb-4">Arbeitsweise & Interaktion</h2>
         <div class="wizard-step-grid">
           <div class="wizard-col-left">
-            <p class="wizard-question-title">Wie soll dein Avatar mit dir interagieren?</p>
-            <p class="text-sm text-gray-500">Mehrfachauswahl möglich – wähle dein bevorzugtes Muster.</p>
+            <p class="wizard-question-title">Wie soll Dein Avatar mit dir arbeiten?</p>
+            <div class="grid gap-3 mt-4">
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_workflow" data-value="Schritt für Schritt erklären">Schritt für Schritt erklären</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_workflow" data-value="Zuerst fragen stellen und dann antworten">Zuerst fragen stellen und dann antworten</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_workflow" data-value="Direkt Vorschläge machen">Direkt Vorschläge machen</button>
+            </div>
           </div>
 
           <div class="wizard-col-center">
@@ -273,13 +277,11 @@
           </div>
 
           <div class="wizard-col-right">
-            <div class="grid gap-3">
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_style" data-multi="true" data-value="Schritt für Schritt">Schritt für Schritt</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_style" data-multi="true" data-value="Direkt">Direkt</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_style" data-multi="true" data-value="Erst Fragen stellen">Erst Fragen stellen</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_style" data-multi="true" data-value="Direktvorschläge">Direktvorschläge</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_style" data-multi="true" data-value="Anwendungsbeispiele">Anwendungsbeispiele</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_style" data-multi="true" data-value="keine Beispiele">keine Beispiele</button>
+            <p class="wizard-question-title">Soll Dein Avatar mit Beispielen arbeiten?</p>
+            <div class="grid gap-3 mt-4">
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Häufig Beispiele nutzen">Häufig Beispiele nutzen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Gelegentlich Beispiele nutzen">Gelegentlich Beispiele nutzen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Keine Beispiele nutzen">Keine Beispiele nutzen</button>
             </div>
           </div>
         </div>

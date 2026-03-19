@@ -16,7 +16,8 @@
     personality_tone: '',        // Ton: Locker / Professionell
     personality_style: '',       // Stil: Persönlich / Sachlich
     // Schritt 4
-    interaction_style: [],       // Mehrfachauswahl (Schritt-für-Schritt, Direkt, ...)
+    interaction_workflow: '',     // Einfachauswahl: wie arbeitet der Avatar?
+    interaction_examples: '',     // Einfachauswahl: nutzt der Avatar Beispiele?
     // Schritt 5
     knowledge: [],               // Mehrfachauswahl (kennt Studiengang, Modulplan, ...)
     // Schritt 6
@@ -437,7 +438,9 @@
       state.personality_tone &&
       state.personality_style
     );
-    const step4 = Array.isArray(state.interaction_style) && state.interaction_style.length > 0;
+    const step4 =
+      !!state.interaction_workflow &&
+      !!state.interaction_examples;
     const step5 = Array.isArray(state.knowledge) && state.knowledge.length > 0;
     const step6 = !!state.feedback;
     const step7 = state.avatarType !== 'human'
@@ -487,7 +490,10 @@
       personality_answer: state.personality_answer || '',
       personality_tone: state.personality_tone || '',
       personality_style: state.personality_style || '',
-      interaction_style: Array.isArray(state.interaction_style) ? state.interaction_style.slice() : [],
+      interaction_workflow: state.interaction_workflow || '',
+      interaction_examples: state.interaction_examples || '',
+      // Kompatibilität: alter Key "interaction_style" als Array
+      interaction_style: [state.interaction_workflow, state.interaction_examples].filter(Boolean),
       knowledge: Array.isArray(state.knowledge) ? state.knowledge.slice() : [],
       feedback: state.feedback,
       privacy: Array.isArray(state.privacy) ? state.privacy.slice() : []
@@ -654,10 +660,11 @@
       document.querySelector('.card-select[data-field="personality_style"][data-value="' + state.personality_style + '"]')?.classList.add('selected');
     }
     // Schritt 4
-    if (Array.isArray(state.interaction_style)) {
-      state.interaction_style.forEach(function (val) {
-        document.querySelector('.card-select[data-field="interaction_style"][data-value="' + val + '"]')?.classList.add('selected');
-      });
+    if (state.interaction_workflow) {
+      document.querySelector('.card-select[data-field="interaction_workflow"][data-value="' + state.interaction_workflow + '"]')?.classList.add('selected');
+    }
+    if (state.interaction_examples) {
+      document.querySelector('.card-select[data-field="interaction_examples"][data-value="' + state.interaction_examples + '"]')?.classList.add('selected');
     }
     // Schritt 5
     if (Array.isArray(state.knowledge)) {
@@ -710,9 +717,9 @@
         state.personality_style
       );
     }
-    // Schritt 4: Arbeitsweise & Interaktion (Mehrfachauswahl)
+    // Schritt 4: Arbeitsweise & Beispiele (je 1 Auswahl links/rechts)
     if (state.currentStep === 4) {
-      return Array.isArray(state.interaction_style) && state.interaction_style.length > 0;
+      return !!state.interaction_workflow && !!state.interaction_examples;
     }
     // Schritt 5: Wissen & Kompetenz (Mehrfachauswahl)
     if (state.currentStep === 5) {
@@ -829,8 +836,11 @@
     if (state.personality_style) personalityParts.push('Stil: ' + state.personality_style);
     document.getElementById('summaryPersonality').textContent =
       personalityParts.length ? personalityParts.join(' | ') : '–';
+    var interactionParts = [];
+    if (state.interaction_workflow) interactionParts.push('Arbeit: ' + state.interaction_workflow);
+    if (state.interaction_examples) interactionParts.push('Beispiele: ' + state.interaction_examples);
     document.getElementById('summaryInteraction').textContent =
-      Array.isArray(state.interaction_style) && state.interaction_style.length ? state.interaction_style.join(', ') : '–';
+      interactionParts.length ? interactionParts.join(' | ') : '–';
     document.getElementById('summaryKnowledge').textContent =
       Array.isArray(state.knowledge) && state.knowledge.length ? state.knowledge.join(', ') : '–';
     document.getElementById('summaryFeedback').textContent = state.feedback || '–';
@@ -865,7 +875,13 @@
     params.set('personality_answer', state.personality_answer || '');
     params.set('personality_tone', state.personality_tone || '');
     params.set('personality_style', state.personality_style || '');
-    params.set('interaction_style', Array.isArray(state.interaction_style) ? state.interaction_style.join(',') : '');
+    params.set('interaction_workflow', state.interaction_workflow || '');
+    params.set('interaction_examples', state.interaction_examples || '');
+    // Kompatibilität: alter Key "interaction_style" (früher Mehrfachauswahl)
+    params.set(
+      'interaction_style',
+      [state.interaction_workflow, state.interaction_examples].filter(Boolean).join(',')
+    );
     params.set('knowledge', Array.isArray(state.knowledge) ? state.knowledge.join(',') : '');
     params.set('feedback', state.feedback);
     params.set('privacy', Array.isArray(state.privacy) ? state.privacy.join(',') : '');
@@ -883,7 +899,8 @@
     state.personality_answer = '';
     state.personality_tone = '';
     state.personality_style = '';
-    state.interaction_style = [];
+    state.interaction_workflow = '';
+    state.interaction_examples = '';
     state.knowledge = [];
     state.feedback = '';
     state.privacy = [];
