@@ -362,8 +362,8 @@
     var activeStep = document.querySelector('.wizard-step:not(.hidden)');
     if (!activeStep) return;
 
-    // Wenn der Avatar bereits erzeugt wurde (Schritt 7), dann keine Lottie drüber legen.
-    var shouldShowAnimation = !(state.currentStep === 7 && state.avatarInitialized);
+    // Wenn der Avatar bereits erzeugt wurde (Schritt 8), dann keine Lottie drüber legen.
+    var shouldShowAnimation = !(state.currentStep === 8 && state.avatarInitialized);
 
     clearAvatarLottie();
 
@@ -443,7 +443,8 @@
       !!state.interaction_examples;
     const step5 = Array.isArray(state.knowledge) && state.knowledge.length > 0;
     const step6 = !!state.feedback;
-    const step7 = state.avatarType !== 'human'
+    const step7 = Array.isArray(state.privacy) && state.privacy.length > 0;
+    const step8 = state.avatarType !== 'human'
       ? !!state.avatarType
       : !!(
           state.avatarSkinColor !== null &&
@@ -455,7 +456,6 @@
           state.avatarClothing !== null &&
           state.avatarAccessories !== null
         );
-    const step8 = Array.isArray(state.privacy) && state.privacy.length > 0;
 
     return step1 && step2 && step3 && step4 && step5 && step6 && step7 && step8;
   }
@@ -550,8 +550,8 @@
     if (settingsBtnEl) settingsBtnEl.classList.toggle('hidden', state.currentStep === 0);
     updateSettingsActions();
     document.getElementById('wizardContent').classList.add('step-enter');
-    // Avatar-Schritt ist jetzt Schritt 7
-    if (state.currentStep === 7) renderAvatarStep();
+    // Avatar-Schritt ist jetzt Schritt 8
+    if (state.currentStep === 8) renderAvatarStep();
     syncWheelAvatarAnimation();
   }
 
@@ -598,7 +598,7 @@
 
           if (field === 'avatarType') {
             state.avatarInitialized = true;
-            if (state.currentStep === 7) {
+            if (state.currentStep === 8) {
               renderAvatarStep();
             }
             updateAvatarPreview();
@@ -729,8 +729,12 @@
     if (state.currentStep === 6) {
       return !!state.feedback;
     }
-    // Schritt 7: Avatar – nur gültig, wenn alle Bereiche gewählt wurden
+    // Schritt 7: Datenschutz (Mehrfachauswahl)
     if (state.currentStep === 7) {
+      return Array.isArray(state.privacy) && state.privacy.length > 0;
+    }
+    // Schritt 8: Avatar – nur gültig, wenn alle Bereiche gewählt wurden
+    if (state.currentStep === 8) {
       if (state.avatarType !== 'human') {
         return !!state.avatarType;
       }
@@ -744,10 +748,6 @@
         state.avatarClothing !== null &&
         state.avatarAccessories !== null
       );
-    }
-    // Schritt 8: Datenschutz (Mehrfachauswahl)
-    if (state.currentStep === 8) {
-      return Array.isArray(state.privacy) && state.privacy.length > 0;
     }
     return true;
   }
@@ -776,7 +776,7 @@
       state.currentStep = targetStep;
       updateUI();
       restoreSelections();
-      if (state.currentStep === 7) renderAvatarStep();
+      if (state.currentStep === 8) renderAvatarStep();
       if (state.currentStep === TOTAL_STEPS) updateSummary();
       return;
     }
@@ -790,7 +790,7 @@
       state.currentStep++;
       updateUI();
       restoreSelections();
-      if (state.currentStep === 7) renderAvatarStep();
+      if (state.currentStep === 8) renderAvatarStep();
       if (state.currentStep === TOTAL_STEPS) updateSummary();
     }
   }
@@ -816,7 +816,7 @@
       state.currentStep--;
       updateUI();
       restoreSelections();
-      if (state.currentStep === 7) renderAvatarStep();
+      if (state.currentStep === 8) renderAvatarStep();
     }
   }
 
