@@ -9,6 +9,7 @@
     // Schritt 2
     role: '',                    // Rolle des Avatars
     name: '',                    // Name des Avatars (frei oder Vorschlag)
+    nameManual: false,           // Freitext nur bei "Eigene Angabe"
     // Schritt 3 – Persönlichkeit & Ton
     personality_greeting: '',    // Anrede: Duzen / Siezen
     personality_humor: '',       // Humor: Humorvoll / ernst
@@ -172,6 +173,39 @@
   ];
 
   const DICEBEAR = 'https://api.dicebear.com/9.x/avataaars/svg';
+  const NAME_SUGGESTIONS_MALE = ['Leo', 'Milan', 'Emil', 'Noel', 'Fynn', 'Timo', 'Nico', 'Luca'];
+  const NAME_SUGGESTIONS_FEMALE = ['Ava', 'Nora', 'Lina', 'Elin', 'Tara', 'Yara', 'Kira', 'Mila', 'Jule', 'Aria'];
+  const NAME_SUGGESTIONS_NEUTRAL = ['Mika', 'Sami', 'Jona', 'Rian', 'Mara', 'Ida'];
+
+  function pickRandomName(list) {
+    if (!Array.isArray(list) || !list.length) return '';
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
+  function applyRandomNameSuggestions() {
+    var suggestionButtons = Array.from(
+      document.querySelectorAll('#step3 .card-select[data-field="nameChoice"][data-suggestion]:not([data-suggestion=""])')
+    );
+    if (!suggestionButtons.length) return;
+
+    var names = [
+      pickRandomName(NAME_SUGGESTIONS_MALE),
+      pickRandomName(NAME_SUGGESTIONS_FEMALE),
+      pickRandomName(NAME_SUGGESTIONS_NEUTRAL)
+    ];
+
+    suggestionButtons.forEach(function (btn, idx) {
+      var name = names[idx] || '';
+      btn.dataset.suggestion = name;
+      btn.textContent = name;
+    });
+  }
+
+  function updateNameInputState() {
+    var input = document.getElementById('inputName');
+    if (!input) return;
+    input.disabled = !state.nameManual;
+  }
 
   function readUrlParams() {
     const params = new URLSearchParams(window.location.search);
@@ -633,8 +667,10 @@
             const suggestion = this.dataset.suggestion || '';
             const input = document.getElementById('inputName');
             if (input) {
+              state.nameManual = !suggestion;
               input.value = suggestion;
               state.name = suggestion;
+              updateNameInputState();
               if (!suggestion) {
                 input.focus();
               }
@@ -660,6 +696,7 @@
     // Schritt 2
     const inputName = document.getElementById('inputName');
     if (inputName) inputName.value = state.name;
+    updateNameInputState();
     if (state.role) {
       document.querySelector('.card-select[data-field="role"][data-value="' + state.role + '"]')?.classList.add('selected');
     }
@@ -945,6 +982,7 @@
     state.help_context = [];
     state.role = '';
     state.name = '';
+    state.nameManual = false;
     state.personality_greeting = '';
     state.personality_humor = '';
     state.personality_answer = '';
@@ -1006,6 +1044,7 @@
 
   function init() {
     readUrlParams();
+    applyRandomNameSuggestions();
     updateUI();
     restoreSelections();
     bindCardSelects();
@@ -1066,7 +1105,11 @@
       });
     });
     if (inputName) {
-      inputName.addEventListener('input', function () { state.name = this.value.trim(); });
+      updateNameInputState();
+      inputName.addEventListener('input', function () {
+        if (this.disabled) return;
+        state.name = this.value.trim();
+      });
       inputName.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') { e.preventDefault(); next(); }
       });
