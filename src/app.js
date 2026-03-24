@@ -19,7 +19,9 @@
     interaction_workflow: '',     // Einfachauswahl: wie arbeitet der Avatar?
     interaction_examples: '',     // Einfachauswahl: nutzt der Avatar Beispiele?
     // Schritt 5
-    knowledge: [],               // Mehrfachauswahl (kennt Studiengang, Modulplan, ...)
+    knowledge: [],               // Mehrfachauswahl (Studiengang, Modulplan, Lernfortschritt)
+    knowledge_source: [],        // Mehrfachauswahl (Allgemeines Wissen, Studiengangswissen)
+    decision_mode: '',           // Einfachauswahl (Entscheidungsverhalten)
     // Schritt 6
     feedback: '',                // Reaktion bei Fehlern/Problemen
     // Schritt 7 – Avatar-Optik (null = noch nichts gewählt)
@@ -441,7 +443,10 @@
     const step4 =
       !!state.interaction_workflow &&
       !!state.interaction_examples;
-    const step5 = Array.isArray(state.knowledge) && state.knowledge.length > 0;
+    const step5 =
+      Array.isArray(state.knowledge) && state.knowledge.length > 0 &&
+      Array.isArray(state.knowledge_source) && state.knowledge_source.length > 0 &&
+      !!state.decision_mode;
     const step6 = !!state.feedback;
     const step7 = Array.isArray(state.privacy) && state.privacy.length > 0;
     const step8 = state.avatarType !== 'human'
@@ -495,6 +500,8 @@
       // Kompatibilität: alter Key "interaction_style" als Array
       interaction_style: [state.interaction_workflow, state.interaction_examples].filter(Boolean),
       knowledge: Array.isArray(state.knowledge) ? state.knowledge.slice() : [],
+      knowledge_source: Array.isArray(state.knowledge_source) ? state.knowledge_source.slice() : [],
+      decision_mode: state.decision_mode || '',
       feedback: state.feedback,
       privacy: Array.isArray(state.privacy) ? state.privacy.slice() : []
     };
@@ -672,6 +679,14 @@
         document.querySelector('.card-select[data-field="knowledge"][data-value="' + val + '"]')?.classList.add('selected');
       });
     }
+    if (Array.isArray(state.knowledge_source)) {
+      state.knowledge_source.forEach(function (val) {
+        document.querySelector('.card-select[data-field="knowledge_source"][data-value="' + val + '"]')?.classList.add('selected');
+      });
+    }
+    if (state.decision_mode) {
+      document.querySelector('.card-select[data-field="decision_mode"][data-value="' + state.decision_mode + '"]')?.classList.add('selected');
+    }
     // Schritt 6
     if (state.feedback) {
       document.querySelector('.card-select[data-field="feedback"][data-value="' + state.feedback + '"]')?.classList.add('selected');
@@ -721,9 +736,13 @@
     if (state.currentStep === 4) {
       return !!state.interaction_workflow && !!state.interaction_examples;
     }
-    // Schritt 5: Wissen & Kompetenz (Mehrfachauswahl)
+    // Schritt 5: Wissen & Kompetenz
     if (state.currentStep === 5) {
-      return Array.isArray(state.knowledge) && state.knowledge.length > 0;
+      return !!(
+        Array.isArray(state.knowledge) && state.knowledge.length > 0 &&
+        Array.isArray(state.knowledge_source) && state.knowledge_source.length > 0 &&
+        state.decision_mode
+      );
     }
     // Schritt 6: Lernen & Feedback
     if (state.currentStep === 6) {
@@ -842,7 +861,19 @@
     document.getElementById('summaryInteraction').textContent =
       interactionParts.length ? interactionParts.join(' | ') : '–';
     document.getElementById('summaryKnowledge').textContent =
-      Array.isArray(state.knowledge) && state.knowledge.length ? state.knowledge.join(', ') : '–';
+      (function () {
+        var parts = [];
+        if (Array.isArray(state.knowledge) && state.knowledge.length) {
+          parts.push('Über dich: ' + state.knowledge.join(', '));
+        }
+        if (Array.isArray(state.knowledge_source) && state.knowledge_source.length) {
+          parts.push('Wissensbasis: ' + state.knowledge_source.join(', '));
+        }
+        if (state.decision_mode) {
+          parts.push('Entscheidungen: ' + state.decision_mode);
+        }
+        return parts.length ? parts.join(' | ') : '–';
+      })();
     document.getElementById('summaryFeedback').textContent = state.feedback || '–';
     document.getElementById('summaryPrivacy').textContent =
       Array.isArray(state.privacy) && state.privacy.length ? state.privacy.join(', ') : '–';
@@ -883,6 +914,8 @@
       [state.interaction_workflow, state.interaction_examples].filter(Boolean).join(',')
     );
     params.set('knowledge', Array.isArray(state.knowledge) ? state.knowledge.join(',') : '');
+    params.set('knowledge_source', Array.isArray(state.knowledge_source) ? state.knowledge_source.join(',') : '');
+    params.set('decision_mode', state.decision_mode || '');
     params.set('feedback', state.feedback);
     params.set('privacy', Array.isArray(state.privacy) ? state.privacy.join(',') : '');
     window.location.href = base + '?' + params.toString();
@@ -902,6 +935,8 @@
     state.interaction_workflow = '';
     state.interaction_examples = '';
     state.knowledge = [];
+    state.knowledge_source = [];
+    state.decision_mode = '';
     state.feedback = '';
     state.privacy = [];
 
