@@ -23,7 +23,7 @@
     knowledge_source: [],        // Mehrfachauswahl (Allgemeines Wissen, Studiengangswissen)
     decision_mode: '',           // Einfachauswahl (Entscheidungsverhalten)
     // Schritt 6
-    feedback: '',                // Reaktion bei Fehlern/Problemen
+    feedback: [],                // Mehrfachauswahl: Reaktion bei Fehlern/Problemen
     // Schritt 7 – Avatar-Optik (null = noch nichts gewählt)
     avatarType: 'human',
     avatarSkinColor: null,
@@ -447,7 +447,7 @@
       Array.isArray(state.knowledge) && state.knowledge.length > 0 &&
       Array.isArray(state.knowledge_source) && state.knowledge_source.length > 0 &&
       !!state.decision_mode;
-    const step6 = !!state.feedback;
+    const step6 = Array.isArray(state.feedback) && state.feedback.length > 0;
     const step7 = Array.isArray(state.privacy) && state.privacy.length > 0;
     const step8 = state.avatarType !== 'human'
       ? !!state.avatarType
@@ -502,7 +502,7 @@
       knowledge: Array.isArray(state.knowledge) ? state.knowledge.slice() : [],
       knowledge_source: Array.isArray(state.knowledge_source) ? state.knowledge_source.slice() : [],
       decision_mode: state.decision_mode || '',
-      feedback: state.feedback,
+      feedback: Array.isArray(state.feedback) ? state.feedback.slice() : [],
       privacy: Array.isArray(state.privacy) ? state.privacy.slice() : []
     };
   }
@@ -688,8 +688,10 @@
       document.querySelector('.card-select[data-field="decision_mode"][data-value="' + state.decision_mode + '"]')?.classList.add('selected');
     }
     // Schritt 6
-    if (state.feedback) {
-      document.querySelector('.card-select[data-field="feedback"][data-value="' + state.feedback + '"]')?.classList.add('selected');
+    if (Array.isArray(state.feedback)) {
+      state.feedback.forEach(function (val) {
+        document.querySelector('.card-select[data-field="feedback"][data-value="' + val + '"]')?.classList.add('selected');
+      });
     }
     // Schritt 8
     if (Array.isArray(state.privacy)) {
@@ -744,9 +746,9 @@
         state.decision_mode
       );
     }
-    // Schritt 6: Lernen & Feedback
+    // Schritt 6: Lernen & Feedback (Mehrfachauswahl)
     if (state.currentStep === 6) {
-      return !!state.feedback;
+      return Array.isArray(state.feedback) && state.feedback.length > 0;
     }
     // Schritt 7: Datenschutz (Mehrfachauswahl)
     if (state.currentStep === 7) {
@@ -874,7 +876,8 @@
         }
         return parts.length ? parts.join(' | ') : '–';
       })();
-    document.getElementById('summaryFeedback').textContent = state.feedback || '–';
+    document.getElementById('summaryFeedback').textContent =
+      Array.isArray(state.feedback) && state.feedback.length ? state.feedback.join(', ') : '–';
     document.getElementById('summaryPrivacy').textContent =
       Array.isArray(state.privacy) && state.privacy.length ? state.privacy.join(', ') : '–';
     const sumImg = document.getElementById('summaryAvatar');
@@ -916,7 +919,7 @@
     params.set('knowledge', Array.isArray(state.knowledge) ? state.knowledge.join(',') : '');
     params.set('knowledge_source', Array.isArray(state.knowledge_source) ? state.knowledge_source.join(',') : '');
     params.set('decision_mode', state.decision_mode || '');
-    params.set('feedback', state.feedback);
+    params.set('feedback', Array.isArray(state.feedback) ? state.feedback.join(',') : '');
     params.set('privacy', Array.isArray(state.privacy) ? state.privacy.join(',') : '');
     window.location.href = base + '?' + params.toString();
   }
@@ -937,7 +940,7 @@
     state.knowledge = [];
     state.knowledge_source = [];
     state.decision_mode = '';
-    state.feedback = '';
+    state.feedback = [];
     state.privacy = [];
 
     // Avatar-Grundzustand wiederherstellen
