@@ -42,163 +42,13 @@
     currentStep: 0
   };
 
-  // Lottie-Instanzen für Avatar-Animationen (je Schritt / Wheel)
-  var avatarLottieInstances = [];
-
   function clearAvatarLottie() {
-    avatarLottieInstances.forEach(function (inst) {
-      try { inst.destroy(); } catch (e) {}
-    });
-    avatarLottieInstances = [];
+    if (window.WizardAvatar && window.WizardAvatar.clearAvatarLottie) {
+      window.WizardAvatar.clearAvatarLottie();
+      return;
+    }
     document.querySelectorAll('.avatar-lottie-root').forEach(function (el) { el.remove(); });
-    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
-      img.style.display = 'block';
-    });
-  }
-
-  // Avatar-Optionen (DiceBear 9.x avataaars – Schema-konforme Werte)
-  const avatarSkinColors = [
-    { label: 'Sehr hell', value: 'ffdbb4' },
-    { label: 'Hell', value: 'edb98a' },
-    { label: 'Mittel', value: 'd08b5b' },
-    { label: 'Gebräunt', value: 'ae5d29' },
-    { label: 'Dunkel', value: '614335' },
-    { label: 'Warm', value: 'fd9841' }
-  ];
-  const avatarFrisurByGender = {
-    'männlich': [
-      { label: 'Kurz flach', value: 'shortFlat' },
-      { label: 'Kurz rund', value: 'shortRound' },
-      { label: 'Kurz gewellt', value: 'shortWaved' },
-      { label: 'Kurz lockig', value: 'shortCurly' },
-      { label: 'Seitenscheitel', value: 'theCaesarAndSidePart' },
-      { label: 'Caesar', value: 'theCaesar' },
-      { label: 'Seiten', value: 'sides' },
-      { label: 'Mullet', value: 'shaggyMullet' },
-      { label: 'Shaggy', value: 'shaggy' },
-      { label: 'Dreads', value: 'dreads01' },
-      { label: 'Dreads 2', value: 'dreads02' },
-      { label: 'Seiten abrasiert', value: 'shavedSides' },
-      { label: 'Großes Haar', value: 'bigHair' },
-      { label: 'Frizzy', value: 'frizzle' }
-    ],
-    'weiblich': [
-      { label: 'Lang gerade', value: 'straight01' },
-      { label: 'Lang gerade (variiert)', value: 'straight02' },
-      { label: 'Lang & Strähnen', value: 'straightAndStrand' },
-      { label: 'Lang lockig', value: 'curly' },
-      { label: 'Lang, aber nicht zu lang', value: 'longButNotTooLong' },
-      { label: 'Bob', value: 'bob' },
-      { label: 'Dutt', value: 'bun' },
-      { label: 'Mia Wallace', value: 'miaWallace' },
-      { label: 'Afro', value: 'fro' },
-      { label: 'Afro mit Band', value: 'froBand' },
-      { label: 'Frida', value: 'frida' },
-      { label: 'Curvy', value: 'curvy' },
-      { label: 'Frizzy', value: 'frizzle' },
-      { label: 'Dreads', value: 'dreads01' },
-      { label: 'Seiten abrasiert', value: 'shavedSides' },
-      { label: 'Großes Haar', value: 'bigHair' }
-    ],
-    'divers': [
-      { label: 'Kurz flach', value: 'shortFlat' },
-      { label: 'Kurz rund', value: 'shortRound' },
-      { label: 'Kurz gewellt', value: 'shortWaved' },
-      { label: 'Kurz lockig', value: 'shortCurly' },
-      { label: 'Lang gerade', value: 'straight01' },
-      { label: 'Lang lockig', value: 'curly' },
-      { label: 'Bob', value: 'bob' },
-      { label: 'Dutt', value: 'bun' },
-      { label: 'Shaggy', value: 'shaggy' },
-      { label: 'Dreads', value: 'dreads01' },
-      { label: 'Afro', value: 'fro' },
-      { label: 'Großes Haar', value: 'bigHair' }
-    ],
-    'kein Geschlecht': [
-      { label: 'Kurz flach', value: 'shortFlat' },
-      { label: 'Kurz rund', value: 'shortRound' },
-      { label: 'Lang gerade', value: 'straight01' },
-      { label: 'Bob', value: 'bob' },
-      { label: 'Dutt', value: 'bun' },
-      { label: 'Shaggy', value: 'shaggy' }
-    ]
-  };
-  const avatarHeadwearOpts = [
-    { label: 'Keine', value: '' },
-    { label: 'Wollmütze', value: 'winterHat03' },
-    { label: 'Hijab', value: 'hijab' },
-    { label: 'Turban', value: 'turban' }
-  ];
-  const avatarHairColors = [
-    { label: 'Schwarz', value: '2c1b18' },
-    { label: 'Braun', value: 'b58143' },
-    { label: 'Blond', value: 'ecdcbf' },
-    { label: 'Auburn', value: 'a55728' },
-    { label: 'Grau', value: '4a312c' }
-  ];
-  const avatarFacialHairOpts = [
-    { label: 'Kein Bart', value: '' },
-    { label: 'Leichter Bart', value: 'beardLight' },
-    { label: 'Vollbart mittel', value: 'beardMedium' },
-    { label: 'Vollbart majestätisch', value: 'beardMajestic' },
-    { label: 'Schnurrbart elegant', value: 'moustacheFancy' },
-    { label: 'Schnurrbart kräftig', value: 'moustacheMagnum' }
-  ];
-  const avatarMouthOpts = [
-    { label: 'Lächelnd', value: 'smile' },
-    { label: 'Neutral', value: 'default' },
-    { label: 'Ernst', value: 'serious' },
-    { label: 'Fröhlich', value: 'twinkle' },
-    { label: 'Nachdenklich', value: 'concerned' },
-    { label: 'Überrascht', value: 'disbelief' }
-  ];
-  const avatarClothingOpts = [
-    { label: 'Blazer & Hemd', value: 'blazerAndShirt' },
-    { label: 'Blazer & Pullover', value: 'blazerAndSweater' },
-    { label: 'Kragen & Pullover', value: 'collarAndSweater' },
-    { label: 'Hoodie', value: 'hoodie' },
-    { label: 'T-Shirt runder Ausschnitt', value: 'shirtCrewNeck' },
-    { label: 'T-Shirt V-Ausschnitt', value: 'shirtVNeck' },
-    { label: 'T-Shirt Scoop-Ausschnitt', value: 'shirtScoopNeck' },
-    { label: 'T-Shirt mit Grafik', value: 'graphicShirt' },
-    { label: 'Overall', value: 'overall' }
-  ];
-  const avatarAccessoriesOpts = [
-    { label: 'Keine', value: '' },
-    { label: 'Brille', value: 'prescription01' },
-    { label: 'Sonnebrille', value: 'sunglasses' },
-    { label: 'Rund', value: 'round' },
-    { label: 'Wayfarer', value: 'wayfarers' },
-    { label: 'Augenklappe', value: 'eyepatch' }
-  ];
-
-  const DICEBEAR = 'https://api.dicebear.com/9.x/avataaars/svg';
-  const NAME_SUGGESTIONS_MALE = ['Leo', 'Milan', 'Emil', 'Noel', 'Fynn', 'Timo', 'Nico', 'Luca'];
-  const NAME_SUGGESTIONS_FEMALE = ['Ava', 'Nora', 'Lina', 'Elin', 'Tara', 'Yara', 'Kira', 'Mila', 'Jule', 'Aria'];
-  const NAME_SUGGESTIONS_NEUTRAL = ['Mika', 'Sami', 'Jona', 'Rian', 'Mara', 'Ida'];
-
-  function pickRandomName(list) {
-    if (!Array.isArray(list) || !list.length) return '';
-    return list[Math.floor(Math.random() * list.length)];
-  }
-
-  function applyRandomNameSuggestions() {
-    var suggestionButtons = Array.from(
-      document.querySelectorAll('#step3 .card-select[data-field="nameChoice"][data-suggestion]:not([data-suggestion=""])')
-    );
-    if (!suggestionButtons.length) return;
-
-    var names = [
-      pickRandomName(NAME_SUGGESTIONS_MALE),
-      pickRandomName(NAME_SUGGESTIONS_FEMALE),
-      pickRandomName(NAME_SUGGESTIONS_NEUTRAL)
-    ];
-
-    suggestionButtons.forEach(function (btn, idx) {
-      var name = names[idx] || '';
-      btn.dataset.suggestion = name;
-      btn.textContent = name;
-    });
+    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) { img.style.display = 'block'; });
   }
 
   function updateNameInputState() {
@@ -225,278 +75,48 @@
   }
 
   function getFirstIncompleteStep() {
-    var originalStep = state.currentStep;
-    // Prüfe nur die inhaltlichen Schritte 1–8
-    for (var s = 1; s <= 8; s++) {
-      state.currentStep = s;
-      if (!isCurrentStepValid()) {
-        state.currentStep = originalStep;
-        return s;
-      }
+    if (window.WizardNavigation && window.WizardNavigation.getFirstIncompleteStep) {
+      return window.WizardNavigation.getFirstIncompleteStep(state, TOTAL_STEPS, {
+        isCurrentStepValid: isCurrentStepValid
+      });
     }
-    // Wenn alle Schritte gültig sind, zur Zusammenfassung
-    state.currentStep = originalStep;
     return TOTAL_STEPS;
   }
 
   function buildAvatarUrl() {
-    const avatarType = state.avatarType || 'human';
-    const humorMood = state.personality_humor === 'Ernst' ? 'serious' : 'happy';
-
-    if (avatarType !== 'human') {
-      // Variante 1: Tiere/Monster als lokale Assets mit 2 Stimmungen pro Typ
-      // Erwartete Dateien (Beispiele):
-      // ./assets/avatar-types/cat-happy.svg
-      // ./assets/avatar-types/cat-serious.svg
-      var localTypes = ['monster', 'cat', 'dog', 'fox', 'panda', 'owl'];
-      if (localTypes.indexOf(avatarType) >= 0) {
-        return './assets/avatar-types/' + avatarType + '-' + humorMood + '.svg';
-      }
-
-      // Roboter bleibt über DiceBear, mit fixen Parametern.
-      if (avatarType === 'robot') {
-        const seed = (state.name || state.id || 'avatar') + '-robot';
-        const pRobot = new URLSearchParams({ seed: seed });
-        pRobot.append('baseColor', 'ffb300');
-        pRobot.append('eyes', 'roundFrame02');
-        pRobot.append('face', 'square01');
-        pRobot.append('mouth', 'smile02');
-        pRobot.append('sides', 'squareAssymetric');
-        return 'https://api.dicebear.com/9.x/bottts/svg?' + pRobot.toString();
-      }
-
-      // Sicherheits-Fallback
-      return './assets/avatar-types/monster-' + humorMood + '.svg';
+    if (window.WizardAvatar && window.WizardAvatar.buildAvatarUrl) {
+      return window.WizardAvatar.buildAvatarUrl(state);
     }
-
-    const topValue = state.avatarHeadwear || state.avatarTop || 'shortFlat';
-    const seed = (state.name || state.id || 'avatar') + topValue + state.avatarHairColor + state.avatarSkinColor;
-    const p = new URLSearchParams({
-      seed: seed,
-      top: topValue,
-      // Keep gaze consistent across variants
-      eyes: 'default',
-      eyebrows: 'default',
-      hairColor: state.avatarHairColor || 'b58143',
-      skinColor: state.avatarSkinColor || 'edb98a',
-      mouth: state.avatarMouth || 'smile',
-      clothing: state.avatarClothing || 'shirtCrewNeck'
-    });
-    if (state.avatarAccessories) {
-      p.set('accessories', state.avatarAccessories);
-      p.set('accessoriesProbability', '100');
-    } else {
-      p.set('accessoriesProbability', '0');
-    }
-    if (state.avatarFacialHair) {
-      p.set('facialHair', state.avatarFacialHair);
-      p.set('facialHairProbability', '100');
-      p.set('facialHairColor', state.avatarHairColor || 'b58143');
-    } else {
-      p.set('facialHairProbability', '0');
-    }
-    return DICEBEAR + '?' + p.toString();
-  }
-
-  function renderAvatarOption(containerId, options, stateKey, dataKind) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    container.innerHTML = options.map(function (o) {
-      return '<button type="button" class="avatar-opt card-select px-3 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-kind="' + dataKind + '" data-value="' + (o.value || '') + '">' + o.label + '</button>';
-    }).join('');
-    container.querySelectorAll('.avatar-opt').forEach(function (b) {
-      var val = b.dataset.value || '';
-      var current = state[stateKey];
-      // Nur markieren, wenn bereits explizit ein (ggf. auch leerer) Wert gesetzt wurde.
-      // Anfangszustand: current === null -> nichts vorselektiert.
-      if (current !== null && current !== undefined && val === String(current)) {
-        b.classList.add('selected');
-      }
-      b.addEventListener('click', onAvatarOptClick);
-    });
+    return './assets/avatar-placeholder.png';
   }
 
   function renderAvatarStep() {
-    if (!state.avatarType) state.avatarType = 'human';
-    const g = state.gender || 'divers';
-    const frisurOpts = avatarFrisurByGender[g] || avatarFrisurByGender['divers'];
-    const validTops = frisurOpts.map(function (o) { return o.value; });
-    // Nur anpassen, wenn der Nutzer bereits eine Frisur gewählt hat und sie
-    // nach einem Gender-Wechsel nicht mehr gültig ist.
-    if (state.avatarInitialized && state.avatarTop && !validTops.includes(state.avatarTop) && frisurOpts[0]) {
-      state.avatarTop = frisurOpts[0].value;
+    if (window.WizardAvatar && window.WizardAvatar.renderAvatarStep) {
+      window.WizardAvatar.renderAvatarStep(state, {
+        onAvatarChanged: function () { updateAvatarPreview(); }
+      });
     }
-
-    // Gesichtsausdruck automatisch aus Schritt 3 (Humor) ableiten
-    if (!state.avatarMouth) {
-      if (state.personality_humor === 'Humorvoll') {
-        state.avatarMouth = 'smile';      // Lächelnd
-      } else if (state.personality_humor === 'Ernst') {
-        state.avatarMouth = 'serious';    // Ernst
-      }
-    }
-
-    // Nicht-menschliche Avatare: Detailoptionen ausblenden
-    var showHumanOptions = state.avatarType === 'human';
-    document.querySelectorAll('.avatar-human-only').forEach(function (el) {
-      el.classList.toggle('hidden', !showHumanOptions);
-    });
-
-    renderAvatarOption('avatarSkinColor', avatarSkinColors, 'avatarSkinColor', 'skin');
-    renderAvatarOption('avatarFrisur', frisurOpts, 'avatarTop', 'top');
-    renderAvatarOption('avatarHeadwear', avatarHeadwearOpts, 'avatarHeadwear', 'headwear');
-    renderAvatarOption('avatarHairColor', avatarHairColors, 'avatarHairColor', 'hair');
-    renderAvatarOption('avatarFacialHair', avatarFacialHairOpts, 'avatarFacialHair', 'facialHair');
-    renderAvatarOption('avatarClothing', avatarClothingOpts, 'avatarClothing', 'clothing');
-    renderAvatarOption('avatarAccessories', avatarAccessoriesOpts, 'avatarAccessories', 'acc');
-  }
-
-  function onAvatarOptClick() {
-    const kind = this.dataset.kind, val = this.dataset.value || '';
-    const container = this.closest('div');
-    container.querySelectorAll('.avatar-opt').forEach(function (b) { b.classList.remove('selected'); });
-    this.classList.add('selected');
-    if (kind === 'skin') state.avatarSkinColor = val;
-    if (kind === 'top') state.avatarTop = val;
-    if (kind === 'headwear') state.avatarHeadwear = val;
-    if (kind === 'hair') state.avatarHairColor = val;
-    if (kind === 'facialHair') state.avatarFacialHair = val;
-    if (kind === 'mouth') state.avatarMouth = val;
-    if (kind === 'clothing') state.avatarClothing = val;
-    if (kind === 'acc') state.avatarAccessories = val;
-    state.avatarInitialized = true;
-    updateAvatarPreview();
   }
 
   function updateAvatarPreview() {
-    if (!state.avatarInitialized) return;
-    // Wenn der Nutzer den Avatar generiert, darf keine Lottie-Animation mehr darüber liegen
-    clearAvatarLottie();
-    const url = buildAvatarUrl();
-    const main = document.getElementById('avatarPreview');
-    if (main) {
-      main.onerror = function () {
-        this.onerror = null;
-        this.src = './assets/avatar-placeholder.png';
-      };
-      main.src = url;
+    if (window.WizardAvatar && window.WizardAvatar.updateAvatarPreview) {
+      window.WizardAvatar.updateAvatarPreview(state, buildAvatarUrl());
     }
-    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
-      img.onerror = function () {
-        this.onerror = null;
-        this.src = './assets/avatar-placeholder.png';
-      };
-      img.src = url;
-    });
-  }
-
-  function getAvatarAnimationUrl(stepNum) {
-    return './assets/avatar-animations/step' + stepNum + '.json';
   }
 
   function syncWheelAvatarAnimation() {
-    var activeStep = document.querySelector('.wizard-step:not(.hidden)');
-    if (!activeStep) return;
-
-    // Wenn der Avatar bereits erzeugt wurde (Schritt 8), dann keine Lottie drüber legen.
-    var shouldShowAnimation = !(state.currentStep === 8 && state.avatarInitialized);
-
-    clearAvatarLottie();
-
-    if (!shouldShowAnimation) return;
-    if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
-    // Bei file:// wird der JSON-Load von Lottie über XHR/Fetch durch CORS blockiert.
-    // Dann lassen wir einfach den Dummy sichtbar (kein Lottie).
-    if (window.location && window.location.protocol === 'file:') return;
-
-    var animationUrl = getAvatarAnimationUrl(state.currentStep);
-    var wheelAvatars = activeStep.querySelectorAll('.wizard-wheel-avatar');
-
-    wheelAvatars.forEach(function (wheelAvatar) {
-      var img = wheelAvatar.querySelector('img');
-      if (!img) return;
-
-      img.style.display = 'none';
-
-      var root = document.createElement('div');
-      root.className = 'avatar-lottie-root';
-      wheelAvatar.appendChild(root);
-
-      var anim = window.lottie.loadAnimation({
-        container: root,
-        renderer: 'svg',
-        loop: false,
-        autoplay: true,
-        path: animationUrl
-      });
-
-      avatarLottieInstances.push(anim);
-
-      var fallback = function () {
-        // eslint-disable-next-line no-console
-        console.warn('Lottie animation failed for', animationUrl, 'on step', state.currentStep);
-        try { anim.destroy(); } catch (e) {}
-        avatarLottieInstances = avatarLottieInstances.filter(function (x) { return x !== anim; });
-        root.remove();
-        img.style.display = 'block';
-      };
-
-      // Fallback, falls die JSON nicht existiert oder nicht geladen werden kann
-      try {
-        anim.addEventListener('data_failed', fallback);
-        anim.addEventListener('config_error', fallback);
-        anim.addEventListener('error', fallback);
-      } catch (e) {}
-
-      // Zusätzlicher Guard: wenn nach kurzer Zeit nichts geladen wurde,
-      // gehen wir von einem Ladefehler aus (z.B. file:// Einschränkungen).
-      setTimeout(function () {
-        try {
-          if (!anim || anim.isLoaded === false) fallback();
-        } catch (e) {
-          // Wenn isLoaded nicht existiert, lassen wir die normalen Events laufen
-        }
-      }, 1200);
-    });
+    if (window.WizardAvatar && window.WizardAvatar.syncWheelAvatarAnimation) {
+      window.WizardAvatar.syncWheelAvatarAnimation(state);
+    }
   }
 
   function isWizardComplete() {
     const input = document.getElementById('inputName');
     if (input) state.name = input.value.trim();
-
-    const step1 = !!state.usage_context &&
-      (Array.isArray(state.help_context) ? state.help_context.length > 0 : !!state.help_context);
-    const step2 = !!(
-      state.personality_greeting &&
-      state.personality_humor &&
-      state.personality_answer &&
-      state.personality_tone &&
-      state.personality_style
-    );
-    const step3 = !!state.role && !!state.name;
-    const step4 =
-      !!state.interaction_workflow &&
-      !!state.interaction_examples;
-    const step5 =
-      Array.isArray(state.knowledge) && state.knowledge.length > 0 &&
-      Array.isArray(state.knowledge_source) && state.knowledge_source.length > 0 &&
-      !!state.decision_mode;
-    const step6 = Array.isArray(state.feedback) && state.feedback.length > 0;
-    const step7 = Array.isArray(state.privacy) && state.privacy.length > 0;
-    const step8 = state.avatarType !== 'human'
-      ? !!state.avatarType
-      : !!(
-          state.avatarSkinColor !== null &&
-          state.avatarTop !== null &&
-          state.avatarHeadwear !== null &&
-          state.avatarHairColor !== null &&
-          state.avatarFacialHair !== null &&
-          state.avatarMouth !== null &&
-          state.avatarClothing !== null &&
-          state.avatarAccessories !== null
-        );
-
-    return step1 && step2 && step3 && step4 && step5 && step6 && step7 && step8;
+    if (window.WizardValidation && window.WizardValidation.isWizardComplete) {
+      return window.WizardValidation.isWizardComplete(state);
+    }
+    return false;
   }
 
   function updateSettingsActions() {
@@ -508,42 +128,19 @@
   }
 
   function buildExportPayload() {
-    return {
-      exportedAt: new Date().toISOString(),
-      usage_context: state.usage_context,
-      help_context: state.help_context,
-      role: state.role,
-      name: state.name,
-      avatar_url: buildAvatarUrl(),
-      avatar_type: state.avatarType || 'human',
-      avatar_skin_color: state.avatarSkinColor,
-      avatar_top: state.avatarTop,
-      avatar_headwear: state.avatarHeadwear,
-      avatar_hair_color: state.avatarHairColor,
-      avatar_facial_hair: state.avatarFacialHair,
-      avatar_mouth: state.avatarMouth,
-      avatar_clothing: state.avatarClothing,
-      avatar_accessories: state.avatarAccessories,
-      personality_greeting: state.personality_greeting || '',
-      personality_humor: state.personality_humor || '',
-      personality_answer: state.personality_answer || '',
-      personality_tone: state.personality_tone || '',
-      personality_style: state.personality_style || '',
-      interaction_workflow: state.interaction_workflow || '',
-      interaction_examples: state.interaction_examples || '',
-      // Kompatibilität: alter Key "interaction_style" als Array
-      interaction_style: [state.interaction_workflow, state.interaction_examples].filter(Boolean),
-      knowledge: Array.isArray(state.knowledge) ? state.knowledge.slice() : [],
-      knowledge_source: Array.isArray(state.knowledge_source) ? state.knowledge_source.slice() : [],
-      decision_mode: state.decision_mode || '',
-      feedback: Array.isArray(state.feedback) ? state.feedback.slice() : [],
-      privacy: Array.isArray(state.privacy) ? state.privacy.slice() : []
-    };
+    if (window.WizardSerializer && window.WizardSerializer.buildExportPayload) {
+      return window.WizardSerializer.buildExportPayload(state, buildAvatarUrl());
+    }
+    return {};
   }
 
   function exportWizardData() {
     if (!isWizardComplete()) return;
     const payload = buildExportPayload();
+    if (window.WizardUiUtils && window.WizardUiUtils.downloadJson) {
+      window.WizardUiUtils.downloadJson('avatar-export', payload);
+      return;
+    }
     const content = JSON.stringify(payload, null, 2);
     const blob = new Blob([content], { type: 'application/json;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -558,382 +155,117 @@
   }
 
   function updateUI() {
-    document.querySelectorAll('.wizard-step').forEach(function (el) {
-      var id = el.id || '';
-      var n = 0;
-      if (id.indexOf('step') === 0) {
-        n = parseInt(id.replace('step', ''), 10) || 0;
-      }
-      el.classList.toggle('hidden', n !== state.currentStep);
-    });
-
-    var currentLabel = document.getElementById('currentStep');
-    var totalLabel = document.getElementById('totalSteps');
-    if (currentLabel) currentLabel.textContent = state.currentStep === 0 ? 'Start' : String(state.currentStep);
-    if (totalLabel) totalLabel.textContent = TOTAL_STEPS;
-
-    var progress = document.getElementById('progressBar');
-    if (progress) {
-      var ratio = state.currentStep === 0 ? 0 : (state.currentStep / TOTAL_STEPS);
-      progress.style.width = (ratio * 100) + '%';
+    if (window.WizardNavigation && window.WizardNavigation.updateUI) {
+      window.WizardNavigation.updateUI(state, TOTAL_STEPS, {
+        updateSettingsActions: updateSettingsActions,
+        renderAvatarStep: renderAvatarStep,
+        syncWheelAvatarAnimation: syncWheelAvatarAnimation
+      });
     }
-
-    var navBarEl = document.getElementById('wizardNavBar');
-    var backBtnEl = document.getElementById('btnBack');
-    var nextBtnEl = document.getElementById('btnNext');
-    var saveBtnEl = document.getElementById('btnSave');
-    var settingsBtnEl = document.getElementById('btnSettings');
-    if (navBarEl) navBarEl.classList.toggle('hidden', state.currentStep === 0);
-    if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
-    if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === TOTAL_STEPS);
-    if (nextBtnEl) nextBtnEl.textContent = state.currentStep === (TOTAL_STEPS - 1) ? 'Zusammenfassung' : 'Weiter';
-    if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== TOTAL_STEPS);
-    if (settingsBtnEl) settingsBtnEl.classList.toggle('hidden', state.currentStep === 0);
-    updateSettingsActions();
-    document.getElementById('wizardContent').classList.add('step-enter');
-    // Avatar-Schritt ist jetzt Schritt 8
-    if (state.currentStep === 8) renderAvatarStep();
-    syncWheelAvatarAnimation();
   }
 
   function bindCardSelects() {
-    document.querySelectorAll('.card-select').forEach(function (btn) {
-      if (btn.classList.contains('avatar-opt')) return;
-      btn.addEventListener('click', function () {
-        const field = this.dataset.field;
-        const isMulti = this.dataset.multi === 'true';
-        if (!field) return;
-
-        if (isMulti) {
-          // Mehrfachauswahl: nur toggeln
-          this.classList.toggle('selected');
-          const value = this.dataset.value;
-          if (!Array.isArray(state[field])) state[field] = [];
-          const idx = state[field].indexOf(value);
-          if (idx >= 0) {
-            state[field].splice(idx, 1);
-          } else {
-            state[field].push(value);
-          }
-
-          // Datenschutz-Schritt: "Keine Daten speichern" ist exklusiv
-          if (field === 'privacy') {
-            var noneValue = 'Keine Daten speichern';
-            if (value === noneValue && this.classList.contains('selected')) {
-              // "Keine Daten speichern" gewählt -> alle anderen abwählen
-              state.privacy = [noneValue];
-              document.querySelectorAll('.card-select[data-field="privacy"]').forEach(function (b) {
-                b.classList.toggle('selected', b.dataset.value === noneValue);
-              });
-            } else if (value !== noneValue && this.classList.contains('selected')) {
-              // Irgendeine andere Option gewählt -> "Keine Daten speichern" abwählen
-              state.privacy = state.privacy.filter(function (v) { return v !== noneValue; });
-              var noneBtn = document.querySelector('.card-select[data-field="privacy"][data-value="' + noneValue + '"]');
-              if (noneBtn) noneBtn.classList.remove('selected');
-            }
-          }
-        } else {
-          // Einzelauswahl: innerhalb desselben Feldes nur einen aktiv lassen
-          const allForField = document.querySelectorAll('.card-select[data-field="' + field + '"]');
-          allForField.forEach(function (b) { b.classList.remove('selected'); });
-          this.classList.add('selected');
-          const value = this.dataset.value;
-          state[field] = value;
-
-          // Wenn Humor (Schritt 3) geändert wird, Gesichtsausdruck synchronisieren
-          if (field === 'personality_humor') {
-            if (value === 'Humorvoll') {
-              state.avatarMouth = 'smile';
-            } else if (value === 'Ernst') {
-              state.avatarMouth = 'serious';
-            } else {
-              state.avatarMouth = null;
-            }
-            if (state.avatarInitialized) {
-              updateAvatarPreview();
-            }
-          }
-
-          if (field === 'avatarType') {
-            state.avatarInitialized = true;
-            if (state.currentStep === 8) {
-              renderAvatarStep();
-            }
-            updateAvatarPreview();
-          }
-
-          // Spezielle Behandlung für Namensvorschläge
-          if (field === 'nameChoice') {
-            const suggestion = this.dataset.suggestion || '';
-            const input = document.getElementById('inputName');
-            if (input) {
-              state.nameManual = !suggestion;
-              input.value = suggestion;
-              state.name = suggestion;
-              updateNameInputState();
-              if (!suggestion) {
-                input.focus();
-              }
-            }
-          }
-        }
+    if (window.WizardSelection && window.WizardSelection.bindCardSelects) {
+      window.WizardSelection.bindCardSelects(state, {
+        renderAvatarStep: renderAvatarStep,
+        updateAvatarPreview: updateAvatarPreview,
+        updateNameInputState: updateNameInputState
       });
-    });
+    }
   }
 
   function restoreSelections() {
-    // Schritt 1
-    if (state.usage_context) {
-      document.querySelector('.card-select[data-field="usage_context"][data-value="' + state.usage_context + '"]')?.classList.add('selected');
-    }
-    if (Array.isArray(state.help_context)) {
-      state.help_context.forEach(function (val) {
-        document.querySelector('.card-select[data-field="help_context"][data-value="' + val + '"]')?.classList.add('selected');
-      });
-    } else if (state.help_context) {
-      document.querySelector('.card-select[data-field="help_context"][data-value="' + state.help_context + '"]')?.classList.add('selected');
-    }
-    // Schritt 2
-    const inputName = document.getElementById('inputName');
-    if (inputName) inputName.value = state.name;
-    updateNameInputState();
-    if (state.role) {
-      document.querySelector('.card-select[data-field="role"][data-value="' + state.role + '"]')?.classList.add('selected');
-    }
-    // Schritt 7: Avatar-Typ
-    if (state.avatarType) {
-      document.querySelector('.card-select[data-field="avatarType"][data-value="' + state.avatarType + '"]')?.classList.add('selected');
-    }
-    // Schritt 3 – Persönlichkeit & Ton
-    if (state.personality_greeting) {
-      document.querySelector('.card-select[data-field="personality_greeting"][data-value="' + state.personality_greeting + '"]')?.classList.add('selected');
-    }
-    if (state.personality_humor) {
-      document.querySelector('.card-select[data-field="personality_humor"][data-value="' + state.personality_humor + '"]')?.classList.add('selected');
-    }
-    if (state.personality_answer) {
-      document.querySelector('.card-select[data-field="personality_answer"][data-value="' + state.personality_answer + '"]')?.classList.add('selected');
-    }
-    if (state.personality_tone) {
-      document.querySelector('.card-select[data-field="personality_tone"][data-value="' + state.personality_tone + '"]')?.classList.add('selected');
-    }
-    if (state.personality_style) {
-      document.querySelector('.card-select[data-field="personality_style"][data-value="' + state.personality_style + '"]')?.classList.add('selected');
-    }
-    // Schritt 4
-    if (state.interaction_workflow) {
-      document.querySelector('.card-select[data-field="interaction_workflow"][data-value="' + state.interaction_workflow + '"]')?.classList.add('selected');
-    }
-    if (state.interaction_examples) {
-      document.querySelector('.card-select[data-field="interaction_examples"][data-value="' + state.interaction_examples + '"]')?.classList.add('selected');
-    }
-    // Schritt 5
-    if (Array.isArray(state.knowledge)) {
-      state.knowledge.forEach(function (val) {
-        document.querySelector('.card-select[data-field="knowledge"][data-value="' + val + '"]')?.classList.add('selected');
-      });
-    }
-    if (Array.isArray(state.knowledge_source)) {
-      state.knowledge_source.forEach(function (val) {
-        document.querySelector('.card-select[data-field="knowledge_source"][data-value="' + val + '"]')?.classList.add('selected');
-      });
-    }
-    if (state.decision_mode) {
-      document.querySelector('.card-select[data-field="decision_mode"][data-value="' + state.decision_mode + '"]')?.classList.add('selected');
-    }
-    // Schritt 6
-    if (Array.isArray(state.feedback)) {
-      state.feedback.forEach(function (val) {
-        document.querySelector('.card-select[data-field="feedback"][data-value="' + val + '"]')?.classList.add('selected');
-      });
-    }
-    // Schritt 8
-    if (Array.isArray(state.privacy)) {
-      state.privacy.forEach(function (val) {
-        document.querySelector('.card-select[data-field="privacy"][data-value="' + val + '"]')?.classList.add('selected');
+    if (window.WizardSelection && window.WizardSelection.restoreSelections) {
+      window.WizardSelection.restoreSelections(state, {
+        updateNameInputState: updateNameInputState
       });
     }
   }
 
   function isCurrentStepValid() {
-    // Testmodus: alle Schritte immer als gültig behandeln
-    if (state.testMode) {
-      return true;
-    }
-
-    // Startseite benötigt keine Eingabe
-    if (state.currentStep === 0) {
-      return true;
-    }
-    // Schritt 1: Einsatz & Zweck
-    if (state.currentStep === 1) {
-      var okHelp = Array.isArray(state.help_context) ? state.help_context.length > 0 : !!state.help_context;
-      return !!state.usage_context && okHelp;
-    }
-    // Schritt 2: Persönlichkeit & Ton – alle 5 Kategorien müssen gewählt sein
-    if (state.currentStep === 2) {
-      return !!(
-        state.personality_greeting &&
-        state.personality_humor &&
-        state.personality_answer &&
-        state.personality_tone &&
-        state.personality_style
-      );
-    }
-    // Schritt 3: Rolle & Name
     if (state.currentStep === 3) {
       const input = document.getElementById('inputName');
-      if (input) {
-        state.name = input.value.trim();
-      }
-      return !!state.role && !!state.name;
+      if (input) state.name = input.value.trim();
     }
-    // Schritt 4: Arbeitsweise & Beispiele (je 1 Auswahl links/rechts)
-    if (state.currentStep === 4) {
-      return !!state.interaction_workflow && !!state.interaction_examples;
+    if (window.WizardValidation && window.WizardValidation.isStepValid) {
+      return window.WizardValidation.isStepValid(state, state.currentStep);
     }
-    // Schritt 5: Wissen & Kompetenz
-    if (state.currentStep === 5) {
-      return !!(
-        Array.isArray(state.knowledge) && state.knowledge.length > 0 &&
-        Array.isArray(state.knowledge_source) && state.knowledge_source.length > 0 &&
-        state.decision_mode
-      );
-    }
-    // Schritt 6: Lernen & Feedback (Mehrfachauswahl)
-    if (state.currentStep === 6) {
-      return Array.isArray(state.feedback) && state.feedback.length > 0;
-    }
-    // Schritt 7: Datenschutz (Mehrfachauswahl)
-    if (state.currentStep === 7) {
-      return Array.isArray(state.privacy) && state.privacy.length > 0;
-    }
-    // Schritt 8: Avatar – nur gültig, wenn alle Bereiche gewählt wurden
-    if (state.currentStep === 8) {
-      if (state.avatarType !== 'human') {
-        return !!state.avatarType;
-      }
-      return !!(
-        state.avatarSkinColor !== null &&
-        state.avatarTop !== null &&
-        state.avatarHeadwear !== null &&
-        state.avatarHairColor !== null &&
-        state.avatarFacialHair !== null &&
-        state.avatarMouth !== null &&
-        state.avatarClothing !== null &&
-        state.avatarAccessories !== null
-      );
-    }
-    return true;
+    return false;
   }
 
   function showValidationMessage(message) {
+    var msg = message || 'Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.';
+    if (window.WizardUiUtils) {
+      window.WizardUiUtils.setTextById('validationMessage', msg);
+      window.WizardUiUtils.showById('validationModal');
+      return;
+    }
     var overlay = document.getElementById('validationModal');
     var text = document.getElementById('validationMessage');
     if (!overlay || !text) return;
-    text.textContent = message || 'Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.';
+    text.textContent = msg;
     overlay.classList.remove('hidden');
   }
 
   function hideValidationMessage() {
+    if (window.WizardUiUtils && window.WizardUiUtils.hideById) {
+      window.WizardUiUtils.hideById('validationModal');
+      return;
+    }
     var overlay = document.getElementById('validationModal');
     if (!overlay) return;
     overlay.classList.add('hidden');
   }
 
   function goToStep(targetStep) {
-    targetStep = Number(targetStep);
-    if (targetStep < 0 || targetStep > TOTAL_STEPS) return;
-    if (targetStep === state.currentStep) return;
-
-    // Rückwärts immer erlaubt
-    if (targetStep < state.currentStep) {
-      state.currentStep = targetStep;
-      updateUI();
-      restoreSelections();
-      if (state.currentStep === 8) renderAvatarStep();
-      if (state.currentStep === TOTAL_STEPS) updateSummary();
-      return;
-    }
-
-    // Vorwärts: Schritt für Schritt mit Validierung
-    while (state.currentStep < targetStep) {
-      if (!isCurrentStepValid()) {
-        showValidationMessage('Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du zu diesem Schritt springst.');
-        break;
-      }
-      state.currentStep++;
-      updateUI();
-      restoreSelections();
-      if (state.currentStep === 8) renderAvatarStep();
-      if (state.currentStep === TOTAL_STEPS) updateSummary();
+    if (window.WizardNavigation && window.WizardNavigation.goToStep) {
+      window.WizardNavigation.goToStep(state, targetStep, TOTAL_STEPS, {
+        isCurrentStepValid: isCurrentStepValid,
+        showValidationMessage: showValidationMessage,
+        updateUI: updateUI,
+        restoreSelections: restoreSelections,
+        renderAvatarStep: renderAvatarStep,
+        updateSummary: updateSummary
+      });
     }
   }
 
   function next() {
-    // Validierung: ohne Auswahl/Eingabe kein Weiterklicken
-    if (!isCurrentStepValid()) {
-      showValidationMessage('Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.');
-      return;
-    }
-    const input = document.getElementById('inputName');
-    if (state.currentStep === 2 && input) state.name = input.value.trim();
-    if (state.currentStep < TOTAL_STEPS) {
-      state.currentStep++;
-      updateUI();
-      restoreSelections();
-      if (state.currentStep === TOTAL_STEPS) updateSummary();
+    if (window.WizardNavigation && window.WizardNavigation.next) {
+      window.WizardNavigation.next(state, TOTAL_STEPS, {
+        isCurrentStepValid: isCurrentStepValid,
+        showValidationMessage: showValidationMessage,
+        updateUI: updateUI,
+        restoreSelections: restoreSelections,
+        updateSummary: updateSummary
+      });
     }
   }
 
   function back() {
-    if (state.currentStep > 0) {
-      state.currentStep--;
-      updateUI();
-      restoreSelections();
-      if (state.currentStep === 8) renderAvatarStep();
+    if (window.WizardNavigation && window.WizardNavigation.back) {
+      window.WizardNavigation.back(state, {
+        updateUI: updateUI,
+        restoreSelections: restoreSelections,
+        renderAvatarStep: renderAvatarStep
+      });
     }
   }
 
   function updateSummary() {
-    document.getElementById('summaryUsage').textContent = state.usage_context || '–';
-    document.getElementById('summaryHelp').textContent =
-      Array.isArray(state.help_context)
-        ? (state.help_context.length ? state.help_context.join(', ') : '–')
-        : (state.help_context || '–');
-    document.getElementById('summaryRole').textContent = state.role || '–';
-    document.getElementById('summaryName').textContent = state.name || '–';
-    var personalityParts = [];
-    if (state.personality_greeting) personalityParts.push('Anrede: ' + state.personality_greeting);
-    if (state.personality_humor) personalityParts.push('Humor: ' + state.personality_humor);
-    if (state.personality_answer) personalityParts.push('Antwortstil: ' + state.personality_answer);
-    if (state.personality_tone) personalityParts.push('Ton: ' + state.personality_tone);
-    if (state.personality_style) personalityParts.push('Stil: ' + state.personality_style);
-    document.getElementById('summaryPersonality').textContent =
-      personalityParts.length ? personalityParts.join(' | ') : '–';
-    var interactionParts = [];
-    if (state.interaction_workflow) interactionParts.push('Arbeit: ' + state.interaction_workflow);
-    if (state.interaction_examples) interactionParts.push('Beispiele: ' + state.interaction_examples);
-    document.getElementById('summaryInteraction').textContent =
-      interactionParts.length ? interactionParts.join(' | ') : '–';
-    document.getElementById('summaryKnowledge').textContent =
-      (function () {
-        var parts = [];
-        if (Array.isArray(state.knowledge) && state.knowledge.length) {
-          parts.push('Über dich: ' + state.knowledge.join(', '));
-        }
-        if (Array.isArray(state.knowledge_source) && state.knowledge_source.length) {
-          parts.push('Wissensbasis: ' + state.knowledge_source.join(', '));
-        }
-        if (state.decision_mode) {
-          parts.push('Entscheidungen: ' + state.decision_mode);
-        }
-        return parts.length ? parts.join(' | ') : '–';
-      })();
-    document.getElementById('summaryFeedback').textContent =
-      Array.isArray(state.feedback) && state.feedback.length ? state.feedback.join(', ') : '–';
-    document.getElementById('summaryPrivacy').textContent =
-      Array.isArray(state.privacy) && state.privacy.length ? state.privacy.join(', ') : '–';
+    var vm = window.WizardSerializer && window.WizardSerializer.buildSummaryViewModel
+      ? window.WizardSerializer.buildSummaryViewModel(state)
+      : null;
+    if (!vm) return;
+    document.getElementById('summaryUsage').textContent = vm.usage;
+    document.getElementById('summaryHelp').textContent = vm.help;
+    document.getElementById('summaryRole').textContent = vm.role;
+    document.getElementById('summaryName').textContent = vm.name;
+    document.getElementById('summaryPersonality').textContent = vm.personality;
+    document.getElementById('summaryInteraction').textContent = vm.interaction;
+    document.getElementById('summaryKnowledge').textContent = vm.knowledge;
+    document.getElementById('summaryFeedback').textContent = vm.feedback;
+    document.getElementById('summaryPrivacy').textContent = vm.privacy;
     const sumImg = document.getElementById('summaryAvatar');
     if (sumImg) sumImg.src = buildAvatarUrl();
   }
@@ -942,39 +274,9 @@
     const input = document.getElementById('inputName');
     if (input) state.name = input.value.trim();
     const base = (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || 'https://deine-ziel-url.de/api';
-    const params = new URLSearchParams();
-    if (state.id) params.set('id', state.id);
-    params.set('usage_context', state.usage_context);
-    params.set('help_context', Array.isArray(state.help_context) ? state.help_context.join(',') : state.help_context);
-    params.set('role', state.role);
-    params.set('name', state.name);
-    params.set('avatar_url', buildAvatarUrl());
-    params.set('avatar_type', state.avatarType || 'human');
-    params.set('avatar_skin_color', state.avatarSkinColor);
-    params.set('avatar_top', state.avatarTop);
-    params.set('avatar_headwear', state.avatarHeadwear);
-    params.set('avatar_hair_color', state.avatarHairColor);
-    params.set('avatar_facial_hair', state.avatarFacialHair);
-    params.set('avatar_mouth', state.avatarMouth);
-    params.set('avatar_clothing', state.avatarClothing);
-    params.set('avatar_accessories', state.avatarAccessories);
-    params.set('personality_greeting', state.personality_greeting || '');
-    params.set('personality_humor', state.personality_humor || '');
-    params.set('personality_answer', state.personality_answer || '');
-    params.set('personality_tone', state.personality_tone || '');
-    params.set('personality_style', state.personality_style || '');
-    params.set('interaction_workflow', state.interaction_workflow || '');
-    params.set('interaction_examples', state.interaction_examples || '');
-    // Kompatibilität: alter Key "interaction_style" (früher Mehrfachauswahl)
-    params.set(
-      'interaction_style',
-      [state.interaction_workflow, state.interaction_examples].filter(Boolean).join(',')
-    );
-    params.set('knowledge', Array.isArray(state.knowledge) ? state.knowledge.join(',') : '');
-    params.set('knowledge_source', Array.isArray(state.knowledge_source) ? state.knowledge_source.join(',') : '');
-    params.set('decision_mode', state.decision_mode || '');
-    params.set('feedback', Array.isArray(state.feedback) ? state.feedback.join(',') : '');
-    params.set('privacy', Array.isArray(state.privacy) ? state.privacy.join(',') : '');
+    const params = window.WizardSerializer && window.WizardSerializer.buildSaveParams
+      ? window.WizardSerializer.buildSaveParams(state, buildAvatarUrl())
+      : new URLSearchParams();
     window.location.href = base + '?' + params.toString();
   }
 
@@ -1032,13 +334,21 @@
   }
 
   function showSettingsModal() {
+    updateSettingsActions();
+    if (window.WizardUiUtils && window.WizardUiUtils.showById) {
+      window.WizardUiUtils.showById('settingsModal');
+      return;
+    }
     var modal = document.getElementById('settingsModal');
     if (!modal) return;
-    updateSettingsActions();
     modal.classList.remove('hidden');
   }
 
   function hideSettingsModal() {
+    if (window.WizardUiUtils && window.WizardUiUtils.hideById) {
+      window.WizardUiUtils.hideById('settingsModal');
+      return;
+    }
     var modal = document.getElementById('settingsModal');
     if (!modal) return;
     modal.classList.add('hidden');
@@ -1046,7 +356,9 @@
 
   function init() {
     readUrlParams();
-    applyRandomNameSuggestions();
+    if (window.NameSuggestions && window.NameSuggestions.applyRandomNameSuggestions) {
+      window.NameSuggestions.applyRandomNameSuggestions('#step3');
+    }
     updateUI();
     restoreSelections();
     bindCardSelects();
