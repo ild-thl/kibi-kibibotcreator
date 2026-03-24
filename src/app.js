@@ -20,7 +20,7 @@
     interaction_examples: '',     // Einfachauswahl: nutzt der Avatar Beispiele?
     // Schritt 5
     knowledge: [],               // Mehrfachauswahl (Studiengang, Modulplan, Lernfortschritt)
-    knowledge_source: [],        // Mehrfachauswahl (Allgemeines Wissen, Studiengangswissen)
+    knowledge_source: '',        // Einfachauswahl (Allgemeines Wissen, Studiengangswissen)
     decision_mode: '',           // Einfachauswahl (Entscheidungsverhalten)
     // Schritt 6
     feedback: [],                // Mehrfachauswahl: Reaktion bei Fehlern/Problemen
@@ -445,7 +445,7 @@
       !!state.interaction_examples;
     const step5 =
       Array.isArray(state.knowledge) && state.knowledge.length > 0 &&
-      Array.isArray(state.knowledge_source) && state.knowledge_source.length > 0 &&
+      !!state.knowledge_source &&
       !!state.decision_mode;
     const step6 = Array.isArray(state.feedback) && state.feedback.length > 0;
     const step7 = Array.isArray(state.privacy) && state.privacy.length > 0;
@@ -500,7 +500,7 @@
       // Kompatibilität: alter Key "interaction_style" als Array
       interaction_style: [state.interaction_workflow, state.interaction_examples].filter(Boolean),
       knowledge: Array.isArray(state.knowledge) ? state.knowledge.slice() : [],
-      knowledge_source: Array.isArray(state.knowledge_source) ? state.knowledge_source.slice() : [],
+      knowledge_source: state.knowledge_source || '',
       decision_mode: state.decision_mode || '',
       feedback: Array.isArray(state.feedback) ? state.feedback.slice() : [],
       privacy: Array.isArray(state.privacy) ? state.privacy.slice() : []
@@ -696,10 +696,8 @@
         document.querySelector('.card-select[data-field="knowledge"][data-value="' + val + '"]')?.classList.add('selected');
       });
     }
-    if (Array.isArray(state.knowledge_source)) {
-      state.knowledge_source.forEach(function (val) {
-        document.querySelector('.card-select[data-field="knowledge_source"][data-value="' + val + '"]')?.classList.add('selected');
-      });
+    if (state.knowledge_source) {
+      document.querySelector('.card-select[data-field="knowledge_source"][data-value="' + state.knowledge_source + '"]')?.classList.add('selected');
     }
     if (state.decision_mode) {
       document.querySelector('.card-select[data-field="decision_mode"][data-value="' + state.decision_mode + '"]')?.classList.add('selected');
@@ -759,7 +757,7 @@
     if (state.currentStep === 5) {
       return !!(
         Array.isArray(state.knowledge) && state.knowledge.length > 0 &&
-        Array.isArray(state.knowledge_source) && state.knowledge_source.length > 0 &&
+        !!state.knowledge_source &&
         state.decision_mode
       );
     }
@@ -885,8 +883,8 @@
         if (Array.isArray(state.knowledge) && state.knowledge.length) {
           parts.push('Über dich: ' + state.knowledge.join(', '));
         }
-        if (Array.isArray(state.knowledge_source) && state.knowledge_source.length) {
-          parts.push('Wissensbasis: ' + state.knowledge_source.join(', '));
+        if (state.knowledge_source) {
+          parts.push('Wissensbasis: ' + state.knowledge_source);
         }
         if (state.decision_mode) {
           parts.push('Entscheidungen: ' + state.decision_mode);
@@ -934,7 +932,7 @@
       [state.interaction_workflow, state.interaction_examples].filter(Boolean).join(',')
     );
     params.set('knowledge', Array.isArray(state.knowledge) ? state.knowledge.join(',') : '');
-    params.set('knowledge_source', Array.isArray(state.knowledge_source) ? state.knowledge_source.join(',') : '');
+    params.set('knowledge_source', state.knowledge_source || '');
     params.set('decision_mode', state.decision_mode || '');
     params.set('feedback', Array.isArray(state.feedback) ? state.feedback.join(',') : '');
     params.set('privacy', Array.isArray(state.privacy) ? state.privacy.join(',') : '');
@@ -955,7 +953,7 @@
     state.interaction_workflow = '';
     state.interaction_examples = '';
     state.knowledge = [];
-    state.knowledge_source = [];
+    state.knowledge_source = '';
     state.decision_mode = '';
     state.feedback = [];
     state.privacy = [];
