@@ -432,14 +432,14 @@
 
     const step1 = !!state.usage_context &&
       (Array.isArray(state.help_context) ? state.help_context.length > 0 : !!state.help_context);
-    const step2 = !!state.role && !!state.name;
-    const step3 = !!(
+    const step2 = !!(
       state.personality_greeting &&
       state.personality_humor &&
       state.personality_answer &&
       state.personality_tone &&
       state.personality_style
     );
+    const step3 = !!state.role && !!state.name;
     const step4 =
       !!state.interaction_workflow &&
       !!state.interaction_examples;
@@ -733,16 +733,8 @@
       var okHelp = Array.isArray(state.help_context) ? state.help_context.length > 0 : !!state.help_context;
       return !!state.usage_context && okHelp;
     }
-    // Schritt 2: Rolle & Name
+    // Schritt 2: Persönlichkeit & Ton – alle 5 Kategorien müssen gewählt sein
     if (state.currentStep === 2) {
-      const input = document.getElementById('inputName');
-      if (input) {
-        state.name = input.value.trim();
-      }
-      return !!state.role && !!state.name;
-    }
-    // Schritt 3: Persönlichkeit & Ton – alle 5 Kategorien müssen gewählt sein
-    if (state.currentStep === 3) {
       return !!(
         state.personality_greeting &&
         state.personality_humor &&
@@ -750,6 +742,14 @@
         state.personality_tone &&
         state.personality_style
       );
+    }
+    // Schritt 3: Rolle & Name
+    if (state.currentStep === 3) {
+      const input = document.getElementById('inputName');
+      if (input) {
+        state.name = input.value.trim();
+      }
+      return !!state.role && !!state.name;
     }
     // Schritt 4: Arbeitsweise & Beispiele (je 1 Auswahl links/rechts)
     if (state.currentStep === 4) {
