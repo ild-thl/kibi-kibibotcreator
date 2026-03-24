@@ -475,8 +475,14 @@
         <h2 class="text-lg font-medium text-gray-800 mb-4">Datenschutzprinzipien</h2>
         <div class="wizard-step-grid">
           <div class="wizard-col-left">
-            <p class="wizard-question-title">Welche Datenschutzeinstellungen sollen vorgenommen werden?</p>
+            <p class="wizard-question-title">Was darf dein Avatar mit deinen Daten tun?</p>
             <p class="text-sm text-gray-500">Mehrfachauswahl möglich.</p>
+            <div class="grid gap-3 mt-4">
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="Auf andere Systeme zugreifen">Auf andere Systeme zugreifen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="Sich an Gespräche erinnern">Sich an Gespräche erinnern</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="Feedback an Lehrende weitergeben">Feedback an Lehrende weitergeben</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="Keine Daten speichern">Keine Daten speichern</button>
+            </div>
           </div>
 
           <div class="wizard-col-center">
@@ -501,13 +507,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
-            <div class="grid gap-3 mb-6">
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="Zugriff auf andere Systeme">Zugriff auf andere Systeme</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="An Gespräche erinnern">An Gespräche erinnern</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="Feedback an Lehrende geben">Feedback an Lehrende geben</button>
-            </div>
-          </div>
+          <div class="wizard-col-right"></div>
         </div>
       </section>
 

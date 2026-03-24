@@ -581,6 +581,23 @@
           } else {
             state[field].push(value);
           }
+
+          // Datenschutz-Schritt: "Keine Daten speichern" ist exklusiv
+          if (field === 'privacy') {
+            var noneValue = 'Keine Daten speichern';
+            if (value === noneValue && this.classList.contains('selected')) {
+              // "Keine Daten speichern" gewählt -> alle anderen abwählen
+              state.privacy = [noneValue];
+              document.querySelectorAll('.card-select[data-field="privacy"]').forEach(function (b) {
+                b.classList.toggle('selected', b.dataset.value === noneValue);
+              });
+            } else if (value !== noneValue && this.classList.contains('selected')) {
+              // Irgendeine andere Option gewählt -> "Keine Daten speichern" abwählen
+              state.privacy = state.privacy.filter(function (v) { return v !== noneValue; });
+              var noneBtn = document.querySelector('.card-select[data-field="privacy"][data-value="' + noneValue + '"]');
+              if (noneBtn) noneBtn.classList.remove('selected');
+            }
+          }
         } else {
           // Einzelauswahl: innerhalb desselben Feldes nur einen aktiv lassen
           const allForField = document.querySelectorAll('.card-select[data-field="' + field + '"]');
