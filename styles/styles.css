@@ -7,6 +7,31 @@ body {
   box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
+/* Darstellung wie im Beispielbild:
+   - Options sind "flat" (keine Card-Border)
+   - Radio-/Checkbox wird über ::before/::after dargestellt */
+.wizard-step-grid .wizard-col-left .card-select:not(.avatar-opt),
+.wizard-step-grid .wizard-col-right .card-select:not(.avatar-opt) {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  padding: 0.35rem 0.75rem 0.35rem 2.6rem !important;
+  border-radius: 0.5rem !important;
+}
+
+.wizard-step-grid .wizard-col-left .card-select:not(.avatar-opt):hover,
+.wizard-step-grid .wizard-col-right .card-select:not(.avatar-opt):hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.wizard-step-grid .wizard-col-left .card-select.selected:not(.avatar-opt),
+.wizard-step-grid .wizard-col-right .card-select.selected:not(.avatar-opt) {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
 .card-select:not(.avatar-opt) {
   position: relative;
   padding-left: 2.5rem !important;
@@ -121,6 +146,11 @@ body {
   animation: modalPop 260ms ease-out;
 }
 
+/* Footer muss immer über den Step-Inhalten liegen */
+#wizardNavBar {
+  z-index: 60;
+}
+
 @keyframes modalPop {
   0% {
     opacity: 0;
@@ -138,9 +168,11 @@ body {
 
 .wizard-step-grid {
   display: grid;
-  grid-template-columns: 0.4fr 0.6fr;
-  gap: 2.5rem;
+  grid-template-columns: 40% 60%;
+  column-gap: 2.5rem;
+  row-gap: 0;
   align-items: flex-start;
+  position: relative;
 }
 
 .wizard-col-left,
@@ -148,6 +180,115 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+/* Schritt 3-5: Etwas mehr vertikaler Abstand zwischen Frageblöcken */
+#step3 .wizard-col-left,
+#step3 .wizard-col-right,
+#step4 .wizard-col-left,
+#step4 .wizard-col-right,
+#step5 .wizard-col-left,
+#step5 .wizard-col-right {
+  gap: 1.25rem;
+}
+
+/* Schritt 3: Name-Frage soll nicht direkt unter der letzten Rollen-Option starten */
+#step3 .wizard-col-right .wizard-question-title {
+  margin-top: 0.75rem;
+}
+
+/* Schritt 4: Rechte Frage darf nicht zu nah an die letzte Auswahl links rutschen */
+#step4 .wizard-col-right .wizard-question-title {
+  margin-top: 0.75rem;
+}
+
+/* Schritt 5: Weniger "chaotisch" => mt-* aus den Blockcontainern entfernen.
+   Sonst addieren sich Tailwind `mt-*` + flex `gap` zu ungleichmäßigen Abständen. */
+#step5 .wizard-col-left > .wizard-question-title {
+  margin-top: 0 !important;
+}
+
+#step5 .wizard-col-left > .grid {
+  margin-top: 0 !important;
+}
+
+#step5 .wizard-col-right .grid {
+  margin-top: 0 !important;
+}
+
+/* Schritt 5: Rechte Frage braucht mehr Luft nach oben. */
+#step5 .wizard-col-right .wizard-question-title {
+  margin-top: 0.75rem;
+}
+
+/* Ein einzelner weißer Panel-Hintergrund pro Step (inkl. Überschrift) */
+#step0:not(.hidden),
+#step1:not(.hidden),
+#step2:not(.hidden),
+#step3:not(.hidden),
+#step4:not(.hidden),
+#step5:not(.hidden),
+#step6:not(.hidden),
+#step7:not(.hidden),
+#step8:not(.hidden) {
+  position: relative;
+}
+
+#step0:not(.hidden)::before,
+#step1:not(.hidden)::before,
+#step2:not(.hidden)::before,
+#step3:not(.hidden)::before,
+#step4:not(.hidden)::before,
+#step5:not(.hidden)::before,
+#step6:not(.hidden)::before,
+#step7:not(.hidden)::before,
+#step8:not(.hidden)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* rechter Panel-Start innerhalb wizard-step-grid: 40% Wheel + column-gap */
+  left: 40%;
+  right: 0;
+  background: #ffffff;
+  border-radius: 1rem;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Rechtsinhalte über dem Panel */
+#step0:not(.hidden) > *,
+#step1:not(.hidden) > *,
+#step2:not(.hidden) > *,
+#step3:not(.hidden) > *,
+#step4:not(.hidden) > *,
+#step5:not(.hidden) > *,
+#step6:not(.hidden) > *,
+#step7:not(.hidden) > *,
+#step8:not(.hidden) > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Wenn die rechte Spalte leer ist (z.B. Schritt 0/6/7), dann kein extra Padding,
+   damit keine "weiße Streifen" unterhalb entstehen. */
+.wizard-step-grid .wizard-col-right:empty {
+  padding: 0;
+}
+
+/* Genug Luft unten, damit der letzte Inhalt nicht zu dicht am Box-Rand sitzt. */
+.wizard-step-grid .wizard-col-right:not(:empty) {
+  padding-bottom: 1.5rem;
+}
+
+/* Rechtsinhalte: transparent (Hintergrund kommt vom Step-Panel) */
+.wizard-step-grid .wizard-col-left,
+.wizard-step-grid .wizard-col-right {
+  background: transparent;
 }
 
 .wizard-col-center {
@@ -180,6 +321,13 @@ body {
   font-weight: 600;
   color: #111827;
   margin-bottom: 0.75rem;
+}
+
+/* Schritt 3: Namenseingabe darf nicht über das rechte Panel hinausragen. */
+#step3 #inputName {
+  box-sizing: border-box; /* wichtig, damit Padding die Gesamtbreite nicht erhöht */
+  width: 50%;
+  max-width: 50%;
 }
 
 .wizard-wheel {
@@ -216,6 +364,8 @@ body {
   grid-column: 2;
   grid-row: 1;
   margin-bottom: 0.75rem; /* Tailwind: mb-4 bleibt optisch ähnlich */
+  margin-left: 2.5rem; /* bündig mit Fragen-Panel (Spalte + column-gap) */
+  margin-top: 1rem;
   justify-self: start;
 }
 
@@ -591,6 +741,54 @@ body {
   #step7:not(.hidden),
   #step8:not(.hidden) {
     display: block;
+  }
+
+  /* mobile: keine extra Verschiebung */
+  #step0:not(.hidden) > h2,
+  #step1:not(.hidden) > h2,
+  #step2:not(.hidden) > h2,
+  #step3:not(.hidden) > h2,
+  #step4:not(.hidden) > h2,
+  #step5:not(.hidden) > h2,
+  #step6:not(.hidden) > h2,
+  #step7:not(.hidden) > h2,
+  #step8:not(.hidden) > h2 {
+    margin-left: 0;
+  }
+
+  /* Mobile: Desktop-Panel-`::before` deaktivieren, damit kein weißer Hintergrund
+     mehr „hinter“/zu hoch über dem Wheel landet. */
+  /* Mobile: Eine einzige Hintergrundbox pro Step (kein Spalten-Boxen-Stapeln). */
+  #step0:not(.hidden)::before,
+  #step1:not(.hidden)::before,
+  #step2:not(.hidden)::before,
+  #step3:not(.hidden)::before,
+  #step4:not(.hidden)::before,
+  #step5:not(.hidden)::before,
+  #step6:not(.hidden)::before,
+  #step7:not(.hidden)::before,
+  #step8:not(.hidden)::before {
+    display: block;
+    left: 0;
+    right: 0;
+    border-radius: 1rem;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+
+  /* Mobile: Spalten bekommen keinen eigenen Hintergrund mehr. */
+  .wizard-step-grid .wizard-col-left:not(:empty),
+  .wizard-step-grid .wizard-col-right:not(:empty) {
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  /* Mobile: Innenabstand kommt von der Grid-Box. */
+  .wizard-step-grid {
+    padding: 1.25rem;
   }
 
   .wizard-step-grid {
