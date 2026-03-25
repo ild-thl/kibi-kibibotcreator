@@ -138,7 +138,7 @@ body {
 
 .wizard-step-grid {
   display: grid;
-  grid-template-columns: 1.3fr 1fr 1.3fr;
+  grid-template-columns: 0.4fr 0.6fr;
   gap: 2.5rem;
   align-items: flex-start;
 }
@@ -156,6 +156,25 @@ body {
   align-items: flex-start;
 }
 
+/* Layout-Anforderung:
+   - Wheel immer links (40%)
+   - Frage(n) + Antworten immer rechts (60%)
+   - Wheel-Section nimmt beide Reihen ein, rechts werden links/rechts-Container gestapelt. */
+.wizard-col-center {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.wizard-col-left {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.wizard-col-right {
+  grid-column: 2;
+  grid-row: 2;
+}
+
 .wizard-question-title {
   font-size: 1rem;
   font-weight: 600;
@@ -168,6 +187,49 @@ body {
   width: 420px;
   height: 420px;
   margin: 0 auto;
+}
+
+/* Schritt-Überschrift soll über den Fragen rechts stehen */
+#step0:not(.hidden),
+#step1:not(.hidden),
+#step2:not(.hidden),
+#step3:not(.hidden),
+#step4:not(.hidden),
+#step5:not(.hidden),
+#step6:not(.hidden),
+#step7:not(.hidden),
+#step8:not(.hidden) {
+  display: grid;
+  grid-template-columns: 0.4fr 0.6fr;
+  grid-template-rows: auto 1fr;
+}
+
+#step0:not(.hidden) > h2,
+#step1:not(.hidden) > h2,
+#step2:not(.hidden) > h2,
+#step3:not(.hidden) > h2,
+#step4:not(.hidden) > h2,
+#step5:not(.hidden) > h2,
+#step6:not(.hidden) > h2,
+#step7:not(.hidden) > h2,
+#step8:not(.hidden) > h2 {
+  grid-column: 2;
+  grid-row: 1;
+  margin-bottom: 0.75rem; /* Tailwind: mb-4 bleibt optisch ähnlich */
+  justify-self: start;
+}
+
+#step0:not(.hidden) > .wizard-step-grid,
+#step1:not(.hidden) > .wizard-step-grid,
+#step2:not(.hidden) > .wizard-step-grid,
+#step3:not(.hidden) > .wizard-step-grid,
+#step4:not(.hidden) > .wizard-step-grid,
+#step5:not(.hidden) > .wizard-step-grid,
+#step6:not(.hidden) > .wizard-step-grid,
+#step7:not(.hidden) > .wizard-step-grid,
+#step8:not(.hidden) > .wizard-step-grid {
+  grid-column: 1 / span 2;
+  grid-row: 2;
 }
 
 .wizard-wheel-outer {
@@ -516,8 +578,39 @@ body {
 }
 
 @media (max-width: 1024px) {
+  /* Auf schmalen Screens normale Struktur: Überschrift wieder oberhalb */
+  #step0:not(.hidden) {
+    display: block;
+  }
+  #step1:not(.hidden),
+  #step2:not(.hidden),
+  #step3:not(.hidden),
+  #step4:not(.hidden),
+  #step5:not(.hidden),
+  #step6:not(.hidden),
+  #step7:not(.hidden),
+  #step8:not(.hidden) {
+    display: block;
+  }
+
   .wizard-step-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Für schmale Screens: Wheel oben, Fragen darunter (keine festen grid-column/row mehr) */
+  .wizard-col-center {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .wizard-col-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .wizard-col-right {
+    grid-column: 1;
+    grid-row: 3;
   }
 
   .summary-layout {
@@ -537,6 +630,15 @@ body {
   .wizard-wheel {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  /* Wheel geometrie bleibt erhalten, indem das komplette Wheel skaliert wird */
+  .wizard-wheel {
+    --wheel-scale: min(1, calc((100vw - 64px) / 420px));
+    transform: scale(var(--wheel-scale));
+    transform-origin: top center;
   }
 }
 
