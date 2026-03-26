@@ -123,28 +123,24 @@ body {
 /* Radio: bei Hover/Fokus auch die Fläche (inkl. Text) leicht highlighten */
 .wizard-step-grid .wizard-col-left .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover,
 .wizard-step-grid .wizard-col-right .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover {
-  background: #f9fafb !important;
-  /* Highlight optisch kürzer: rechts "Luft" lassen */
-  box-shadow: inset -1.25rem 0 0 #ffffff !important;
+  /* Highlight optisch kürzer: rechts ein Stück weiß "ausblenden" */
+  background: linear-gradient(to right, #f9fafb 0 calc(100% - 2.0rem), transparent calc(100% - 2.0rem) 100%) !important;
 }
 
 .wizard-step-grid .wizard-col-left .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):focus-visible,
 .wizard-step-grid .wizard-col-right .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):focus-visible {
-  background: #f9fafb !important;
-  box-shadow: inset -1.25rem 0 0 #ffffff !important;
+  background: linear-gradient(to right, #f9fafb 0 calc(100% - 2.0rem), transparent calc(100% - 2.0rem) 100%) !important;
 }
 
 /* Checkbox (Mehrfachauswahl): gleiches "sensitives" Highlight wie bei Radio */
 .wizard-step-grid .wizard-col-left .card-select[data-multi="true"]:not(.avatar-opt):hover,
 .wizard-step-grid .wizard-col-right .card-select[data-multi="true"]:not(.avatar-opt):hover {
-  background: #f9fafb !important;
-  box-shadow: inset -1.25rem 0 0 #ffffff !important;
+  background: linear-gradient(to right, #f9fafb 0 calc(100% - 2.0rem), transparent calc(100% - 2.0rem) 100%) !important;
 }
 
 .wizard-step-grid .wizard-col-left .card-select[data-multi="true"]:not(.avatar-opt):focus-visible,
 .wizard-step-grid .wizard-col-right .card-select[data-multi="true"]:not(.avatar-opt):focus-visible {
-  background: #f9fafb !important;
-  box-shadow: inset -1.25rem 0 0 #ffffff !important;
+  background: linear-gradient(to right, #f9fafb 0 calc(100% - 2.0rem), transparent calc(100% - 2.0rem) 100%) !important;
 }
 
 /* In Schritt 8 (Avatar-Gestaltung) keine Radio/Checkbox-Icons anzeigen */
@@ -350,7 +346,7 @@ body {
   left: 40%;
   /* Grid überlappt die Spalte durch den column-gap leicht nach rechts.
      Hintergrund soll den Optionsbereich sauber abdecken. */
-  right: -2.5rem;
+  right: -0.75rem;
   background: #ffffff;
   border-radius: 1rem;
   border-top-right-radius: 1rem;
