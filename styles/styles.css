@@ -246,6 +246,8 @@ body {
   column-gap: 2.5rem;
   row-gap: 0;
   align-items: flex-start;
+  align-content: start;
+  grid-auto-rows: max-content;
   position: relative;
 }
 
