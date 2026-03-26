@@ -339,6 +339,9 @@ body {
 #step7:not(.hidden),
 #step8:not(.hidden) {
   position: relative;
+  /* Weiße Panel-Box soll bis kurz über die fixe Navigation reichen */
+  min-height: calc(100dvh - 16rem);
+  padding-bottom: 0.75rem;
 }
 
 #step0:not(.hidden)::before,
@@ -850,6 +853,8 @@ body {
   #step7:not(.hidden),
   #step8:not(.hidden) {
     display: block;
+    min-height: auto;
+    padding-bottom: 0;
   }
 
   /* mobile: keine extra Verschiebung */
