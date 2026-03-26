@@ -29,14 +29,14 @@
       <section id="step0" class="wizard-step">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Willkommen</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title">Dein Avatar für Studium und Lehre</p>
             <p class="text-sm text-gray-500">
               Auf den nächsten Seiten stellst du deinen Avatar Schritt für Schritt ein.
             </p>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -58,7 +58,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
+          <div class="wizard-col-side">
           </div>
         </div>
       </section>
@@ -67,16 +67,22 @@
       <section id="step1" class="wizard-step">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Einsatz & Zweck</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title">Für was soll dein Avatar eingesetzt werden?</p>
             <div class="grid gap-3">
               <button type="button" class="card-select w-full px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="usage_context" data-value="Lernraum">Lernraum</button>
               <button type="button" class="card-select w-full px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="usage_context" data-value="Lernveranstaltung">Lernveranstaltung</button>
               <button type="button" class="card-select w-full px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="usage_context" data-value="TH-Weit">TH-Weit</button>
             </div>
+            <p class="wizard-question-title mt-6">Wobei soll dir der Avatar helfen?</p>
+            <div class="grid gap-3">
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="help_context" data-multi="true" data-value="Lernen">Lernen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="help_context" data-multi="true" data-value="Planen">Planen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="help_context" data-multi="true" data-value="Schreiben">Schreiben</button>
+            </div>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -98,14 +104,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
-            <p class="wizard-question-title">Wobei soll dir der Avatar helfen?</p>
-            <div class="grid gap-3">
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="help_context" data-multi="true" data-value="Lernen">Lernen</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="help_context" data-multi="true" data-value="Planen">Planen</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="help_context" data-multi="true" data-value="Schreiben">Schreiben</button>
-            </div>
-          </div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 
@@ -113,7 +112,7 @@
       <section id="step3" class="wizard-step hidden">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Rolle & Name</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title">Welche Rolle soll dein Avatar bekommen?</p>
             <div class="grid gap-3">
               <button type="button" class="card-select w-full px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="role" data-value="Experte">Experte</button>
@@ -124,9 +123,17 @@
               <button type="button" class="card-select w-full px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="role" data-value="Buddy">Buddy</button>
               <button type="button" class="card-select w-full px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="role" data-value="Coach">Coach</button>
             </div>
+            <p class="wizard-question-title mt-6">Wie soll dein Avatar heißen?</p>
+            <div class="grid gap-3 mb-4">
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="Ava">Vorschlag 1: Ava</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="Leo">Vorschlag 2: Leo</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="Mika">Vorschlag 3: Mika</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="">Eigene Eingabe</button>
+            </div>
+            <input type="text" id="inputName" placeholder="Name deines Avatars" class="w-full px-5 py-3 rounded-2xl border-2 border-gray-200 bg-white text-sm placeholder-gray-400 focus:outline-none focus:border-[#007AFF] focus:ring-0 transition-colors" />
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -148,16 +155,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
-            <p class="wizard-question-title">Wie soll dein Avatar heißen?</p>
-            <div class="grid gap-3 mb-4">
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="Ava">Vorschlag 1: Ava</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="Leo">Vorschlag 2: Leo</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="Mika">Vorschlag 3: Mika</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left text-sm transition-all" data-field="nameChoice" data-suggestion="">Eigene Eingabe</button>
-            </div>
-            <input type="text" id="inputName" placeholder="Name deines Avatars" class="w-full px-5 py-3 rounded-2xl border-2 border-gray-200 bg-white text-sm placeholder-gray-400 focus:outline-none focus:border-[#007AFF] focus:ring-0 transition-colors" />
-          </div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 
@@ -165,7 +163,7 @@
       <section id="step2" class="wizard-step hidden">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Persönlichkeit & Ton</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title mb-4">Wie soll sich dein Avatar anfühlen?</p>
             <div class="space-y-4">
               <div>
@@ -189,10 +187,24 @@
                   <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_answer" data-value="Ausführlich">Ausführlich</button>
                 </div>
               </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700 mb-1">Ton</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_tone" data-value="Locker">Locker</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_tone" data-value="Professionell">Professionell</button>
+                </div>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700 mb-1">Stil</p>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_style" data-value="Persönlich">Persönlich</button>
+                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_style" data-value="Sachlich">Sachlich</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -214,24 +226,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
-            <div class="space-y-4">
-              <div>
-                <p class="text-sm font-medium text-gray-700 mb-1">Ton</p>
-                <div class="flex flex-wrap gap-2">
-                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_tone" data-value="Locker">Locker</button>
-                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_tone" data-value="Professionell">Professionell</button>
-                </div>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700 mb-1">Stil</p>
-                <div class="flex flex-wrap gap-2">
-                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_style" data-value="Persönlich">Persönlich</button>
-                  <button type="button" class="card-select px-4 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-field="personality_style" data-value="Sachlich">Sachlich</button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 
@@ -239,16 +234,22 @@
       <section id="step4" class="wizard-step hidden">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Arbeitsweise & Interaktion</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title">Wie soll Dein Avatar mit dir arbeiten?</p>
             <div class="grid gap-3 mt-4">
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_workflow" data-value="Schritt für Schritt erklären">Schritt für Schritt erklären</button>
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_workflow" data-value="Zuerst fragen stellen und dann antworten">Zuerst fragen stellen und dann antworten</button>
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_workflow" data-value="Direkt Vorschläge machen">Direkt Vorschläge machen</button>
             </div>
+            <p class="wizard-question-title mt-6">Soll Dein Avatar mit Beispielen arbeiten?</p>
+            <div class="grid gap-3 mt-4">
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Häufig Beispiele nutzen">Häufig Beispiele nutzen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Gelegentlich Beispiele nutzen">Gelegentlich Beispiele nutzen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Keine Beispiele nutzen">Keine Beispiele nutzen</button>
+            </div>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -270,14 +271,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
-            <p class="wizard-question-title">Soll Dein Avatar mit Beispielen arbeiten?</p>
-            <div class="grid gap-3 mt-4">
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Häufig Beispiele nutzen">Häufig Beispiele nutzen</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Gelegentlich Beispiele nutzen">Gelegentlich Beispiele nutzen</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="interaction_examples" data-value="Keine Beispiele nutzen">Keine Beispiele nutzen</button>
-            </div>
-          </div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 
@@ -285,7 +279,7 @@
       <section id="step5" class="wizard-step hidden">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Wissen & Kompetenz</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title">Was soll dein Avatar über dich wissen?</p>
             <div class="grid gap-3 mt-4">
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="knowledge" data-multi="true" data-value="Studiengang">Studiengang</button>
@@ -297,9 +291,15 @@
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="knowledge_source" data-multi="true" data-value="Allgemeines Wissen">Allgemeines Wissen</button>
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="knowledge_source" data-multi="true" data-value="Studiengangswissen">Studiengangswissen</button>
             </div>
+            <p class="wizard-question-title mt-6">Wie soll dein Avatar entscheiden?</p>
+            <div class="grid gap-3 mt-4">
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="decision_mode" data-value="Trifft Entscheidungen">Trifft Entscheidungen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="decision_mode" data-value="Gibt Empfehlungen">Gibt Empfehlungen</button>
+              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="decision_mode" data-value="Trifft keine Entscheidungen">Trifft keine Entscheidungen</button>
+            </div>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -321,14 +321,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
-            <p class="wizard-question-title">Wie soll dein Avatar entscheiden?</p>
-            <div class="grid gap-3 mt-4">
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="decision_mode" data-value="Trifft Entscheidungen">Trifft Entscheidungen</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="decision_mode" data-value="Gibt Empfehlungen">Gibt Empfehlungen</button>
-              <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="decision_mode" data-value="Trifft keine Entscheidungen">Trifft keine Entscheidungen</button>
-            </div>
-          </div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 
@@ -336,7 +329,7 @@
       <section id="step6" class="wizard-step hidden">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Lernen & Feedback</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title">Wie soll dein Avatar mit Fehlern umgehen?</p>
             <div class="grid gap-3 mt-4">
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="feedback" data-multi="true" data-value="Fehler freundlich erklären">Fehler freundlich erklären</button>
@@ -345,7 +338,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -367,7 +360,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right"></div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 
@@ -375,7 +368,7 @@
       <section id="step8" class="wizard-step hidden">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Visuelle Gestaltung</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title mb-4">Wie soll dein Avatar aussehen?</p>
             <div class="space-y-4">
               <div>
@@ -415,10 +408,28 @@
                 <div id="avatarFacialHair" class="flex flex-wrap gap-2"></div>
               </div>
               </div>
+              <div class="avatar-human-only">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">Kopfbedeckung</label>
+                <div id="avatarHeadwear" class="flex flex-wrap gap-2"></div>
+              </div>
+              </div>
+              <div class="avatar-human-only">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">Kleidung</label>
+                <div id="avatarClothing" class="flex flex-wrap gap-2"></div>
+              </div>
+              </div>
+              <div class="avatar-human-only">
+              <div>
+                <label class="block text-sm font-medium text-gray-600 mb-2">Accessoires</label>
+                <div id="avatarAccessories" class="flex flex-wrap gap-2"></div>
+              </div>
+              </div>
             </div>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -440,28 +451,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right">
-            <div class="space-y-4">
-              <div class="avatar-human-only">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-2">Kopfbedeckung</label>
-                <div id="avatarHeadwear" class="flex flex-wrap gap-2"></div>
-              </div>
-              </div>
-              <div class="avatar-human-only">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-2">Kleidung</label>
-                <div id="avatarClothing" class="flex flex-wrap gap-2"></div>
-              </div>
-              </div>
-              <div class="avatar-human-only">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-2">Accessoires</label>
-                <div id="avatarAccessories" class="flex flex-wrap gap-2"></div>
-              </div>
-              </div>
-            </div>
-          </div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 
@@ -469,7 +459,7 @@
       <section id="step7" class="wizard-step hidden">
         <h2 class="text-lg font-medium text-gray-800 mb-4">Datenschutzprinzipien</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-left">
+          <div class="wizard-col-main">
             <p class="wizard-question-title">Was darf dein Avatar mit deinen Daten tun?</p>
             <div class="grid gap-3 mt-4">
               <button type="button" class="card-select w-full px-4 py-2 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="privacy" data-multi="true" data-value="Auf andere Systeme zugreifen">Auf andere Systeme zugreifen</button>
@@ -479,7 +469,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-center">
+          <div class="wizard-col-wheel">
             <div class="wizard-wheel">
               <div class="wizard-wheel-outer"></div>
               <div class="wizard-wheel-band"></div>
@@ -501,7 +491,7 @@
             </div>
           </div>
 
-          <div class="wizard-col-right"></div>
+          <div class="wizard-col-side"></div>
         </div>
       </section>
 

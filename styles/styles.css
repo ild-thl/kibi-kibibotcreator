@@ -11,13 +11,14 @@ body {
 .wizard-step-grid .card-select {
   font-size: 1rem !important;
   line-height: 1.4;
+  font-weight: 500 !important;
 }
 
 /* Darstellung wie im Beispielbild:
    - Options sind "flat" (keine Card-Border)
    - Radio-/Checkbox wird über ::before/::after dargestellt */
-.wizard-step-grid .wizard-col-left .card-select:not(.avatar-opt),
-.wizard-step-grid .wizard-col-right .card-select:not(.avatar-opt) {
+.wizard-step-grid .wizard-col-main .card-select:not(.avatar-opt),
+.wizard-step-grid .wizard-col-side .card-select:not(.avatar-opt) {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -25,17 +26,18 @@ body {
   padding: 0.3rem 0.75rem 0.3rem 2.35rem !important;
   border-radius: 0.5rem !important;
   text-align: left;
+  /* Hover-/Fokus-Fläche endet mit rechtem Inset innerhalb der weißen Box */
   clip-path: inset(0 2rem 0 0 round 0.5rem);
 }
 
-.wizard-step-grid .wizard-col-left .card-select:not(.avatar-opt):hover,
-.wizard-step-grid .wizard-col-right .card-select:not(.avatar-opt):hover {
+.wizard-step-grid .wizard-col-main .card-select:not(.avatar-opt):hover,
+.wizard-step-grid .wizard-col-side .card-select:not(.avatar-opt):hover {
   transform: none !important;
   box-shadow: none !important;
 }
 
-.wizard-step-grid .wizard-col-left .card-select.selected:not(.avatar-opt),
-.wizard-step-grid .wizard-col-right .card-select.selected:not(.avatar-opt) {
+.wizard-step-grid .wizard-col-main .card-select.selected:not(.avatar-opt),
+.wizard-step-grid .wizard-col-side .card-select.selected:not(.avatar-opt) {
   background: transparent !important;
   border-color: transparent !important;
 }
@@ -47,8 +49,8 @@ body {
 }
 
 /* Optionen insgesamt etwas dichter zusammen (viele Steps nutzen grid gap-3) */
-.wizard-step-grid .wizard-col-left .grid.gap-3,
-.wizard-step-grid .wizard-col-right .grid.gap-3 {
+.wizard-step-grid .wizard-col-main .grid.gap-3,
+.wizard-step-grid .wizard-col-side .grid.gap-3 {
   gap: 0.5rem !important;
 }
 
@@ -128,27 +130,27 @@ body {
 }
 
 /* Radio: bei Hover/Fokus auch die Fläche (inkl. Text) leicht highlighten */
-.wizard-step-grid .wizard-col-left .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover,
-.wizard-step-grid .wizard-col-right .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover {
+.wizard-step-grid .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover,
+.wizard-step-grid .wizard-col-side .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover {
   background: #f9fafb !important;
   background-image: none !important;
 }
 
-.wizard-step-grid .wizard-col-left .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):focus-visible,
-.wizard-step-grid .wizard-col-right .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):focus-visible {
+.wizard-step-grid .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):focus-visible,
+.wizard-step-grid .wizard-col-side .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):focus-visible {
   background: #f9fafb !important;
   background-image: none !important;
 }
 
 /* Checkbox (Mehrfachauswahl): gleiches "sensitives" Highlight wie bei Radio */
-.wizard-step-grid .wizard-col-left .card-select[data-multi="true"]:not(.avatar-opt):hover,
-.wizard-step-grid .wizard-col-right .card-select[data-multi="true"]:not(.avatar-opt):hover {
+.wizard-step-grid .wizard-col-main .card-select[data-multi="true"]:not(.avatar-opt):hover,
+.wizard-step-grid .wizard-col-side .card-select[data-multi="true"]:not(.avatar-opt):hover {
   background: #f9fafb !important;
   background-image: none !important;
 }
 
-.wizard-step-grid .wizard-col-left .card-select[data-multi="true"]:not(.avatar-opt):focus-visible,
-.wizard-step-grid .wizard-col-right .card-select[data-multi="true"]:not(.avatar-opt):focus-visible {
+.wizard-step-grid .wizard-col-main .card-select[data-multi="true"]:not(.avatar-opt):focus-visible,
+.wizard-step-grid .wizard-col-side .card-select[data-multi="true"]:not(.avatar-opt):focus-visible {
   background: #f9fafb !important;
   background-image: none !important;
 }
@@ -251,8 +253,9 @@ body {
   position: relative;
 }
 
-.wizard-col-left,
-.wizard-col-right {
+/* main = Fragen/Antworten, side = optionaler Zusatzbereich (aktuell meist leer) */
+.wizard-col-main,
+.wizard-col-side {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -263,7 +266,8 @@ body {
 /* (kein extra clipping notwendig) */
 
 /* Rechts: Hover/Fokus-Highlight soll nicht über die abgerundete Panel-Kante laufen */
-.wizard-step-grid .wizard-col-right {
+/* side-Spalte clippt Hover/Fokus-Flächen sauber an der rechten Panel-Kante */
+.wizard-step-grid .wizard-col-side {
   overflow: hidden;
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
@@ -272,62 +276,54 @@ body {
 }
 
 /* Schritt 3-5: Etwas mehr vertikaler Abstand zwischen Frageblöcken */
-#step3 .wizard-col-left,
-#step3 .wizard-col-right,
-#step4 .wizard-col-left,
-#step4 .wizard-col-right,
-#step5 .wizard-col-left,
-#step5 .wizard-col-right {
+#step3 .wizard-col-main,
+#step4 .wizard-col-main,
+#step5 .wizard-col-main {
   gap: 1.25rem;
 }
 
 /* Schritt 2: Radio-Optionen in 2 Spalten, damit Spalten exakt übereinander sitzen */
-#step2 .wizard-col-left .flex.flex-wrap.gap-2,
-#step2 .wizard-col-right .flex.flex-wrap.gap-2 {
+#step2 .wizard-col-main .flex.flex-wrap.gap-2 {
   display: grid !important;
-  /* Fixe Spalten, damit die 2. Option immer exakt in Spalte 2 sitzt,
-     aber die Gruppe insgesamt linksbündig bleibt. */
-  grid-template-columns: 12.5rem 12.5rem;
-  gap: 0.5rem; /* entspricht Tailwind gap-2 */
+  /* Feste Spaltenbreite für bündige vertikale Ausrichtung */
+  grid-template-columns: 10.75rem 10.75rem;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
   justify-content: start;
   align-items: start;
-  width: fit-content;
-  max-width: 100%;
 }
 
-#step2 .wizard-col-left .flex.flex-wrap.gap-2 .card-select,
-#step2 .wizard-col-right .flex.flex-wrap.gap-2 .card-select {
+#step2 .wizard-col-main .flex.flex-wrap.gap-2 .card-select {
   width: 100%;
   white-space: nowrap;
 }
 
-/* Schritt 3: Name-Frage soll nicht direkt unter der letzten Rollen-Option starten */
-#step3 .wizard-col-right .wizard-question-title {
-  margin-top: 0.75rem;
+/* Schritt 2: gleichmäßige Zeilenabstände zwischen den Kategorien */
+#step2 .wizard-col-main .space-y-4 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
 }
 
-/* Schritt 4: Rechte Frage darf nicht zu nah an die letzte Auswahl links rutschen */
-#step4 .wizard-col-right .wizard-question-title {
-  margin-top: 0.75rem;
+#step2 .wizard-col-main .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0 !important;
+}
+
+/* Wenn Step 2 untereinander gestapelt wird: gleicher Abstand zwischen Antwortstil und Ton */
+@media (max-width: 1024px) {
+  #step2 .wizard-step-grid {
+    row-gap: 0.9rem;
+  }
 }
 
 /* Schritt 5: Weniger "chaotisch" => mt-* aus den Blockcontainern entfernen.
    Sonst addieren sich Tailwind `mt-*` + flex `gap` zu ungleichmäßigen Abständen. */
-#step5 .wizard-col-left > .wizard-question-title {
+#step5 .wizard-col-main > .wizard-question-title {
   margin-top: 0 !important;
 }
 
-#step5 .wizard-col-left > .grid {
+#step5 .wizard-col-main > .grid {
   margin-top: 0 !important;
-}
-
-#step5 .wizard-col-right .grid {
-  margin-top: 0 !important;
-}
-
-/* Schritt 5: Rechte Frage braucht mehr Luft nach oben. */
-#step5 .wizard-col-right .wizard-question-title {
-  margin-top: 0.75rem;
 }
 
 /* Ein einzelner weißer Panel-Hintergrund pro Step (inkl. Überschrift) */
@@ -390,22 +386,23 @@ body {
 
 /* Wenn die rechte Spalte leer ist (z.B. Schritt 0/6/7), dann kein extra Padding,
    damit keine "weiße Streifen" unterhalb entstehen. */
-.wizard-step-grid .wizard-col-right:empty {
+.wizard-step-grid .wizard-col-side:empty {
   padding: 0;
 }
 
 /* Genug Luft unten, damit der letzte Inhalt nicht zu dicht am Box-Rand sitzt. */
-.wizard-step-grid .wizard-col-right:not(:empty) {
+.wizard-step-grid .wizard-col-side:not(:empty) {
   padding-bottom: 1.5rem;
 }
 
 /* Rechtsinhalte: transparent (Hintergrund kommt vom Step-Panel) */
-.wizard-step-grid .wizard-col-left,
-.wizard-step-grid .wizard-col-right {
+.wizard-step-grid .wizard-col-main,
+.wizard-step-grid .wizard-col-side {
   background: transparent;
 }
 
-.wizard-col-center {
+/* wheel = zentrale Visualisierung (Wizard-Wheel + Avatar) */
+.wizard-col-wheel {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -415,17 +412,18 @@ body {
    - Wheel immer links (40%)
    - Frage(n) + Antworten immer rechts (60%)
    - Wheel-Section nimmt beide Reihen ein, rechts werden links/rechts-Container gestapelt. */
-.wizard-col-center {
+/* Desktop-Grid: Wheel links, Inhalte in main/side rechts gestapelt */
+.wizard-col-wheel {
   grid-column: 1;
   grid-row: 1 / span 2;
 }
 
-.wizard-col-left {
+.wizard-col-main {
   grid-column: 2;
   grid-row: 1;
 }
 
-.wizard-col-right {
+.wizard-col-side {
   grid-column: 2;
   grid-row: 2;
 }
@@ -895,8 +893,8 @@ body {
   }
 
   /* Mobile: Spalten bekommen keinen eigenen Hintergrund mehr. */
-  .wizard-step-grid .wizard-col-left:not(:empty),
-  .wizard-step-grid .wizard-col-right:not(:empty) {
+  .wizard-step-grid .wizard-col-main:not(:empty),
+  .wizard-step-grid .wizard-col-side:not(:empty) {
     background: transparent;
     border-radius: 0;
     padding: 0;
@@ -912,17 +910,17 @@ body {
   }
 
   /* Für schmale Screens: Wheel oben, Fragen darunter (keine festen grid-column/row mehr) */
-  .wizard-col-center {
+  .wizard-col-wheel {
     grid-column: 1;
     grid-row: 1;
   }
 
-  .wizard-col-left {
+  .wizard-col-main {
     grid-column: 1;
     grid-row: 2;
   }
 
-  .wizard-col-right {
+  .wizard-col-side {
     grid-column: 1;
     grid-row: 3;
   }
