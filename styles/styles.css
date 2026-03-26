@@ -14,6 +14,36 @@ body {
   font-weight: 500 !important;
 }
 
+/* Schritt 3: max. 4 Rollen-Optionen pro Zeile */
+#step3 .role-options {
+  display: grid;
+  grid-template-columns: repeat(4, 7rem);
+  gap: 0.5rem;
+  justify-content: start;
+  align-items: start;
+}
+
+/* Schritt 3: Name-Optionen max. 3 pro Zeile */
+#step3 .name-options {
+  display: grid;
+  grid-template-columns: repeat(3, 7rem);
+  gap: 0.5rem;
+  justify-content: start;
+  align-items: start;
+}
+
+#step3 .role-options .card-select,
+#step3 .name-options .card-select {
+  width: 100%;
+}
+
+/* Nur "Eigene Eingabe" ohne Zeilenumbruch; Vorschläge behalten ihren Abstand */
+#step3 .name-options .card-select[data-suggestion=""] {
+  white-space: nowrap;
+  width: max-content;
+  grid-column: 1 / span 2;
+}
+
 /* Darstellung wie im Beispielbild:
    - Options sind "flat" (keine Card-Border)
    - Radio-/Checkbox wird über ::before/::after dargestellt */
@@ -26,7 +56,10 @@ body {
   padding: 0.3rem 0.75rem 0.3rem 2.35rem !important;
   border-radius: 0.5rem !important;
   text-align: left;
-  /* Hover-/Fokus-Fläche endet mit rechtem Inset innerhalb der weißen Box */
+}
+
+/* Rechter Zuschnitt nur für volle Zeilen-Buttons (nicht für Wrap-Chips wie Rolle in Schritt 3) */
+.wizard-step-grid .card-select.w-full:not(.avatar-opt) {
   clip-path: inset(0 2rem 0 0 round 0.5rem);
 }
 
