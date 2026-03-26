@@ -7,6 +7,12 @@ body {
   box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.15);
 }
 
+/* Einheitliche Schriftgröße für alle Antwortoptionen in allen Schritten */
+.wizard-step-grid .card-select {
+  font-size: 1rem !important;
+  line-height: 1.4;
+}
+
 /* Darstellung wie im Beispielbild:
    - Options sind "flat" (keine Card-Border)
    - Radio-/Checkbox wird über ::before/::after dargestellt */
