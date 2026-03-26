@@ -2,31 +2,31 @@
   function buildExportPayload(state, avatarUrl) {
     return {
       exportedAt: new Date().toISOString(),
-      usage_context: state.usage_context,
-      help_context: state.help_context,
+      usagecontext: state.usage_context,
+      helpcontext: state.help_context,
       role: state.role,
       name: state.name,
-      avatar_url: avatarUrl,
-      avatar_type: state.avatarType || 'human',
-      avatar_skin_color: state.avatarSkinColor,
-      avatar_top: state.avatarTop,
-      avatar_headwear: state.avatarHeadwear,
-      avatar_hair_color: state.avatarHairColor,
-      avatar_facial_hair: state.avatarFacialHair,
-      avatar_mouth: state.avatarMouth,
-      avatar_clothing: state.avatarClothing,
-      avatar_accessories: state.avatarAccessories,
-      personality_greeting: state.personality_greeting || '',
-      personality_humor: state.personality_humor || '',
-      personality_answer: state.personality_answer || '',
-      personality_tone: state.personality_tone || '',
-      personality_style: state.personality_style || '',
-      interaction_workflow: state.interaction_workflow || '',
-      interaction_examples: state.interaction_examples || '',
-      interaction_style: [state.interaction_workflow, state.interaction_examples].filter(Boolean),
+      avatarurl: avatarUrl,
+      avatartype: state.avatarType || 'human',
+      avatarskincolor: state.avatarSkinColor,
+      avatartop: state.avatarTop,
+      avatarheadwear: state.avatarHeadwear,
+      avatarhaircolor: state.avatarHairColor,
+      avatarfacialhair: state.avatarFacialHair,
+      avatarmouth: state.avatarMouth,
+      avatarclothing: state.avatarClothing,
+      avataraccessories: state.avatarAccessories,
+      personalitygreeting: state.personality_greeting || '',
+      personalityhumor: state.personality_humor || '',
+      personalityanswer: state.personality_answer || '',
+      personalitytone: state.personality_tone || '',
+      personalitystyle: state.personality_style || '',
+      interactionworkflow: state.interaction_workflow || '',
+      interactionexamples: state.interaction_examples || '',
+      interactionstyle: [state.interaction_workflow, state.interaction_examples].filter(Boolean),
       knowledge: Array.isArray(state.knowledge) ? state.knowledge.slice() : [],
-      knowledge_source: Array.isArray(state.knowledge_source) ? state.knowledge_source.slice() : [],
-      decision_mode: state.decision_mode || '',
+      knowledgesource: Array.isArray(state.knowledge_source) ? state.knowledge_source.slice() : [],
+      decisionmode: state.decision_mode || '',
       feedback: Array.isArray(state.feedback) ? state.feedback.slice() : [],
       privacy: Array.isArray(state.privacy) ? state.privacy.slice() : []
     };
@@ -34,32 +34,33 @@
 
   function buildSaveParams(state, avatarUrl) {
     var params = new URLSearchParams();
+    params.set('newtest', 'Y');
     if (state.id) params.set('id', state.id);
-    params.set('usage_context', state.usage_context);
-    params.set('help_context', Array.isArray(state.help_context) ? state.help_context.join(',') : state.help_context);
+    params.set('usagecontext', state.usage_context);
+    params.set('helpcontext', Array.isArray(state.help_context) ? state.help_context.join(',') : state.help_context);
     params.set('role', state.role);
     params.set('name', state.name);
-    params.set('avatar_url', avatarUrl);
-    params.set('avatar_type', state.avatarType || 'human');
-    params.set('avatar_skin_color', state.avatarSkinColor);
-    params.set('avatar_top', state.avatarTop);
-    params.set('avatar_headwear', state.avatarHeadwear);
-    params.set('avatar_hair_color', state.avatarHairColor);
-    params.set('avatar_facial_hair', state.avatarFacialHair);
-    params.set('avatar_mouth', state.avatarMouth);
-    params.set('avatar_clothing', state.avatarClothing);
-    params.set('avatar_accessories', state.avatarAccessories);
-    params.set('personality_greeting', state.personality_greeting || '');
-    params.set('personality_humor', state.personality_humor || '');
-    params.set('personality_answer', state.personality_answer || '');
-    params.set('personality_tone', state.personality_tone || '');
-    params.set('personality_style', state.personality_style || '');
-    params.set('interaction_workflow', state.interaction_workflow || '');
-    params.set('interaction_examples', state.interaction_examples || '');
-    params.set('interaction_style', [state.interaction_workflow, state.interaction_examples].filter(Boolean).join(','));
+    params.set('avatarurl', avatarUrl);
+    params.set('avatartype', state.avatarType || 'human');
+    params.set('avatarskincolor', state.avatarSkinColor);
+    params.set('avatartop', state.avatarTop);
+    params.set('avatarheadwear', state.avatarHeadwear);
+    params.set('avatarhaircolor', state.avatarHairColor);
+    params.set('avatarfacialhair', state.avatarFacialHair);
+    params.set('avatarmouth', state.avatarMouth);
+    params.set('avatarclothing', state.avatarClothing);
+    params.set('avataraccessories', state.avatarAccessories);
+    params.set('personalitygreeting', state.personality_greeting || '');
+    params.set('personalityhumor', state.personality_humor || '');
+    params.set('personalityanswer', state.personality_answer || '');
+    params.set('personalitytone', state.personality_tone || '');
+    params.set('personalitystyle', state.personality_style || '');
+    params.set('interactionworkflow', state.interaction_workflow || '');
+    params.set('interactionexamples', state.interaction_examples || '');
+    params.set('interactionstyle', [state.interaction_workflow, state.interaction_examples].filter(Boolean).join(','));
     params.set('knowledge', Array.isArray(state.knowledge) ? state.knowledge.join(',') : '');
-    params.set('knowledge_source', Array.isArray(state.knowledge_source) ? state.knowledge_source.join(',') : '');
-    params.set('decision_mode', state.decision_mode || '');
+    params.set('knowledgesource', Array.isArray(state.knowledge_source) ? state.knowledge_source.join(',') : '');
+    params.set('decisionmode', state.decision_mode || '');
     params.set('feedback', Array.isArray(state.feedback) ? state.feedback.join(',') : '');
     params.set('privacy', Array.isArray(state.privacy) ? state.privacy.join(',') : '');
     return params;
