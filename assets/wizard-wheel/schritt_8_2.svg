@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Schritt_8_x5F_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 625 625">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <filter id="drop-shadow-1" x="101.1" y="70.4" width="137.2" height="137.2" filterUnits="userSpaceOnUse">
+      <feOffset dx="4.5" dy="4.5"/>
+      <feGaussianBlur result="blur" stdDeviation="0"/>
+      <feFlood flood-color="#245ebc" flood-opacity="1"/>
+      <feComposite in2="blur" operator="in"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g filter="url(#drop-shadow-1)">
+    <circle cx="167.5" cy="136.8" r="64.7" fill="#fff" stroke="#fff" stroke-miterlimit="10" stroke-width="3.3"/>
+    <path d="M142.2,108.3h53.6c8.1,0,14.7,6.6,14.7,14.7v24.8c0,8.1-6.6,14.7-14.7,14.7h-26.8s-18.4,17.9-18.4,17.9l2.6-17.9h-11.1c-8.1,0-14.7-6.6-14.7-14.7v-24.8c0-8.1,6.6-14.7,14.7-14.7Z" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="3"/>
+    <line x1="144.9" y1="123.4" x2="193.4" y2="123.4" fill="none" stroke="#333" stroke-miterlimit="10" stroke-width="3"/>
+    <line x1="144.9" y1="133.8" x2="193.4" y2="133.8" fill="none" stroke="#333" stroke-miterlimit="10" stroke-width="3"/>
+    <line x1="144.9" y1="144.8" x2="193.4" y2="144.8" fill="none" stroke="#333" stroke-miterlimit="10" stroke-width="3"/>
+  </g>
+</svg>

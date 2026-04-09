@@ -57,6 +57,15 @@
     input.disabled = !state.nameManual;
   }
 
+  function getFirstIncompleteStep() {
+    if (window.WizardNavigation && window.WizardNavigation.getFirstIncompleteStep) {
+      return window.WizardNavigation.getFirstIncompleteStep(state, TOTAL_STEPS, {
+        isCurrentStepValid: isCurrentStepValid
+      });
+    }
+    return TOTAL_STEPS;
+  }
+
   function readUrlParams() {
     const params = new URLSearchParams(window.location.search);
     state.id = params.get('id') || '';
@@ -74,15 +83,6 @@
     }
   }
 
-  function getFirstIncompleteStep() {
-    if (window.WizardNavigation && window.WizardNavigation.getFirstIncompleteStep) {
-      return window.WizardNavigation.getFirstIncompleteStep(state, TOTAL_STEPS, {
-        isCurrentStepValid: isCurrentStepValid
-      });
-    }
-    return TOTAL_STEPS;
-  }
-
   function buildAvatarUrl() {
     if (window.WizardAvatar && window.WizardAvatar.buildAvatarUrl) {
       return window.WizardAvatar.buildAvatarUrl(state);
@@ -98,10 +98,17 @@
     }
   }
 
+  function updateWizardWheelGraphics() {
+    if (window.WizardWheel && window.WizardWheel.updateWizardWheel) {
+      window.WizardWheel.updateWizardWheel(state);
+    }
+  }
+
   function updateAvatarPreview() {
     if (window.WizardAvatar && window.WizardAvatar.updateAvatarPreview) {
       window.WizardAvatar.updateAvatarPreview(state, buildAvatarUrl());
     }
+    updateWizardWheelGraphics();
   }
 
   function syncWheelAvatarAnimation() {
@@ -169,7 +176,8 @@
       window.WizardSelection.bindCardSelects(state, {
         renderAvatarStep: renderAvatarStep,
         updateAvatarPreview: updateAvatarPreview,
-        updateNameInputState: updateNameInputState
+        updateNameInputState: updateNameInputState,
+        updateWizardWheel: updateWizardWheelGraphics
       });
     }
   }
@@ -363,6 +371,22 @@
     restoreSelections();
     bindCardSelects();
 
+    var wizardContent = document.getElementById('wizardContent');
+    if (wizardContent) {
+      wizardContent.addEventListener('click', function (e) {
+        var hotspot = e.target.closest('.wizard-wheel-start, .wizard-wheel-jump');
+        if (!hotspot) return;
+        e.preventDefault();
+        var stepNum = Number(hotspot.getAttribute('data-step') || '0');
+        if (stepNum === 0) {
+          if (state.currentStep === 0) goToStep(getFirstIncompleteStep());
+          else goToStep(0);
+        } else {
+          goToStep(stepNum);
+        }
+      });
+    }
+
     const nextBtn = document.getElementById('btnNext');
     const backBtn = document.getElementById('btnBack');
     const saveBtn = document.getElementById('btnSave');
@@ -399,30 +423,12 @@
         }
       });
     }
-    document.querySelectorAll('.wizard-wheel-node[data-step]').forEach(function (node) {
-      node.style.cursor = 'pointer';
-      node.addEventListener('click', function () {
-        var stepAttr = this.getAttribute('data-step');
-        var stepNum = Number(stepAttr);
-        if (stepNum === 0) {
-          // Wenn der Start-Kreis gerade aktiv ist: zum ersten offenen Schritt springen,
-          // sonst einfach auf die Startseite (Schritt 0) zurück.
-          if (this.classList.contains('wizard-wheel-node--active')) {
-            var target = getFirstIncompleteStep();
-            goToStep(target);
-          } else {
-            goToStep(0);
-          }
-        } else {
-          goToStep(stepNum);
-        }
-      });
-    });
     if (inputName) {
       updateNameInputState();
       inputName.addEventListener('input', function () {
         if (this.disabled) return;
         state.name = this.value.trim();
+        updateWizardWheelGraphics();
       });
       inputName.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') { e.preventDefault(); next(); }

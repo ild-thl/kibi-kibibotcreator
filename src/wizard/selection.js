@@ -3,6 +3,7 @@
     var renderAvatarStep = deps && deps.renderAvatarStep;
     var updateAvatarPreview = deps && deps.updateAvatarPreview;
     var updateNameInputState = deps && deps.updateNameInputState;
+    var updateWizardWheel = deps && deps.updateWizardWheel;
 
     document.querySelectorAll('.card-select').forEach(function (btn) {
       if (btn.classList.contains('avatar-opt')) return;
@@ -68,6 +69,7 @@
             }
           }
         }
+        if (typeof updateWizardWheel === 'function') updateWizardWheel();
       });
     });
   }

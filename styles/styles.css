@@ -480,6 +480,97 @@ body {
   width: 420px;
   height: 420px;
   margin: 0 auto;
+  aspect-ratio: 1;
+  /* Einheitliche Größe aller Ring-Klickflächen (Start + Schritt 1–8). */
+  --wheel-hotspot-size: 5.5rem;
+}
+
+/* Gestapelte SVGs: HG unten, Fortschritt, Schritt-Overlay; Avatar darüber (siehe .wizard-wheel-avatar). */
+.wizard-wheel-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
+}
+
+.wizard-wheel-bg {
+  z-index: 0;
+}
+
+.wizard-wheel-progress {
+  z-index: 1;
+}
+
+.wizard-wheel-step {
+  z-index: 2;
+}
+
+/* Klickflächen Start + Schritt 1–8: gleiche Größe (--wheel-hotspot-size). */
+.wizard-wheel-start,
+.wizard-wheel-jump {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  width: var(--wheel-hotspot-size);
+  height: var(--wheel-hotspot-size);
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.wizard-wheel-start:focus-visible,
+.wizard-wheel-jump:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Debug: Klickflächen sichtbar (?wheelDebug=1 oder Alt+Shift+D) */
+body.wizard-wheel-debug .wizard-wheel-start {
+  background: rgba(34, 197, 94, 0.28);
+  border: 2px dashed rgba(21, 128, 61, 0.95);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+}
+
+body.wizard-wheel-debug .wizard-wheel-jump {
+  background: rgba(239, 68, 68, 0.22);
+  border: 2px dashed rgba(185, 28, 28, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+}
+
+body.wizard-wheel-debug .wizard-wheel-jump::after {
+  content: attr(data-step);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #991b1b;
+  pointer-events: none;
+  line-height: 1;
+}
+
+body.wizard-wheel-debug .wizard-wheel-start::after {
+  content: "0";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #14532d;
+  pointer-events: none;
+  line-height: 1;
 }
 
 /* Schritt-Überschrift soll über den Fragen rechts stehen */
@@ -527,27 +618,14 @@ body {
   grid-row: 2;
 }
 
-.wizard-wheel-outer {
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  background: transparent url("../assets/wheel-ring.svg") center center no-repeat;
-  background-size: contain;
-}
-
-.wizard-wheel-inner {
-  position: absolute;
-  inset: 22%;
-  border-radius: 999px;
-  background: transparent;
-}
-
 .wizard-wheel-avatar {
   position: absolute;
-  top: 21.5%;
-  left: 26.75%;
-  width: 56%;
-  height: 56%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  width: 42%;
+  height: 42%;
   border-radius: 999px;
   overflow: hidden;
   display: flex;
@@ -567,113 +645,6 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.wizard-wheel-node {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60px;
-  height: 60px;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 2px solid rgba(70, 70, 70, 0.8); /* Grundlinie */
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  /* zweite „Linie“ unten rechts für ungleichmäßigen Rand */
-  box-shadow:
-    1px 2px 0 0 #333333,
-    0 2px 3px rgba(0, 0, 0, 0.18);
-  transition: background-color 150ms ease-out,
-              box-shadow 150ms ease-out,
-              border-color 150ms ease-out;
-}
-
-.wizard-wheel-node--active {
-  background: #4caf50;
-  border-color: #2f7d32;
-  width: 70px;
-  height: 70px;
-  /* gleicher „gezeichneter“ Rand wie bei den weißen Kreisen, nur etwas stärker */
-  box-shadow:
-    1px 2px 0 0 #2b5b2b,
-    0 3px 4px rgba(0, 0, 0, 0.22);
-  z-index: 3;
-  animation: wizardNodePop 260ms ease-out;
-}
-
-@keyframes wizardNodePop {
-  0% {
-    width: 60px;
-    height: 60px;
-  }
-  55% {
-    width: 88px;
-    height: 88px;
-  }
-  100% {
-    width: 70px;
-    height: 70px;
-  }
-}
-
-.wizard-wheel-node-label {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: #333333;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  letter-spacing: -0.01em;
-  pointer-events: none;
-  transform-origin: center;
-}
-
-.wizard-wheel-node--active .wizard-wheel-node-label {
-  color: #ffffff;
-  animation: wizardNodeLabelPop 260ms ease-out;
-}
-
-@keyframes wizardNodeLabelPop {
-  0% {
-    transform: scale(0.95);
-  }
-  55% {
-    transform: scale(1.25);
-  }
-  100% {
-    transform: scale(1.0);
-  }
-}
-
-/* Verteilung entlang des Rings – Start-Kreis (0) steht oben */
-.wizard-wheel-node--1 { transform: translate(-50%, -50%) rotate(-50deg) translate(172px) rotate(50deg); }
-.wizard-wheel-node--2 { transform: translate(-50%, -50%) rotate(-10deg) translate(172px) rotate(10deg); }
-.wizard-wheel-node--3 { transform: translate(-50%, -50%) rotate(30deg) translate(172px) rotate(-30deg); }
-.wizard-wheel-node--4 { transform: translate(-50%, -50%) rotate(70deg) translate(165px) rotate(-70deg); }
-.wizard-wheel-node--5 { transform: translate(-50%, -50%) rotate(110deg) translate(156px) rotate(-110deg); }
-.wizard-wheel-node--6 { transform: translate(-50%, -50%) rotate(150deg) translate(152px) rotate(-150deg); }
-.wizard-wheel-node--7 { transform: translate(-50%, -50%) rotate(190deg) translate(152px) rotate(-190deg); }
-.wizard-wheel-node--8 { transform: translate(-50%, -50%) rotate(230deg) translate(158px) rotate(-230deg); }
-
-.wizard-wheel-node--0 {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border-radius: 999px;
-  /* Start-Kreis genau oben auf dem Wheel */
-  transform: translate(-50%, -50%) rotate(-90deg) translate(165px) rotate(90deg);
-}
-
-.wizard-wheel-band {
-  position: absolute;
-  inset: 14%;
-  border-radius: 999px;
-  border: 24px solid transparent; /* visueller Ring kommt aus SVG */
-  box-sizing: border-box;
 }
 
 .summary-layout {

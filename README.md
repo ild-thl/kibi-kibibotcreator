@@ -86,9 +86,23 @@ When test mode is active:
 - **All validations are skipped** – every step is treated as valid.
 - You can jump directly to any step via the wheel (for example, from the start page straight to Step 7) without filling out previous steps.
 
+## Wheel debug mode (development)
+
+The wheel uses **invisible hit targets** (transparent buttons) aligned to the SVG artwork. To check or fine-tune alignment:
+
+- **URL:** append `?wheelDebug=1` (or `wheeldebug=1`) when opening the app, e.g. `index.html?wheelDebug=1`.
+- **Keyboard:** press **Alt+Shift+D** to toggle the debug overlay on or off (no reload).
+
+When debug mode is on, `body` gets the class `wizard-wheel-debug`:
+
+- **Start (step 0)** is shown with a green-tinted dashed circle and label `0`.
+- **Steps 1–8** use a red-tinted dashed circle and their step number.
+
+Implementation: `src/wizard/wheel.js` (`WizardWheel.setWheelDebug(true|false)` and `WizardWheel.isWheelDebugEnabled()` are also available in the console).
+
 ## Notes / behavior
 
-- **Step wheel**: click on circles to jump to steps. Clicking the “Start” circle returns to the start page (Step 0). If the start circle is currently highlighted, it jumps to the next incomplete step.
+- **Step wheel**: click the **Start** area or **step 1–8** areas on the ring to jump (forward jumps still respect validation unless test mode is on). On the **welcome page (step 0)**, **Start** jumps to the **first incomplete** step (or the summary if everything is done). On any other step, **Start** returns to the welcome page.
 - **Step 3 (Communication style)**: consists of 5 categories with two options each.
 - **Step 7 (Avatar appearance)**: the “Facial expression” is not shown as a UI category; it is derived automatically from Step 3 “Humor”.
 
