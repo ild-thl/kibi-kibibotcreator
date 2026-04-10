@@ -454,6 +454,57 @@
     return out;
   }
 
+  /**
+   * Alle sinnvollen sel-*.json-Kandidaten für den Schritt aus dem aktuellen State
+   * (z. B. wenn der Nutzer später wieder auf den Schritt springt – passend zur Auswahl).
+   */
+  function restoreStepWheelCandidates(step, state) {
+    var fields = STEP_FIELDS[step];
+    if (!fields || !fields.length || !state) return [];
+
+    var setFields = fields.filter(function (f) {
+      return valueSlugFromState(state, f) != null;
+    });
+    if (!setFields.length) return [];
+
+    var seen = {};
+    var out = [];
+
+    function pushUnique(u) {
+      if (!u || seen[u]) return;
+      seen[u] = true;
+      out.push(u);
+    }
+
+    for (var pi = 0; pi < setFields.length; pi++) {
+      var f = setFields[pi];
+      var prefix = BASE + 'step-' + pad2(step) + '/';
+      var vSlug = valueSlugFromState(state, f);
+      var fs = fieldSeg(f);
+      var others = fields.filter(function (of) {
+        return of !== f && valueSlugFromState(state, of) != null;
+      });
+      others.sort();
+
+      if (others.length) {
+        var combo = others
+          .map(function (of) {
+            return fieldSeg(of) + '-' + valueSlugFromState(state, of);
+          })
+          .join('__');
+        pushUnique(prefix + 'sel-' + fs + '-' + vSlug + '__' + combo + '.json');
+      }
+      for (var j = 0; j < others.length; j++) {
+        var of = others[j];
+        pushUnique(
+          prefix + 'sel-' + fs + '-' + vSlug + '__' + fieldSeg(of) + '-' + valueSlugFromState(state, of) + '.json'
+        );
+      }
+      pushUnique(prefix + 'sel-' + fs + '-' + vSlug + '.json');
+    }
+    return out;
+  }
+
   function notifyUiUpdate(state) {
     if (!state) return;
     var cur = state.currentStep;
@@ -470,7 +521,10 @@
       return;
     }
     if (shouldSkipWheelAnimations(state)) return;
-    playCandidateUrls(state, transitionCandidates(from, cur), from);
+    var restoreUrls = restoreStepWheelCandidates(cur, state);
+    var transUrls = transitionCandidates(from, cur);
+    var urls = restoreUrls.length ? restoreUrls.concat(transUrls) : transUrls;
+    playCandidateUrls(state, urls, from);
   }
 
   function notifySelection(state, meta) {
