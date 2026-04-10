@@ -87,6 +87,15 @@
     return slugify(v);
   }
 
+  /** Mehrfach-help: Slug in Klick-/Array-Reihenfolge, falls von der sortierten Variante abweichend. */
+  function helpContextMultiInsertSlug(state) {
+    var hc = state.help_context;
+    if (!Array.isArray(hc) || hc.length < 2) return null;
+    var sorted = hc.slice().sort().map(slugify).join('-and-');
+    var ordered = hc.map(slugify).join('-and-');
+    return sorted !== ordered ? ordered : null;
+  }
+
   /**
    * Einheitlicher `sel-…`-Mittelteil: Felder in STEP_FIELDS-Reihenfolge, nur gesetzte Werte, mit `__`.
    * Entspricht z. B. `usage-lernraum__help-lernen` (unabhängig davon, welches Feld zuletzt geklickt wurde).
@@ -101,6 +110,22 @@
       if (vs != null) parts.push(fieldSeg(f) + '-' + vs);
     }
     return parts.length ? parts.join('__') : null;
+  }
+
+  /**
+   * Schritt 1: gleicher kanonischer Name wie `canonicalSelBase`, aber `help_context`-Teil in
+   * Array-Reihenfolge (Klickreihenfolge), nicht alphabetisch. Ermöglicht Assets wie
+   * `sel-usage-…__help-schreiben-and-planen.json` neben `…-planen-and-schreiben…`.
+   */
+  function canonicalSelBaseHelpInsertionVariant(state, step) {
+    var base = canonicalSelBase(state, step);
+    if (!base || step !== 1 || !state) return null;
+    var hi = helpContextMultiInsertSlug(state);
+    if (!hi) return null;
+    var sortedSeg = 'help-' + valueSlugFromState(state, 'help_context');
+    var orderedSeg = 'help-' + hi;
+    if (base.indexOf(sortedSeg) === -1) return null;
+    return base.replace(sortedSeg, orderedSeg);
   }
 
   function destroyInstance(inst) {
@@ -473,6 +498,9 @@
     }
 
     var canonBase = canonicalSelBase(state, step);
+    var canonHelpOrder = canonicalSelBaseHelpInsertionVariant(state, step);
+    /* Zuerst Klick-Reihenfolge, wenn abweichend: sonst fehlende sortierte Datei → ~900ms Timeout bis zum nächsten Kandidaten. */
+    if (canonHelpOrder) push(prefix + 'sel-' + canonHelpOrder + '.json');
     if (canonBase) push(prefix + 'sel-' + canonBase + '.json');
 
     var others = fields.filter(function (of) {
@@ -481,20 +509,43 @@
     others.sort();
 
     if (others.length) {
+      var hiSel = step === 1 ? helpContextMultiInsertSlug(state) : null;
       var combo = others
         .map(function (of) {
           return fieldSeg(of) + '-' + valueSlugFromState(state, of);
         })
         .join('__');
+      if (hiSel && others.indexOf('help_context') >= 0) {
+        var comboIns = others
+          .map(function (of) {
+            return of === 'help_context' ? 'help-' + hiSel : fieldSeg(of) + '-' + valueSlugFromState(state, of);
+          })
+          .join('__');
+        push(prefix + 'sel-' + fs + '-' + vSlug + '__' + comboIns + '.json');
+      }
       push(prefix + 'sel-' + fs + '-' + vSlug + '__' + combo + '.json');
+      if (hiSel && f === 'help_context') {
+        push(prefix + 'sel-help-' + hiSel + '__' + combo + '.json');
+      }
     }
     for (var i = 0; i < others.length; i++) {
       var of = others[i];
+      var hiPair = step === 1 && of === 'help_context' ? helpContextMultiInsertSlug(state) : null;
+      if (hiPair) {
+        push(prefix + 'sel-' + fs + '-' + vSlug + '__help-' + hiPair + '.json');
+      }
       push(
         prefix + 'sel-' + fs + '-' + vSlug + '__' + fieldSeg(of) + '-' + valueSlugFromState(state, of) + '.json'
       );
     }
     push(prefix + 'sel-' + fs + '-' + vSlug + '.json');
+    if (step === 1 && f === 'help_context') {
+      var hiSolo = helpContextMultiInsertSlug(state);
+      if (hiSolo) {
+        var hsFull = valueSlugFromState(state, 'help_context');
+        if (hiSolo !== hsFull) push(prefix + 'sel-help-' + hiSolo + '.json');
+      }
+    }
     return out;
   }
 
@@ -522,6 +573,8 @@
 
     var prefix0 = BASE + 'step-' + pad2(step) + '/';
     var canonBase = canonicalSelBase(state, step);
+    var canonHelpIns = canonicalSelBaseHelpInsertionVariant(state, step);
+    if (canonHelpIns) pushUnique(prefix0 + 'sel-' + canonHelpIns + '.json');
     if (canonBase) pushUnique(prefix0 + 'sel-' + canonBase + '.json');
 
     for (var pi = 0; pi < setFields.length; pi++) {
@@ -535,20 +588,43 @@
       others.sort();
 
       if (others.length) {
+        var hiR = step === 1 ? helpContextMultiInsertSlug(state) : null;
         var combo = others
           .map(function (of) {
             return fieldSeg(of) + '-' + valueSlugFromState(state, of);
           })
           .join('__');
+        if (hiR && others.indexOf('help_context') >= 0) {
+          var comboInsR = others
+            .map(function (of) {
+              return of === 'help_context' ? 'help-' + hiR : fieldSeg(of) + '-' + valueSlugFromState(state, of);
+            })
+            .join('__');
+          pushUnique(prefix + 'sel-' + fs + '-' + vSlug + '__' + comboInsR + '.json');
+        }
         pushUnique(prefix + 'sel-' + fs + '-' + vSlug + '__' + combo + '.json');
+        if (hiR && f === 'help_context') {
+          pushUnique(prefix + 'sel-help-' + hiR + '__' + combo + '.json');
+        }
       }
       for (var j = 0; j < others.length; j++) {
         var of = others[j];
+        var hiPr = step === 1 && of === 'help_context' ? helpContextMultiInsertSlug(state) : null;
+        if (hiPr) {
+          pushUnique(prefix + 'sel-' + fs + '-' + vSlug + '__help-' + hiPr + '.json');
+        }
         pushUnique(
           prefix + 'sel-' + fs + '-' + vSlug + '__' + fieldSeg(of) + '-' + valueSlugFromState(state, of) + '.json'
         );
       }
       pushUnique(prefix + 'sel-' + fs + '-' + vSlug + '.json');
+      if (step === 1 && f === 'help_context') {
+        var hiSo = helpContextMultiInsertSlug(state);
+        if (hiSo) {
+          var hsF = valueSlugFromState(state, 'help_context');
+          if (hiSo !== hsF) pushUnique(prefix + 'sel-help-' + hiSo + '.json');
+        }
+      }
     }
     return out;
   }
@@ -628,7 +704,11 @@
       return;
     }
     if (shouldSkipWheelAnimations(state)) return;
-    var urls = selectionCandidates(state.currentStep, state, meta);
+    /* Bei Abwahl: meta.value ist das entfernte Item — selectionCandidates wäre falsch und liefert ohnehin []. */
+    var urls =
+      meta.isMulti && meta.added === false
+        ? restoreStepWheelCandidates(state.currentStep, state)
+        : selectionCandidates(state.currentStep, state, meta);
     playCandidateUrls(state, urls, state.currentStep);
   }
 

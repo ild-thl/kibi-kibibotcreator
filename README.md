@@ -165,7 +165,8 @@ assets/wheel-animations/
 `{seg}` is a short alias for the `data-field` / state key (e.g. `usage_context` → `usage`, `help_context` → `help`). See `FIELD_SEGMENT` in `wheel-center-lottie.js` for the full list.
 
 `{valueSlug}` is derived from the **clicked** value (or current state for the other fields): lowercased, `&` → `and`, non-alphanumeric → `-`, empty → `none`.  
-For **arrays** (multi-select), values are **sorted**, slugified, and joined with `-and-` (e.g. `lernen-and-planen`).
+For **arrays** (multi-select), values are **sorted**, slugified, and joined with `-and-` (e.g. `lernen-and-planen`).  
+**Step 1 `help_context`:** If sort order and **click order** differ (e.g. Schreiben + Planen → sorted `planen-and-schreiben` vs. order `schreiben-and-planen`), the resolver tries **both** full combo filenames so assets like `sel-help-schreiben-and-planen.json` / `sel-usage-…__help-schreiben-and-planen.json` still match.
 
 **Examples (step 1)**
 
