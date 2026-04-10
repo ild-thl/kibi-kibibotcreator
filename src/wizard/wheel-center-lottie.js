@@ -87,6 +87,22 @@
     return slugify(v);
   }
 
+  /**
+   * Einheitlicher `sel-…`-Mittelteil: Felder in STEP_FIELDS-Reihenfolge, nur gesetzte Werte, mit `__`.
+   * Entspricht z. B. `usage-lernraum__help-lernen` (unabhängig davon, welches Feld zuletzt geklickt wurde).
+   */
+  function canonicalSelBase(state, step) {
+    var fields = STEP_FIELDS[step];
+    if (!fields || !state) return null;
+    var parts = [];
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      var vs = valueSlugFromState(state, f);
+      if (vs != null) parts.push(fieldSeg(f) + '-' + vs);
+    }
+    return parts.length ? parts.join('__') : null;
+  }
+
   function destroyInstance(inst) {
     if (!inst) return;
     try {
@@ -448,27 +464,37 @@
     var vSlug = slugify(meta.value);
     var fs = fieldSeg(f);
 
+    var seen = {};
+    var out = [];
+    function push(u) {
+      if (!u || seen[u]) return;
+      seen[u] = true;
+      out.push(u);
+    }
+
+    var canonBase = canonicalSelBase(state, step);
+    if (canonBase) push(prefix + 'sel-' + canonBase + '.json');
+
     var others = fields.filter(function (of) {
       return of !== f && valueSlugFromState(state, of) != null;
     });
     others.sort();
 
-    var out = [];
     if (others.length) {
       var combo = others
         .map(function (of) {
           return fieldSeg(of) + '-' + valueSlugFromState(state, of);
         })
         .join('__');
-      out.push(prefix + 'sel-' + fs + '-' + vSlug + '__' + combo + '.json');
+      push(prefix + 'sel-' + fs + '-' + vSlug + '__' + combo + '.json');
     }
     for (var i = 0; i < others.length; i++) {
       var of = others[i];
-      out.push(
+      push(
         prefix + 'sel-' + fs + '-' + vSlug + '__' + fieldSeg(of) + '-' + valueSlugFromState(state, of) + '.json'
       );
     }
-    out.push(prefix + 'sel-' + fs + '-' + vSlug + '.json');
+    push(prefix + 'sel-' + fs + '-' + vSlug + '.json');
     return out;
   }
 
@@ -493,6 +519,10 @@
       seen[u] = true;
       out.push(u);
     }
+
+    var prefix0 = BASE + 'step-' + pad2(step) + '/';
+    var canonBase = canonicalSelBase(state, step);
+    if (canonBase) pushUnique(prefix0 + 'sel-' + canonBase + '.json');
 
     for (var pi = 0; pi < setFields.length; pi++) {
       var f = setFields[pi];

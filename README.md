@@ -157,11 +157,10 @@ assets/wheel-animations/
 
 **Selections** for step `S` (in order, first successful load wins):
 
-1. **Full combo:** `step-NN/sel-{seg}-{valueSlug}__{seg2}-{slug2}__{seg3}-{slug3}.json`  
-   – one `segN-slugN` pair per **other** field in that step that already has a value, sorted alphabetically by `seg` name.
-2. **Pairwise:** for each other field with a value:  
-   `step-NN/sel-{seg}-{valueSlug}__{segOther}-{slugOther}.json`
-3. **Solo:** `step-NN/sel-{seg}-{valueSlug}.json`
+1. **Canonical full combo:** `step-NN/sel-{seg1}-{slug1}__{seg2}-{slug2}__….json`  
+   – one pair per field in that step that already has a value, in **`STEP_FIELDS` order** (same order as the table below), independent of which option was clicked last. Example step 1: `sel-usage-lernraum__help-lernen.json`.
+2. **Clicked-first combo** (legacy / alternate authoring): same pairs but the **clicked** field’s segment comes first in the filename.
+3. **Pairwise** (clicked field vs each other set field), then **solo** for the clicked value.
 
 `{seg}` is a short alias for the `data-field` / state key (e.g. `usage_context` → `usage`, `help_context` → `help`). See `FIELD_SEGMENT` in `wheel-center-lottie.js` for the full list.
 
@@ -173,7 +172,7 @@ For **arrays** (multi-select), values are **sorted**, slugified, and joined with
 | Situation | Tried files (simplified) |
 |-----------|---------------------------|
 | Choose “Lernraum” only | `sel-usage-lernraum.json` |
-| Then add help “Lernen” | `sel-help-lernen__usage-lernraum.json`, then `sel-help-lernen.json` |
+| Then add help “Lernen” | `sel-usage-lernraum__help-lernen.json`, then fallbacks (`sel-help-lernen__usage-lernraum.json`, `sel-help-lernen.json`) |
 | Choose “Lernen” first, no usage yet | `sel-help-lernen.json` |
 | Then choose “Lernraum” | `sel-usage-lernraum__help-lernen.json`, then `sel-usage-lernraum.json` |
 
