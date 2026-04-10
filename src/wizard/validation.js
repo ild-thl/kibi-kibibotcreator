@@ -6,12 +6,10 @@
     return !!(
       state.avatarSkinColor !== null &&
       state.avatarTop !== null &&
-      state.avatarHeadwear !== null &&
       state.avatarHairColor !== null &&
       state.avatarFacialHair !== null &&
       state.avatarMouth !== null &&
-      state.avatarClothing !== null &&
-      state.avatarAccessories !== null
+      state.avatarClothing !== null
     );
   }
 

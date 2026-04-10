@@ -12,66 +12,26 @@
     { label: 'Dunkel', value: '614335' },
     { label: 'Warm', value: 'fd9841' }
   ];
-  const avatarFrisurByGender = {
-    'männlich': [
-      { label: 'Kurz flach', value: 'shortFlat' }, { label: 'Kurz rund', value: 'shortRound' },
-      { label: 'Kurz gewellt', value: 'shortWaved' }, { label: 'Kurz lockig', value: 'shortCurly' },
-      { label: 'Seitenscheitel', value: 'theCaesarAndSidePart' }, { label: 'Caesar', value: 'theCaesar' },
-      { label: 'Seiten', value: 'sides' }, { label: 'Mullet', value: 'shaggyMullet' },
-      { label: 'Shaggy', value: 'shaggy' }, { label: 'Dreads', value: 'dreads01' },
-      { label: 'Dreads 2', value: 'dreads02' }, { label: 'Seiten abrasiert', value: 'shavedSides' },
-      { label: 'Großes Haar', value: 'bigHair' }, { label: 'Frizzy', value: 'frizzle' }
-    ],
-    'weiblich': [
-      { label: 'Lang gerade', value: 'straight01' }, { label: 'Lang gerade (variiert)', value: 'straight02' },
-      { label: 'Lang & Strähnen', value: 'straightAndStrand' }, { label: 'Lang lockig', value: 'curly' },
-      { label: 'Lang, aber nicht zu lang', value: 'longButNotTooLong' }, { label: 'Bob', value: 'bob' },
-      { label: 'Dutt', value: 'bun' }, { label: 'Mia Wallace', value: 'miaWallace' },
-      { label: 'Afro', value: 'fro' }, { label: 'Afro mit Band', value: 'froBand' },
-      { label: 'Frida', value: 'frida' }, { label: 'Curvy', value: 'curvy' },
-      { label: 'Frizzy', value: 'frizzle' }, { label: 'Dreads', value: 'dreads01' },
-      { label: 'Seiten abrasiert', value: 'shavedSides' }, { label: 'Großes Haar', value: 'bigHair' }
-    ],
-    'divers': [
-      { label: 'Kurz flach', value: 'shortFlat' }, { label: 'Kurz rund', value: 'shortRound' },
-      { label: 'Kurz gewellt', value: 'shortWaved' }, { label: 'Kurz lockig', value: 'shortCurly' },
-      { label: 'Lang gerade', value: 'straight01' }, { label: 'Lang lockig', value: 'curly' },
-      { label: 'Bob', value: 'bob' }, { label: 'Dutt', value: 'bun' },
-      { label: 'Shaggy', value: 'shaggy' }, { label: 'Dreads', value: 'dreads01' },
-      { label: 'Afro', value: 'fro' }, { label: 'Großes Haar', value: 'bigHair' }
-    ],
-    'kein Geschlecht': [
-      { label: 'Kurz flach', value: 'shortFlat' }, { label: 'Kurz rund', value: 'shortRound' },
-      { label: 'Lang gerade', value: 'straight01' }, { label: 'Bob', value: 'bob' },
-      { label: 'Dutt', value: 'bun' }, { label: 'Shaggy', value: 'shaggy' }
-    ]
-  };
-  const avatarHeadwearOpts = [
-    { label: 'Keine', value: '' }, { label: 'Wollmütze', value: 'winterHat03' },
-    { label: 'Hijab', value: 'hijab' }, { label: 'Turban', value: 'turban' }
+  /** UI: Kurz / Lang / Lockig → Dicebear Avataaars `top`: Kurz flach, Lang gerade, Afro. */
+  const avatarFrisurOpts = [
+    { label: 'Kurz', value: 'shortFlat' },
+    { label: 'Lang', value: 'straight01' },
+    { label: 'Lockig', value: 'fro' }
   ];
   const avatarHairColors = [
     { label: 'Schwarz', value: '2c1b18' }, { label: 'Braun', value: 'b58143' },
     { label: 'Blond', value: 'ecdcbf' }, { label: 'Auburn', value: 'a55728' },
     { label: 'Grau', value: '4a312c' }
   ];
+  /** UI: Kein Bart / Vollbart / Schnurrbart → Dicebear: keins, beardLight (Leichter Bart), moustacheFancy (Schnurrbart elegant). */
   const avatarFacialHairOpts = [
-    { label: 'Kein Bart', value: '' }, { label: 'Leichter Bart', value: 'beardLight' },
-    { label: 'Vollbart mittel', value: 'beardMedium' }, { label: 'Vollbart majestätisch', value: 'beardMajestic' },
-    { label: 'Schnurrbart elegant', value: 'moustacheFancy' }, { label: 'Schnurrbart kräftig', value: 'moustacheMagnum' }
+    { label: 'Kein Bart', value: '' },
+    { label: 'Vollbart', value: 'beardLight' },
+    { label: 'Schnurrbart', value: 'moustacheFancy' }
   ];
-  const avatarClothingOpts = [
-    { label: 'Blazer & Hemd', value: 'blazerAndShirt' }, { label: 'Blazer & Pullover', value: 'blazerAndSweater' },
-    { label: 'Kragen & Pullover', value: 'collarAndSweater' }, { label: 'Hoodie', value: 'hoodie' },
-    { label: 'T-Shirt runder Ausschnitt', value: 'shirtCrewNeck' }, { label: 'T-Shirt V-Ausschnitt', value: 'shirtVNeck' },
-    { label: 'T-Shirt Scoop-Ausschnitt', value: 'shirtScoopNeck' }, { label: 'T-Shirt mit Grafik', value: 'graphicShirt' },
-    { label: 'Overall', value: 'overall' }
-  ];
-  const avatarAccessoriesOpts = [
-    { label: 'Keine', value: '' }, { label: 'Brille', value: 'prescription01' },
-    { label: 'Sonnebrille', value: 'sunglasses' }, { label: 'Rund', value: 'round' },
-    { label: 'Wayfarer', value: 'wayfarers' }, { label: 'Augenklappe', value: 'eyepatch' }
-  ];
+  /** Mensch: Kleidung folgt Schritt 2 „Ton“ (nicht mehr wählbar in Schritt 8). */
+  const HUMAN_CLOTHING_LOCKER = 'shirtCrewNeck';
+  const HUMAN_CLOTHING_PROFESSIONELL = 'collarAndSweater';
 
   var avatarLottieInstances = [];
 
@@ -85,12 +45,20 @@
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) { img.style.display = 'block'; });
   }
 
+  /** Setzt `state.avatarClothing` für Mensch aus Schritt 2 (Ton). */
+  function syncHumanClothingFromTone(state) {
+    if (!state || state.avatarType !== 'human') return null;
+    var v = HUMAN_CLOTHING_LOCKER;
+    if (state.personality_tone === 'Professionell') v = HUMAN_CLOTHING_PROFESSIONELL;
+    else if (state.personality_tone === 'Locker') v = HUMAN_CLOTHING_LOCKER;
+    state.avatarClothing = v;
+    return v;
+  }
+
   function buildAvatarUrl(state) {
     const avatarType = state.avatarType || 'human';
     const humorMood = state.personality_humor === 'Ernst' ? 'serious' : 'happy';
     if (avatarType !== 'human') {
-      var localTypes = ['monster', 'cat', 'dog', 'fox', 'panda', 'owl'];
-      if (localTypes.indexOf(avatarType) >= 0) return './assets/avatar-types/' + avatarType + '-' + humorMood + '.svg';
       if (avatarType === 'robot') {
         const seed = (state.name || state.id || 'avatar') + '-robot';
         const pRobot = new URLSearchParams({ seed: seed });
@@ -101,19 +69,18 @@
         pRobot.append('sides', 'squareAssymetric');
         return 'https://api.dicebear.com/9.x/bottts/svg?' + pRobot.toString();
       }
-      return './assets/avatar-types/monster-' + humorMood + '.svg';
+      return './assets/avatar-types/owl-' + humorMood + '.svg';
     }
-    const topValue = state.avatarHeadwear || state.avatarTop || 'shortFlat';
+    const topValue = state.avatarTop || 'shortFlat';
     const seed = (state.name || state.id || 'avatar') + topValue + state.avatarHairColor + state.avatarSkinColor;
     const p = new URLSearchParams({
       seed: seed, top: topValue, eyes: 'default', eyebrows: 'default',
       hairColor: state.avatarHairColor || 'b58143',
       skinColor: state.avatarSkinColor || 'edb98a',
       mouth: state.avatarMouth || 'smile',
-      clothing: state.avatarClothing || 'shirtCrewNeck'
+      clothing: syncHumanClothingFromTone(state) || HUMAN_CLOTHING_LOCKER
     });
-    if (state.avatarAccessories) { p.set('accessories', state.avatarAccessories); p.set('accessoriesProbability', '100'); }
-    else p.set('accessoriesProbability', '0');
+    p.set('accessoriesProbability', '0');
     if (state.avatarFacialHair) {
       p.set('facialHair', state.avatarFacialHair);
       p.set('facialHairProbability', '100');
@@ -141,11 +108,8 @@
         this.classList.add('selected');
         if (kind === 'skin') state.avatarSkinColor = selectedVal;
         if (kind === 'top') state.avatarTop = selectedVal;
-        if (kind === 'headwear') state.avatarHeadwear = selectedVal;
         if (kind === 'hair') state.avatarHairColor = selectedVal;
         if (kind === 'facialHair') state.avatarFacialHair = selectedVal;
-        if (kind === 'clothing') state.avatarClothing = selectedVal;
-        if (kind === 'acc') state.avatarAccessories = selectedVal;
         state.avatarInitialized = true;
         if (typeof onChanged === 'function') onChanged();
         if (typeof notifyWheel === 'function') {
@@ -156,12 +120,23 @@
   }
 
   function renderAvatarStep(state, deps) {
+    var allowedAvatarTypes = { human: true, robot: true, owl: true };
+    if (state.avatarType && !allowedAvatarTypes[state.avatarType]) {
+      state.avatarType = 'human';
+    }
     if (!state.avatarType) state.avatarType = 'human';
-    const g = state.gender || 'divers';
-    const frisurOpts = avatarFrisurByGender[g] || avatarFrisurByGender.divers;
+    if (state.avatarType === 'human') syncHumanClothingFromTone(state);
+    const frisurOpts = avatarFrisurOpts;
     const validTops = frisurOpts.map(function (o) { return o.value; });
     if (state.avatarInitialized && state.avatarTop && !validTops.includes(state.avatarTop) && frisurOpts[0]) {
       state.avatarTop = frisurOpts[0].value;
+    }
+    var validFacialVals = avatarFacialHairOpts.map(function (o) {
+      return o.value;
+    });
+    var fh = state.avatarFacialHair;
+    if (state.avatarInitialized && fh !== '' && fh != null && !validFacialVals.includes(fh)) {
+      state.avatarFacialHair = '';
     }
     if (!state.avatarMouth) {
       if (state.personality_humor === 'Humorvoll') state.avatarMouth = 'smile';
@@ -171,11 +146,8 @@
     document.querySelectorAll('.avatar-human-only').forEach(function (el) { el.classList.toggle('hidden', !showHumanOptions); });
     renderAvatarOption('avatarSkinColor', avatarSkinColors, state, 'avatarSkinColor', 'skin', deps);
     renderAvatarOption('avatarFrisur', frisurOpts, state, 'avatarTop', 'top', deps);
-    renderAvatarOption('avatarHeadwear', avatarHeadwearOpts, state, 'avatarHeadwear', 'headwear', deps);
     renderAvatarOption('avatarHairColor', avatarHairColors, state, 'avatarHairColor', 'hair', deps);
     renderAvatarOption('avatarFacialHair', avatarFacialHairOpts, state, 'avatarFacialHair', 'facialHair', deps);
-    renderAvatarOption('avatarClothing', avatarClothingOpts, state, 'avatarClothing', 'clothing', deps);
-    renderAvatarOption('avatarAccessories', avatarAccessoriesOpts, state, 'avatarAccessories', 'acc', deps);
   }
 
   function updateAvatarPreview(state, avatarUrl) {
@@ -197,6 +169,7 @@
     buildAvatarUrl: buildAvatarUrl,
     renderAvatarStep: renderAvatarStep,
     updateAvatarPreview: updateAvatarPreview,
-    clearAvatarLottie: clearAvatarLottie
+    clearAvatarLottie: clearAvatarLottie,
+    syncHumanClothingFromTone: syncHumanClothingFromTone
   };
 })();

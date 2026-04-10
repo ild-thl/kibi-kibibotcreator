@@ -22,12 +22,10 @@
     avatarType: 'avatar_type',
     avatarSkinColor: 'skin',
     avatarTop: 'hair_top',
-    avatarHeadwear: 'headwear',
     avatarHairColor: 'hair_color',
     avatarFacialHair: 'facial_hair',
     avatarMouth: 'mouth',
-    avatarClothing: 'clothing',
-    avatarAccessories: 'accessories'
+    avatarClothing: 'clothing'
   };
 
   /**
@@ -47,10 +45,8 @@
       'avatarSkinColor',
       'avatarHairColor',
       'avatarTop',
-      'avatarHeadwear',
       'avatarFacialHair',
       'avatarClothing',
-      'avatarAccessories',
       'avatarMouth'
     ]
   };

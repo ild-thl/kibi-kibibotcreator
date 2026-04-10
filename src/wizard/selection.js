@@ -52,6 +52,15 @@
             }
           }
 
+          if (field === 'personality_tone') {
+            if (window.WizardAvatar && typeof window.WizardAvatar.syncHumanClothingFromTone === 'function') {
+              window.WizardAvatar.syncHumanClothingFromTone(state);
+            }
+            if (state.avatarInitialized && typeof updateAvatarPreview === 'function') {
+              updateAvatarPreview();
+            }
+          }
+
           if (field === 'avatarType') {
             state.avatarInitialized = true;
             if (state.currentStep === 8 && typeof renderAvatarStep === 'function') {

@@ -192,7 +192,11 @@ The resolver knows these fields per wizard step (must match `index.html` / `stat
 | 5 | `knowledge`, `knowledge_source`, `decision_mode` |
 | 6 | `feedback` |
 | 7 | `privacy` |
-| 8 | `avatarType`, `avatarSkinColor`, `avatarHairColor`, `avatarTop`, `avatarHeadwear`, `avatarFacialHair`, `avatarClothing`, `avatarAccessories`, `avatarMouth` |
+| 8 | `avatarType`, `avatarSkinColor`, `avatarHairColor`, `avatarTop`, `avatarFacialHair`, `avatarClothing`, `avatarMouth` |
+
+Für den Typ **human** wird `avatarClothing` nicht in Schritt 8 gewählt, sondern aus Schritt 2 **Ton** abgeleitet: *Locker* → `shirtCrewNeck` (T‑Shirt runder Ausschnitt), *Professionell* → `collarAndSweater` (Kragen & Pullover).
+
+**Avatar-Typen:** `human` (Dicebear Avataaars + detaillierte Optionen), `robot` (Dicebear Bottts), `owl` (lokale SVGs `assets/avatar-types/owl-{happy|serious}.svg`). Ältere Exporte mit anderen Typen werden beim Öffnen von Schritt 8 auf `human` zurückgesetzt.
 
 **Note:** Free-text name entry (`#inputName`) does not trigger a clip yet; only `nameChoice` buttons do. You can extend this later with an `input` listener if needed.
 
@@ -205,8 +209,8 @@ The resolver knows these fields per wizard step (must match `index.html` / `stat
 ## Notes / behavior
 
 - **Step wheel**: click the **Start** area or **step 1–8** areas on the ring to jump (forward jumps still respect validation unless test mode is on). On the **welcome page (step 0)**, **Start** jumps to the **first incomplete** step (or the summary if everything is done). On any other step, **Start** returns to the welcome page.
-- **Step 3 (Communication style)**: consists of 5 categories with two options each.
-- **Step 7 (Avatar appearance)**: the “Facial expression” is not shown as a UI category; it is derived automatically from Step 3 “Humor”.
+- **Step 2 (Persönlichkeit & Ton)**: five categories with two options each (greeting, humor, answer style, tone, style).
+- **Step 8 (Avatar appearance)**: Mouth is not a separate UI row; it follows Step 2 “Humor”. **Clothing** is not shown either; for humans it follows Step 2 **Ton** (Locker = crew-neck shirt, Professionell = collar & sweater). **Accessories** are not used (DiceBear URL always has accessories disabled).
 
 ## Troubleshooting
 

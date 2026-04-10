@@ -33,12 +33,10 @@
     avatarType: 'human',
     avatarSkinColor: null,
     avatarTop: null,
-    avatarHeadwear: null,
     avatarHairColor: null,
     avatarFacialHair: null,
     avatarMouth: null,
     avatarClothing: null,
-    avatarAccessories: null,
     // Schritt 8 – Datenschutz
     privacy: [],                 // Mehrfachauswahl Datenschutzoptionen
     // Avatar wurde aktiv erzeugt (Nutzerinteraktion)
@@ -327,12 +325,10 @@
     state.avatarType = 'human';
     state.avatarSkinColor = null;
     state.avatarTop = null;
-    state.avatarHeadwear = null;
     state.avatarHairColor = null;
     state.avatarFacialHair = null;
     state.avatarMouth = null;
     state.avatarClothing = null;
-    state.avatarAccessories = null;
     state.avatarInitialized = false;
     state.currentStep = 0;
 
