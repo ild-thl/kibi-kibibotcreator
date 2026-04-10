@@ -1,4 +1,7 @@
 ;(function () {
+  var TRANSPARENT_IMG =
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+
   const DICEBEAR = 'https://api.dicebear.com/9.x/avataaars/svg';
 
   const avatarSkinColors = [
@@ -76,6 +79,9 @@
     avatarLottieInstances.forEach(function (inst) { try { inst.destroy(); } catch (e) {} });
     avatarLottieInstances = [];
     document.querySelectorAll('.avatar-lottie-root').forEach(function (el) { el.remove(); });
+    if (window.WizardWheelCenter && typeof window.WizardWheelCenter.clearLottieLayers === 'function') {
+      window.WizardWheelCenter.clearLottieLayers();
+    }
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) { img.style.display = 'block'; });
   }
 
@@ -116,7 +122,9 @@
     return DICEBEAR + '?' + p.toString();
   }
 
-  function renderAvatarOption(containerId, options, state, stateKey, dataKind, onChanged) {
+  function renderAvatarOption(containerId, options, state, stateKey, dataKind, deps) {
+    var onChanged = deps && deps.onAvatarChanged;
+    var notifyWheel = deps && deps.notifyWheelSelection;
     const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = options.map(function (o) {
@@ -140,6 +148,9 @@
         if (kind === 'acc') state.avatarAccessories = selectedVal;
         state.avatarInitialized = true;
         if (typeof onChanged === 'function') onChanged();
+        if (typeof notifyWheel === 'function') {
+          notifyWheel(state, { field: stateKey, value: selectedVal, isMulti: false, added: true });
+        }
       });
     });
   }
@@ -158,14 +169,13 @@
     }
     var showHumanOptions = state.avatarType === 'human';
     document.querySelectorAll('.avatar-human-only').forEach(function (el) { el.classList.toggle('hidden', !showHumanOptions); });
-    var onChanged = deps && deps.onAvatarChanged;
-    renderAvatarOption('avatarSkinColor', avatarSkinColors, state, 'avatarSkinColor', 'skin', onChanged);
-    renderAvatarOption('avatarFrisur', frisurOpts, state, 'avatarTop', 'top', onChanged);
-    renderAvatarOption('avatarHeadwear', avatarHeadwearOpts, state, 'avatarHeadwear', 'headwear', onChanged);
-    renderAvatarOption('avatarHairColor', avatarHairColors, state, 'avatarHairColor', 'hair', onChanged);
-    renderAvatarOption('avatarFacialHair', avatarFacialHairOpts, state, 'avatarFacialHair', 'facialHair', onChanged);
-    renderAvatarOption('avatarClothing', avatarClothingOpts, state, 'avatarClothing', 'clothing', onChanged);
-    renderAvatarOption('avatarAccessories', avatarAccessoriesOpts, state, 'avatarAccessories', 'acc', onChanged);
+    renderAvatarOption('avatarSkinColor', avatarSkinColors, state, 'avatarSkinColor', 'skin', deps);
+    renderAvatarOption('avatarFrisur', frisurOpts, state, 'avatarTop', 'top', deps);
+    renderAvatarOption('avatarHeadwear', avatarHeadwearOpts, state, 'avatarHeadwear', 'headwear', deps);
+    renderAvatarOption('avatarHairColor', avatarHairColors, state, 'avatarHairColor', 'hair', deps);
+    renderAvatarOption('avatarFacialHair', avatarFacialHairOpts, state, 'avatarFacialHair', 'facialHair', deps);
+    renderAvatarOption('avatarClothing', avatarClothingOpts, state, 'avatarClothing', 'clothing', deps);
+    renderAvatarOption('avatarAccessories', avatarAccessoriesOpts, state, 'avatarAccessories', 'acc', deps);
   }
 
   function updateAvatarPreview(state, avatarUrl) {
@@ -174,50 +184,12 @@
     const url = avatarUrl || buildAvatarUrl(state);
     const main = document.getElementById('avatarPreview');
     if (main) {
-      main.onerror = function () { this.onerror = null; this.src = './assets/avatar-placeholder.png'; };
+      main.onerror = function () { this.onerror = null; this.src = TRANSPARENT_IMG; };
       main.src = url;
     }
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
-      img.onerror = function () { this.onerror = null; this.src = './assets/avatar-placeholder.png'; };
+      img.onerror = function () { this.onerror = null; this.src = TRANSPARENT_IMG; };
       img.src = url;
-    });
-  }
-
-  function syncWheelAvatarAnimation(state) {
-    var activeStep = document.querySelector('.wizard-step:not(.hidden)');
-    if (!activeStep) return;
-    var shouldShowAnimation = !(state.currentStep === 8 && state.avatarInitialized);
-    clearAvatarLottie();
-    if (!shouldShowAnimation) return;
-    if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
-    if (window.location && window.location.protocol === 'file:') return;
-    var animationUrl = (window.AvatarHelpers && window.AvatarHelpers.getAvatarAnimationUrl)
-      ? window.AvatarHelpers.getAvatarAnimationUrl(state.currentStep)
-      : ('./assets/avatar-animations/step' + state.currentStep + '.json');
-    var wheelAvatars = activeStep.querySelectorAll('.wizard-wheel-avatar');
-    wheelAvatars.forEach(function (wheelAvatar) {
-      var img = wheelAvatar.querySelector('img');
-      if (!img) return;
-      img.style.display = 'none';
-      var root = document.createElement('div');
-      root.className = 'avatar-lottie-root';
-      wheelAvatar.appendChild(root);
-      var anim = window.lottie.loadAnimation({ container: root, renderer: 'svg', loop: false, autoplay: true, path: animationUrl });
-      avatarLottieInstances.push(anim);
-      var fallback = function () {
-        try { anim.destroy(); } catch (e) {}
-        avatarLottieInstances = avatarLottieInstances.filter(function (x) { return x !== anim; });
-        root.remove();
-        img.style.display = 'block';
-      };
-      try {
-        anim.addEventListener('data_failed', fallback);
-        anim.addEventListener('config_error', fallback);
-        anim.addEventListener('error', fallback);
-      } catch (e) {}
-      setTimeout(function () {
-        try { if (!anim || anim.isLoaded === false) fallback(); } catch (e) {}
-      }, 1200);
     });
   }
 
@@ -225,7 +197,6 @@
     buildAvatarUrl: buildAvatarUrl,
     renderAvatarStep: renderAvatarStep,
     updateAvatarPreview: updateAvatarPreview,
-    syncWheelAvatarAnimation: syncWheelAvatarAnimation,
     clearAvatarLottie: clearAvatarLottie
   };
 })();

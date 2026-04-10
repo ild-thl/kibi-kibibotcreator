@@ -4,6 +4,7 @@
     var updateAvatarPreview = deps && deps.updateAvatarPreview;
     var updateNameInputState = deps && deps.updateNameInputState;
     var updateWizardWheel = deps && deps.updateWizardWheel;
+    var onWheelSelection = deps && deps.onWheelSelection;
 
     document.querySelectorAll('.card-select').forEach(function (btn) {
       if (btn.classList.contains('avatar-opt')) return;
@@ -11,6 +12,8 @@
         const field = this.dataset.field;
         const isMulti = this.dataset.multi === 'true';
         if (!field) return;
+
+        var wasInList = isMulti && Array.isArray(state[field]) && state[field].indexOf(this.dataset.value) >= 0;
 
         if (isMulti) {
           this.classList.toggle('selected');
@@ -69,6 +72,17 @@
             }
           }
         }
+
+        var added = !isMulti || (this.classList.contains('selected') && !wasInList);
+        if (typeof onWheelSelection === 'function') {
+          onWheelSelection(state, {
+            field: field,
+            value: this.dataset.value,
+            isMulti: isMulti,
+            added: added
+          });
+        }
+
         if (typeof updateWizardWheel === 'function') updateWizardWheel();
       });
     });

@@ -7,6 +7,7 @@ Create a personalized avatar for study & teaching through a multi-step wizard. T
 - **Multi-step wizard (Step 0–9)** with validation (you can’t proceed without completing the current step).
 - **Clickable step wheel** for direct navigation between steps.
 - **Avatar preview** in the center of the wheel (placeholder until the avatar is generated).
+- **Lottie animations** in the wheel center on step changes and on answer selections (`assets/wheel-animations/`, see below).
 - **DiceBear avatar generation** using the `avataaars` style.
 - **Custom validation modal** instead of browser `alert()`.
 - **Configurable API target** via `src/config.js`.
@@ -24,11 +25,15 @@ Create a personalized avatar for study & teaching through a multi-step wizard. T
 ├─ index.html
 ├─ README.md
 ├─ assets/
-│  ├─ avatar-placeholder.png
+│  ├─ avatar-animations/     (optional fallback for step transitions)
+│  ├─ wheel-animations/       (Lottie JSON: transitions + per-step selections)
 │  └─ wheel-ring.svg
 ├─ styles/
 │  └─ styles.css
 └─ src/
+   ├─ wizard/
+   │  ├─ wheel-center-lottie.js
+   │  └─ …
    ├─ app.js
    └─ config.js
 ```
@@ -53,7 +58,7 @@ Using a server avoids potential browser restrictions around local files.
 - Run `node server.js` in the project folder
 - Open `http://localhost:3000`
 
-This is especially important if you use **Lottie animations** (`assets/avatar-animations/*.json`), because `file://` loading will block XMLHttpRequests due to browser CORS rules.
+This is especially important if you use **Lottie JSON** (`assets/wheel-animations/**/*.json` and `assets/avatar-animations/*.json`), because `file://` loading will block XMLHttpRequests due to browser CORS rules.
 
 ## Configuration
 
@@ -99,6 +104,103 @@ When debug mode is on, `body` gets the class `wizard-wheel-debug`:
 - **Steps 1–8** use a red-tinted dashed circle and their step number.
 
 Implementation: `src/wizard/wheel.js` (`WizardWheel.setWheelDebug(true|false)` and `WizardWheel.isWheelDebugEnabled()` are also available in the console).
+
+## Wheel center animations (Lottie)
+
+Center animations are driven by **`src/wizard/wheel-center-lottie.js`** (Lottie Web is loaded from the CDN in `index.html`). They play **inside** `.wizard-wheel-avatar` on the **currently visible** step.
+
+### When animations run
+
+1. **Start step (step 0)** – whenever the welcome screen is shown, the app plays `transitions/on-load.json` in the wheel center **in a loop** (`loop: true`). That happens on first load, after **“Avatar zurücksetzen”**, and whenever you **navigate back** to the start step. Leaving step 0 stops the loop (other clips use `loop: false`). If `on-load.json` is missing or fails to load, the placeholder image stays visible.
+2. **Step transition** – whenever `currentStep` changes (after `updateUI`), the app tries to load a **transition** clip for the step you **enter**.
+3. **Answer selection** – when the user clicks a `.card-select` (or an avatar option in step 8), the app tries to load a **selection** clip that can depend on **all other answers already set in that same step** (order-independent: filenames use the same rules whether the user answers “usage” first or “help” first).
+
+Other animations are **not** played when:
+
+- `currentStep === 9` (summary has no wheel), or
+- `currentStep === 8` **and** `avatarInitialized === true` (center shows the static DiceBear preview instead).
+
+Multi-select **deselect** does not trigger a clip (only **adding** a value does).
+
+### Where to put files
+
+Use this folder (create it if needed):
+
+```text
+assets/wheel-animations/
+├─ transitions/
+│  ├─ on-load.json                   (Schritt 0, geloopt, bei jedem Aufenthalt auf Start)
+│  ├─ from-step-00-to-step-01.json   (optional, most specific)
+│  ├─ to-step-01.json                … to-step-09.json
+│  └─ …
+├─ step-01/
+│  ├─ sel-usage-lernraum.json
+│  ├─ sel-help-lernen.json
+│  ├─ sel-help-lernen__usage-lernraum.json
+│  └─ sel-usage-lernraum__help-lernen-and-planen.json
+├─ step-02/
+│  └─ …
+└─ step-08/
+    └─ …
+```
+
+- **`transitions/`** – clips when **entering** a step (`currentStep` after navigation).
+- **`step-NN/`** – `NN` = wizard step **01–08** (two digits), matching `state.currentStep` (1 = first question step after start, …, 8 = avatar appearance).
+
+### How the app picks a file (fallback chain)
+
+**Transitions** (in order, first successful load wins):
+
+1. `transitions/from-step-{A}-to-step-{B}.json` with **two-digit** `A` and `B` (e.g. `from-step-00-to-step-01.json`).
+2. `transitions/to-step-{B}.json` (e.g. `to-step-01.json`).
+3. **Legacy:** `assets/avatar-animations/step{B}.json` (same numbering as before).
+
+**Selections** for step `S` (in order, first successful load wins):
+
+1. **Full combo:** `step-NN/sel-{seg}-{valueSlug}__{seg2}-{slug2}__{seg3}-{slug3}.json`  
+   – one `segN-slugN` pair per **other** field in that step that already has a value, sorted alphabetically by `seg` name.
+2. **Pairwise:** for each other field with a value:  
+   `step-NN/sel-{seg}-{valueSlug}__{segOther}-{slugOther}.json`
+3. **Solo:** `step-NN/sel-{seg}-{valueSlug}.json`
+
+`{seg}` is a short alias for the `data-field` / state key (e.g. `usage_context` → `usage`, `help_context` → `help`). See `FIELD_SEGMENT` in `wheel-center-lottie.js` for the full list.
+
+`{valueSlug}` is derived from the **clicked** value (or current state for the other fields): lowercased, `&` → `and`, non-alphanumeric → `-`, empty → `none`.  
+For **arrays** (multi-select), values are **sorted**, slugified, and joined with `-and-` (e.g. `lernen-and-planen`).
+
+**Examples (step 1)**
+
+| Situation | Tried files (simplified) |
+|-----------|---------------------------|
+| Choose “Lernraum” only | `sel-usage-lernraum.json` |
+| Then add help “Lernen” | `sel-help-lernen__usage-lernraum.json`, then `sel-help-lernen.json` |
+| Choose “Lernen” first, no usage yet | `sel-help-lernen.json` |
+| Then choose “Lernraum” | `sel-usage-lernraum__help-lernen.json`, then `sel-usage-lernraum.json` |
+
+So you can author **either** the **combo** file, **or** only the **solo** files, depending on how granular your motion design is. Missing files are skipped automatically.
+
+### Steps and fields (for `step-NN` clips)
+
+The resolver knows these fields per wizard step (must match `index.html` / `state`):
+
+| Step (`currentStep`) | Fields used in filenames |
+|----------------------|---------------------------|
+| 1 | `usage_context`, `help_context` |
+| 2 | `personality_greeting`, `personality_humor`, `personality_answer`, `personality_tone`, `personality_style` |
+| 3 | `role`, `nameChoice` |
+| 4 | `interaction_workflow`, `interaction_examples` |
+| 5 | `knowledge`, `knowledge_source`, `decision_mode` |
+| 6 | `feedback` |
+| 7 | `privacy` |
+| 8 | `avatarType`, `avatarSkinColor`, `avatarHairColor`, `avatarTop`, `avatarHeadwear`, `avatarFacialHair`, `avatarClothing`, `avatarAccessories`, `avatarMouth` |
+
+**Note:** Free-text name entry (`#inputName`) does not trigger a clip yet; only `nameChoice` buttons do. You can extend this later with an `input` listener if needed.
+
+### API (console / debugging)
+
+- `WizardWheelCenter.notifyUiUpdate(state)` – normally called from navigation after UI update.
+- `WizardWheelCenter.notifySelection(state, { field, value, isMulti, added })` – mirrors card clicks.
+- `WizardWheelCenter.slugify(value)` / `WizardWheelCenter.fieldSeg(field)` – to preview filename segments.
 
 ## Notes / behavior
 

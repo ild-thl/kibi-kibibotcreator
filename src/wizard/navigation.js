@@ -52,7 +52,7 @@
     var wizardContent = document.getElementById('wizardContent');
     if (wizardContent) wizardContent.classList.add('step-enter');
     if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
-    if (deps && typeof deps.syncWheelAvatarAnimation === 'function') deps.syncWheelAvatarAnimation();
+    if (deps && typeof deps.syncWheelCenterAnimation === 'function') deps.syncWheelCenterAnimation();
     if (window.WizardWheel && typeof window.WizardWheel.updateWizardWheel === 'function') {
       window.WizardWheel.updateWizardWheel(state);
     }

@@ -1,4 +1,8 @@
 (function () {
+  /** Leeres Bild statt avatar-placeholder.png (Wheel / Fallbacks). */
+  const TRANSPARENT_IMG =
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+
   const TOTAL_STEPS = 9; // 1–8 Fragen + 9 = Zusammenfassung (Startseite ist Schritt 0)
   const state = {
     id: '',
@@ -48,6 +52,7 @@
       return;
     }
     document.querySelectorAll('.avatar-lottie-root').forEach(function (el) { el.remove(); });
+    document.querySelectorAll('.wheel-center-lottie').forEach(function (el) { el.remove(); });
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) { img.style.display = 'block'; });
   }
 
@@ -87,13 +92,18 @@
     if (window.WizardAvatar && window.WizardAvatar.buildAvatarUrl) {
       return window.WizardAvatar.buildAvatarUrl(state);
     }
-    return './assets/avatar-placeholder.png';
+    return TRANSPARENT_IMG;
   }
 
   function renderAvatarStep() {
     if (window.WizardAvatar && window.WizardAvatar.renderAvatarStep) {
       window.WizardAvatar.renderAvatarStep(state, {
-        onAvatarChanged: function () { updateAvatarPreview(); }
+        onAvatarChanged: function () { updateAvatarPreview(); },
+        notifyWheelSelection: function (s, meta) {
+          if (window.WizardWheelCenter && window.WizardWheelCenter.notifySelection) {
+            window.WizardWheelCenter.notifySelection(s, meta);
+          }
+        }
       });
     }
   }
@@ -111,9 +121,9 @@
     updateWizardWheelGraphics();
   }
 
-  function syncWheelAvatarAnimation() {
-    if (window.WizardAvatar && window.WizardAvatar.syncWheelAvatarAnimation) {
-      window.WizardAvatar.syncWheelAvatarAnimation(state);
+  function syncWheelCenterAnimation() {
+    if (window.WizardWheelCenter && window.WizardWheelCenter.notifyUiUpdate) {
+      window.WizardWheelCenter.notifyUiUpdate(state);
     }
   }
 
@@ -166,7 +176,7 @@
       window.WizardNavigation.updateUI(state, TOTAL_STEPS, {
         updateSettingsActions: updateSettingsActions,
         renderAvatarStep: renderAvatarStep,
-        syncWheelAvatarAnimation: syncWheelAvatarAnimation
+        syncWheelCenterAnimation: syncWheelCenterAnimation
       });
     }
   }
@@ -177,7 +187,12 @@
         renderAvatarStep: renderAvatarStep,
         updateAvatarPreview: updateAvatarPreview,
         updateNameInputState: updateNameInputState,
-        updateWizardWheel: updateWizardWheelGraphics
+        updateWizardWheel: updateWizardWheelGraphics,
+        onWheelSelection: function (s, meta) {
+          if (window.WizardWheelCenter && window.WizardWheelCenter.notifySelection) {
+            window.WizardWheelCenter.notifySelection(s, meta);
+          }
+        }
       });
     }
   }
@@ -321,6 +336,13 @@
     state.avatarInitialized = false;
     state.currentStep = 0;
 
+    if (window.WizardWheelCenter && window.WizardWheelCenter.resetNavigationTracking) {
+      window.WizardWheelCenter.resetNavigationTracking();
+    }
+    if (window.WizardWheelCenter && window.WizardWheelCenter.clearLottieLayers) {
+      window.WizardWheelCenter.clearLottieLayers();
+    }
+
     // UI-Selektionen leeren
     document.querySelectorAll('.card-select.selected, .avatar-opt.selected').forEach(function (el) {
       el.classList.remove('selected');
@@ -330,15 +352,18 @@
 
     // Avatar-Vorschauen zurück auf Platzhalter
     const main = document.getElementById('avatarPreview');
-    if (main) main.src = './assets/avatar-placeholder.png';
+    if (main) main.src = TRANSPARENT_IMG;
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
-      img.src = './assets/avatar-placeholder.png';
+      img.src = TRANSPARENT_IMG;
     });
     const sumImg = document.getElementById('summaryAvatar');
-    if (sumImg) sumImg.src = './assets/avatar-placeholder.png';
+    if (sumImg) sumImg.src = TRANSPARENT_IMG;
 
     updateUI();
     restoreSelections();
+    if (window.WizardWheelCenter && typeof window.WizardWheelCenter.ensureStartStepLoop === 'function') {
+      window.WizardWheelCenter.ensureStartStepLoop(state);
+    }
   }
 
   function showSettingsModal() {
@@ -370,6 +395,13 @@
     updateUI();
     restoreSelections();
     bindCardSelects();
+
+    if (window.WizardWheelCenter && typeof window.WizardWheelCenter.prefetchWheelAnimationData === 'function') {
+      window.WizardWheelCenter.prefetchWheelAnimationData();
+    }
+    if (window.WizardWheelCenter && typeof window.WizardWheelCenter.ensureStartStepLoop === 'function') {
+      window.WizardWheelCenter.ensureStartStepLoop(state);
+    }
 
     var wizardContent = document.getElementById('wizardContent');
     if (wizardContent) {
