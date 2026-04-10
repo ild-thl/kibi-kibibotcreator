@@ -484,6 +484,20 @@ body {
   margin-bottom: 0.75rem;
 }
 
+/* Startseite: Willkommensgrafik rechts unter dem Fließtext (Grid Zeile 2, Spalte „Inhalt“) */
+#step0 .step0-welcome-graphic {
+  margin: 0;
+  margin-top: 0.25rem;
+  max-width: 100%;
+}
+
+#step0 .step0-welcome-graphic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: min(54rem, 100%);
+}
+
 /* Schritt 3: Namenseingabe darf nicht über das rechte Panel hinausragen. */
 #step3 #inputName {
   box-sizing: border-box; /* wichtig, damit Padding die Gesamtbreite nicht erhöht */
