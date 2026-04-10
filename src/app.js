@@ -394,6 +394,9 @@
     }
     updateUI();
     restoreSelections();
+    if (window.WizardWheelCenter && typeof window.WizardWheelCenter.refreshWheelCenterForState === 'function') {
+      window.WizardWheelCenter.refreshWheelCenterForState(state);
+    }
     bindCardSelects();
 
     if (window.WizardWheelCenter && typeof window.WizardWheelCenter.prefetchWheelAnimationData === 'function') {

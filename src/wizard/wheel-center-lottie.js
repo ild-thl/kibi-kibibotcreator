@@ -116,10 +116,32 @@
     return section.querySelector('.wizard-wheel-avatar');
   }
 
+  /** Schritt 8 wirklich ausgefüllt (ohne testMode-Shortcuts), für dauerhaftes Avatar-Bild im Wheel. */
+  function isStepEightComplete(state) {
+    if (!state || state.testMode) return false;
+    return !!(
+      window.WizardValidation &&
+      typeof window.WizardValidation.isStepValid === 'function' &&
+      window.WizardValidation.isStepValid(state, 8)
+    );
+  }
+
+  function applyWheelCenterAvatarImage(state) {
+    var url = '';
+    try {
+      if (window.WizardAvatar && typeof window.WizardAvatar.buildAvatarUrl === 'function') {
+        url = window.WizardAvatar.buildAvatarUrl(state);
+      }
+    } catch (e) {}
+    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      if (url) img.src = url;
+      img.style.display = 'block';
+    });
+  }
+
   function shouldSkipWheelAnimations(state) {
     if (!state) return true;
     if (state.currentStep === 9) return true;
-    if (state.currentStep === 8 && state.avatarInitialized) return true;
     return false;
   }
 
@@ -510,6 +532,19 @@
     var cur = state.currentStep;
     if (previousUiStep === null) {
       previousUiStep = cur;
+      if (cur === 8) {
+        clearLottieLayers();
+        if (isStepEightComplete(state)) {
+          applyWheelCenterAvatarImage(state);
+        } else {
+          document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+            img.style.display = 'block';
+          });
+        }
+      } else if (isStepEightComplete(state)) {
+        clearLottieLayers();
+        applyWheelCenterAvatarImage(state);
+      }
       return;
     }
     if (previousUiStep === cur) return;
@@ -517,7 +552,27 @@
     previousUiStep = cur;
     if (cur === 0) {
       clearLottieLayers();
-      ensureStartStepLoop(state);
+      if (isStepEightComplete(state)) {
+        applyWheelCenterAvatarImage(state);
+      } else {
+        ensureStartStepLoop(state);
+      }
+      return;
+    }
+    if (cur === 8) {
+      clearLottieLayers();
+      if (isStepEightComplete(state)) {
+        applyWheelCenterAvatarImage(state);
+      } else {
+        document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+          img.style.display = 'block';
+        });
+      }
+      return;
+    }
+    if (isStepEightComplete(state)) {
+      clearLottieLayers();
+      applyWheelCenterAvatarImage(state);
       return;
     }
     if (shouldSkipWheelAnimations(state)) return;
@@ -530,6 +585,22 @@
   function notifySelection(state, meta) {
     if (!state || !meta) return;
     if (state.currentStep === 0) return;
+    if (state.currentStep === 8) {
+      clearLottieLayers();
+      if (isStepEightComplete(state)) {
+        applyWheelCenterAvatarImage(state);
+      } else {
+        document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+          img.style.display = 'block';
+        });
+      }
+      return;
+    }
+    if (isStepEightComplete(state)) {
+      clearLottieLayers();
+      applyWheelCenterAvatarImage(state);
+      return;
+    }
     if (shouldSkipWheelAnimations(state)) return;
     var urls = selectionCandidates(state.currentStep, state, meta);
     playCandidateUrls(state, urls, state.currentStep);
@@ -545,6 +616,7 @@
    */
   function ensureStartStepLoop(state) {
     if (!state || state.currentStep !== 0) return;
+    if (isStepEightComplete(state)) return;
     if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
     if (isFileProtocol()) return;
     var wrap = getActiveWheelAvatar();
@@ -602,10 +674,19 @@
     }, 900);
   }
 
+  function refreshWheelCenterForState(state) {
+    if (!state) return;
+    if (isStepEightComplete(state)) {
+      clearLottieLayers();
+      applyWheelCenterAvatarImage(state);
+    }
+  }
+
   window.WizardWheelCenter = {
     notifyUiUpdate: notifyUiUpdate,
     notifySelection: notifySelection,
     resetNavigationTracking: resetNavigationTracking,
+    refreshWheelCenterForState: refreshWheelCenterForState,
     ensureStartStepLoop: ensureStartStepLoop,
     /** @deprecated Alias – nutze ensureStartStepLoop */
     playPageLoadIntro: ensureStartStepLoop,
