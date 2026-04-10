@@ -110,6 +110,18 @@
     if (window.WizardWheel && window.WizardWheel.updateWizardWheel) {
       window.WizardWheel.updateWizardWheel(state);
     }
+    syncNextButtonMuted();
+  }
+
+  /** „Weiter“ / „Zusammenfassung“ leicht ausgegraut bei unvollständigem Schritt (nicht im Testmodus); Klick bleibt aktiv für Validierungs-Popup. */
+  function syncNextButtonMuted() {
+    var btn = document.getElementById('btnNext');
+    if (!btn) return;
+    if (state.testMode || state.currentStep === 0 || state.currentStep === TOTAL_STEPS) {
+      btn.classList.remove('wizard-nav-next--muted');
+      return;
+    }
+    btn.classList.toggle('wizard-nav-next--muted', !isCurrentStepValid());
   }
 
   function updateAvatarPreview() {
@@ -177,6 +189,7 @@
         syncWheelCenterAnimation: syncWheelCenterAnimation
       });
     }
+    syncNextButtonMuted();
   }
 
   function bindCardSelects() {

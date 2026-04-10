@@ -260,6 +260,17 @@ body {
   z-index: 60;
 }
 
+/* Weiter / Zusammenfassung: dezent ausgegraut bei unvollständigem Schritt (nicht Testmodus); Button bleibt klickbar → Validierung. */
+#btnNext.wizard-nav-next--muted {
+  opacity: 0.68;
+  background-color: #8eaecf !important;
+  color: rgba(255, 255, 255, 0.94) !important;
+}
+
+#btnNext.wizard-nav-next--muted:hover {
+  background-color: #7c9cbb !important;
+}
+
 @keyframes modalPop {
   0% {
     opacity: 0;
