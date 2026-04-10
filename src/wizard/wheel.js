@@ -90,6 +90,22 @@
     document.querySelectorAll('.wizard-wheel-step').forEach(function (img) {
       if (img.getAttribute('src') !== step) img.setAttribute('src', step);
     });
+    document.querySelectorAll('.wizard-wheel-jump').forEach(function (btn) {
+      var n = Number(btn.getAttribute('data-step') || '0');
+      var allowed =
+        window.WizardValidation && typeof window.WizardValidation.isWheelJumpAllowed === 'function'
+          ? window.WizardValidation.isWheelJumpAllowed(state, n)
+          : true;
+      btn.classList.toggle('wizard-wheel-hotspot--blocked', !allowed);
+      if (!allowed) {
+        btn.setAttribute('tabindex', '-1');
+        btn.setAttribute('aria-disabled', 'true');
+        if (document.activeElement === btn) btn.blur();
+      } else {
+        btn.removeAttribute('tabindex');
+        btn.removeAttribute('aria-disabled');
+      }
+    });
   }
 
   function setWheelDebug(on) {

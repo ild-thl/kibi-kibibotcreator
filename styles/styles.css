@@ -532,6 +532,16 @@ body {
   outline-offset: 2px;
 }
 
+/* Vorwärts-Sprünge, die noch nicht möglich sind: kein Klick, kein Hover (Testmodus: Klasse fehlt). */
+.wizard-wheel-jump.wizard-wheel-hotspot--blocked {
+  cursor: default;
+  pointer-events: none;
+}
+
+.wizard-wheel-jump.wizard-wheel-hotspot--blocked:hover {
+  background: transparent;
+}
+
 /* Debug: Klickflächen sichtbar (?wheelDebug=1 oder Alt+Shift+D) */
 body.wizard-wheel-debug .wizard-wheel-start {
   background: rgba(34, 197, 94, 0.28);

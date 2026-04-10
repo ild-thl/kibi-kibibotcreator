@@ -63,8 +63,27 @@
     return true;
   }
 
+  /**
+   * Ob ein Klick auf die Wheel-Kachel für `targetStep` (1–8) ohne Testmodus als „zulässig“ gilt
+   * (entspricht `goToStep`: Rückwärts immer, vorwärts nur wenn alle Zwischenschritte gültig).
+   */
+  function isWheelJumpAllowed(state, targetStep) {
+    targetStep = Number(targetStep);
+    if (!state || targetStep < 1 || targetStep > 8) return false;
+    if (state.testMode) return true;
+    var cur = state.currentStep;
+    if (targetStep === cur) return true;
+    if (targetStep < cur) return true;
+    var s;
+    for (s = cur; s < targetStep; s++) {
+      if (!isStepValid(state, s)) return false;
+    }
+    return true;
+  }
+
   window.WizardValidation = {
     isStepValid: isStepValid,
-    isWizardComplete: isWizardComplete
+    isWizardComplete: isWizardComplete,
+    isWheelJumpAllowed: isWheelJumpAllowed
   };
 })();

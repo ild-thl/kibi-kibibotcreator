@@ -407,6 +407,14 @@
       wizardContent.addEventListener('click', function (e) {
         var hotspot = e.target.closest('.wizard-wheel-start, .wizard-wheel-jump');
         if (!hotspot) return;
+        if (
+          hotspot.classList.contains('wizard-wheel-jump') &&
+          hotspot.classList.contains('wizard-wheel-hotspot--blocked')
+        ) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
         e.preventDefault();
         var stepNum = Number(hotspot.getAttribute('data-step') || '0');
         if (stepNum === 0) {
