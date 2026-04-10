@@ -255,6 +255,11 @@ body {
   animation: modalPop 260ms ease-out;
 }
 
+/* Über #wizardNavBar (60): kompletter Viewport inkl. Zurück/Weiter ausgrauen. */
+#validationModal.modal-overlay {
+  z-index: 70;
+}
+
 /* Footer muss immer über den Step-Inhalten liegen */
 #wizardNavBar {
   z-index: 60;
