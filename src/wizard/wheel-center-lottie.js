@@ -186,6 +186,41 @@
     return window.location && window.location.protocol === 'file:';
   }
 
+  /** Minimale Absicherung eingebetteter SVG-Texte (lokale Assets). */
+  function sanitizeSvgText(text) {
+    if (!text || typeof text !== 'string') return '';
+    return text.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
+  }
+
+  /**
+   * Vor jeder *.json-URL wird dieselbe Basis-URL mit *.svg eingefügt (wenn noch nicht in der Liste).
+   * Liegt eine passende SVG-Datei vor, wird sie statt der Lottie-Animation angezeigt.
+   */
+  function expandWheelMediaCandidates(urls) {
+    if (!urls || !urls.length) return urls;
+    var out = [];
+    var seen = {};
+    function push(u) {
+      if (!u || seen[u]) return;
+      seen[u] = true;
+      out.push(u);
+    }
+    for (var i = 0; i < urls.length; i++) {
+      var u = urls[i];
+      if (typeof u === 'string' && u.length > 5 && u.slice(-5).toLowerCase() === '.json') {
+        push(u.slice(0, -5) + '.svg');
+      }
+      push(u);
+    }
+    return out;
+  }
+
+  function rememberWheelSvgFromRoot(stepNum, rootEl) {
+    if (stepNum == null || !rootEl) return;
+    var svg = rootEl.querySelector('svg');
+    if (svg) lastWheelSvgByStep[stepNum] = svg.cloneNode(true);
+  }
+
   function cacheAnimationFromInstance(url, anim) {
     if (!url || !anim) return;
     try {
@@ -288,6 +323,77 @@
     } catch (e) {}
   }
 
+  /**
+   * Statische SVG-Grafik aus dem Kandidaten-Array (fetch + Inline-SVG im Wheel-Zentrum).
+   */
+  function tryPlaySvgAtIndex(state, urls, index, wrap) {
+    var url = urls[index];
+    var img = wrap.querySelector('img');
+    var root = document.createElement('div');
+    root.className = 'wheel-center-lottie wheel-center-lottie--pending wheel-center-lottie--static';
+    root.style.opacity = '0';
+    root.style.pointerEvents = 'none';
+    wrap.appendChild(root);
+    var settled = false;
+    var loadTimer;
+
+    function fail() {
+      if (settled) return;
+      settled = true;
+      if (loadTimer) clearTimeout(loadTimer);
+      if (root.parentNode) root.remove();
+      tryPlayIndex(state, urls, index + 1, wrap);
+    }
+
+    function revealStatic() {
+      if (settled) return;
+      var svg = root.querySelector('svg');
+      if (!svg) {
+        fail();
+        return;
+      }
+      settled = true;
+      if (loadTimer) clearTimeout(loadTimer);
+      try {
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      } catch (eA) {}
+      snapshotWheelLottiesToMemory(root);
+      removeHoldFramesFromWrap(root.parentNode);
+      instances.forEach(destroyInstance);
+      instances = [];
+      document.querySelectorAll('.wheel-center-lottie').forEach(function (el) {
+        if (el !== root) el.remove();
+      });
+      root.classList.remove('wheel-center-lottie--pending');
+      root.style.opacity = '';
+      root.style.pointerEvents = '';
+      if (img) img.style.display = 'none';
+      rememberWheelSvgFromRoot(state.currentStep, root);
+    }
+
+    if (!window.fetch) {
+      fail();
+      return;
+    }
+    fetch(url)
+      .then(function (r) {
+        if (!r.ok) throw new Error('svg');
+        return r.text();
+      })
+      .then(function (text) {
+        if (settled) return;
+        root.innerHTML = sanitizeSvgText(text);
+        if (settled) return;
+        revealStatic();
+      })
+      .catch(function () {
+        fail();
+      });
+    loadTimer = setTimeout(function () {
+      if (!settled) fail();
+    }, 900);
+  }
+
   /** Zeigt bis zur neuen Lottie den letzten Zustand vom **vorherigen** Schritt (Live-DOM oder Snapshot). */
   function injectHoldFrame(wrap, holdFromStep, targetStep) {
     if (!wrap) return;
@@ -339,8 +445,25 @@
   function playCandidateUrls(state, urls, holdFromStep) {
     if (!urls || !urls.length) return;
     if (shouldSkipWheelAnimations(state)) return;
-    if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
     if (isFileProtocol()) return;
+    urls = expandWheelMediaCandidates(urls);
+    if (!urls.length) return;
+    var hasJson = false;
+    var hasSvg = false;
+    for (var hi = 0; hi < urls.length; hi++) {
+      var hu = urls[hi];
+      if (typeof hu !== 'string') continue;
+      var hul = hu.toLowerCase();
+      if (hul.slice(-5) === '.json') hasJson = true;
+      if (hul.slice(-4) === '.svg') hasSvg = true;
+    }
+    if (hasJson && (!window.lottie || typeof window.lottie.loadAnimation !== 'function')) return;
+    if (hasSvg && !window.fetch) {
+      urls = urls.filter(function (u) {
+        return !(typeof u === 'string' && u.toLowerCase().slice(-4) === '.svg');
+      });
+    }
+    if (!urls.length) return;
     var wrap = getActiveWheelAvatar();
     if (!wrap) return;
     abortPendingInWrap(wrap);
@@ -357,13 +480,21 @@
       }
       return;
     }
+    var url = urls[index];
+    if (typeof url === 'string' && url.toLowerCase().slice(-4) === '.svg') {
+      tryPlaySvgAtIndex(state, urls, index, wrap);
+      return;
+    }
+    if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') {
+      tryPlayIndex(state, urls, index + 1, wrap);
+      return;
+    }
     var img = wrap.querySelector('img');
     var root = document.createElement('div');
     root.className = 'wheel-center-lottie wheel-center-lottie--pending';
     root.style.opacity = '0';
     root.style.pointerEvents = 'none';
     wrap.appendChild(root);
-    var url = urls[index];
     var introSkipFrames = transitionIntroSkipFrames(url);
     var anim;
     var settled = false;
@@ -717,67 +848,105 @@
   }
 
   /**
-   * Schritt 0: Endlosschleife im Wheel-Zentrum (on-load.json).
+   * Schritt 0: statische Grafik (on-load.svg) oder Endlosschleife (on-load.json).
    * Läuft erneut, sobald der Nutzer wieder auf die Startseite wechselt.
    */
   function ensureStartStepLoop(state) {
     if (!state || state.currentStep !== 0) return;
     if (isStepEightComplete(state)) return;
-    if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
     if (isFileProtocol()) return;
     var wrap = getActiveWheelAvatar();
     if (!wrap) return;
     if (wrap.querySelector('.wheel-center-lottie--start')) return;
 
     var img = wrap.querySelector('img');
-    if (img) img.style.display = 'none';
-    var root = document.createElement('div');
-    root.className = 'wheel-center-lottie wheel-center-lottie--start';
-    wrap.appendChild(root);
+    var svgUrl = BASE + 'transitions/on-load.svg';
+    var jsonUrl = BASE + 'transitions/on-load.json';
 
-    var url = BASE + 'transitions/on-load.json';
-    var anim;
-    try {
-      anim = loadWheelLottie(root, url, true);
-    } catch (e) {
-      root.remove();
-      if (img) img.style.display = 'block';
+    function mountStartJson() {
+      if (wrap.querySelector('.wheel-center-lottie--start')) return;
+      if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') {
+        if (img) img.style.display = 'block';
+        return;
+      }
+      if (img) img.style.display = 'none';
+      var root = document.createElement('div');
+      root.className = 'wheel-center-lottie wheel-center-lottie--start';
+      wrap.appendChild(root);
+      var anim;
+      try {
+        anim = loadWheelLottie(root, jsonUrl, true);
+      } catch (e) {
+        root.remove();
+        if (img) img.style.display = 'block';
+        return;
+      }
+      instances.push(anim);
+      var cacheIt = function () {
+        cacheAnimationFromInstance(jsonUrl, anim);
+      };
+      try {
+        anim.addEventListener('DOMLoaded', cacheIt);
+      } catch (e) {}
+      try {
+        if (anim.isLoaded === true) cacheIt();
+      } catch (e2) {}
+
+      var fail = function () {
+        try {
+          anim.destroy();
+        } catch (err) {}
+        instances = instances.filter(function (x) {
+          return x !== anim;
+        });
+        root.remove();
+        if (img) img.style.display = 'block';
+      };
+
+      try {
+        anim.addEventListener('data_failed', fail);
+        anim.addEventListener('config_error', fail);
+        anim.addEventListener('error', fail);
+      } catch (e) {}
+      setTimeout(function () {
+        try {
+          if (anim && anim.isLoaded === false) fail();
+        } catch (err) {
+          fail();
+        }
+      }, 900);
+    }
+
+    if (window.fetch) {
+      fetch(svgUrl)
+        .then(function (r) {
+          return r.ok ? r.text() : Promise.reject();
+        })
+        .then(function (text) {
+          if (wrap.querySelector('.wheel-center-lottie--start')) return;
+          if (img) img.style.display = 'none';
+          var root = document.createElement('div');
+          root.className = 'wheel-center-lottie wheel-center-lottie--start wheel-center-lottie--static';
+          root.innerHTML = sanitizeSvgText(text);
+          var svg = root.querySelector('svg');
+          if (!svg) {
+            root.remove();
+            if (img) img.style.display = 'block';
+            mountStartJson();
+            return;
+          }
+          try {
+            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          } catch (eA) {}
+          wrap.appendChild(root);
+          rememberWheelSvgFromRoot(0, root);
+        })
+        .catch(function () {
+          mountStartJson();
+        });
       return;
     }
-    instances.push(anim);
-    var cacheIt = function () {
-      cacheAnimationFromInstance(url, anim);
-    };
-    try {
-      anim.addEventListener('DOMLoaded', cacheIt);
-    } catch (e) {}
-    try {
-      if (anim.isLoaded === true) cacheIt();
-    } catch (e2) {}
-
-    var fail = function () {
-      try {
-        anim.destroy();
-      } catch (err) {}
-      instances = instances.filter(function (x) {
-        return x !== anim;
-      });
-      root.remove();
-      if (img) img.style.display = 'block';
-    };
-
-    try {
-      anim.addEventListener('data_failed', fail);
-      anim.addEventListener('config_error', fail);
-      anim.addEventListener('error', fail);
-    } catch (e) {}
-    setTimeout(function () {
-      try {
-        if (anim && anim.isLoaded === false) fail();
-      } catch (err) {
-        fail();
-      }
-    }, 900);
+    mountStartJson();
   }
 
   function refreshWheelCenterForState(state) {

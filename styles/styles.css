@@ -691,6 +691,13 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   z-index: 2;
 }
 
+/* Optionale statische SVGs statt Lottie (gleicher Dateiname, Endung .svg). */
+.wheel-center-lottie--static svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 /* Eingefrorener Zwischenframe vom vorherigen Schritt bis die neue Lottie steht (kein Platzhalterfoto). */
 .wheel-center-hold-frame {
   position: absolute;
