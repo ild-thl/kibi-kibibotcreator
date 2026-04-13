@@ -188,14 +188,71 @@ body {
   background-image: none !important;
 }
 
-/* In Schritt 8 (Avatar-Gestaltung) keine Radio/Checkbox-Icons anzeigen */
-#step8 .card-select:not(.avatar-opt) {
-  padding-left: 1rem !important;
+/*
+ * Schritt 8: .avatar-opt wird in globalen Regeln von :not(.avatar-opt) ausgeschlossen.
+ * Gleiche Flat-Optik + Radio wie in den übrigen Schritten.
+ */
+#step8 .wizard-col-main .card-select.avatar-opt {
+  position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  padding: 0.3rem 0.75rem 0.3rem 2.35rem !important;
+  border-radius: 0.5rem !important;
+  text-align: left;
 }
 
-#step8 .card-select:not(.avatar-opt)::before,
-#step8 .card-select:not(.avatar-opt)::after {
+#step8 .wizard-col-main .card-select.avatar-opt::before {
+  content: "";
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  transform: translateY(-50%);
+  border: 2px solid #d1d5db;
+  border-radius: 999px;
+  background: #ffffff;
+  transition: all 0.18s ease;
+}
+
+#step8 .wizard-col-main .card-select.avatar-opt.selected::before {
+  border-color: #3b82f6;
+  background: #3b82f6;
+}
+
+#step8 .wizard-col-main .card-select.avatar-opt.selected::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(0.7rem + 0.625rem - 0.25rem);
+  transform: translateY(-50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+#step8 .wizard-col-main .card-select.avatar-opt:not(.selected)::after {
   content: none;
+}
+
+#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):hover::before,
+#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):focus-visible::before {
+  border-color: #3b82f6;
+}
+
+#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):hover,
+#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):focus-visible {
+  background: #f9fafb !important;
+  background-image: none !important;
+}
+
+#step8 .wizard-col-main .card-select.avatar-opt:hover,
+#step8 .wizard-col-main .card-select.avatar-opt:focus-visible {
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .card-select.selected {

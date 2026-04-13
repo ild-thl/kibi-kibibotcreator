@@ -95,7 +95,7 @@
     const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = options.map(function (o) {
-      return '<button type="button" class="avatar-opt card-select px-3 py-2 rounded-xl border-2 border-gray-200 bg-white text-sm font-medium transition-all" data-kind="' + dataKind + '" data-value="' + (o.value || '') + '">' + o.label + '</button>';
+      return '<button type="button" class="avatar-opt card-select px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-kind="' + dataKind + '" data-value="' + (o.value || '') + '">' + o.label + '</button>';
     }).join('');
     container.querySelectorAll('.avatar-opt').forEach(function (b) {
       var val = b.dataset.value || '';
