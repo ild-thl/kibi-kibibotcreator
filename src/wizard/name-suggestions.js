@@ -12,7 +12,9 @@
     var selector = stepSelector || '#step3';
     var suggestionButtons = Array.from(
       document.querySelectorAll(selector + ' .card-select[data-field="nameChoice"][data-suggestion]:not([data-suggestion=""])')
-    );
+    ).filter(function (btn) {
+      return !btn.hasAttribute('data-fixed-name');
+    });
     if (!suggestionButtons.length) return;
 
     var names = [
@@ -25,6 +27,11 @@
       var name = names[idx] || '';
       btn.dataset.suggestion = name;
       btn.textContent = name;
+    });
+
+    document.querySelectorAll(selector + ' .card-select[data-field="nameChoice"][data-fixed-name]').forEach(function (btn) {
+      var s = btn.dataset.suggestion || '';
+      if (s) btn.textContent = s;
     });
   }
 
