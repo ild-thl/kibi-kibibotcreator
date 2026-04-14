@@ -151,9 +151,14 @@ assets/wheel-animations/
 
 **Transitions** (in order, first successful load wins):
 
-1. `transitions/from-step-{A}-to-step-{B}.json` with **two-digit** `A` and `B` (e.g. `from-step-00-to-step-01.json`).
-2. `transitions/to-step-{B}.json` (e.g. `to-step-01.json`).
-3. **Legacy:** `assets/avatar-animations/step{B}.json` (same numbering as before).
+1. **Context-aware (last shown wheel clip):**  
+   `transitions/from-step-{A}-{lastClipBase}-to-step-{B}.json`  
+   `transitions/from-{lastClipBase}-to-step-{B}.json`  
+   Example (if last clip was `sel-help-schreiben-and-planen`):  
+   `transitions/from-step-01-sel-help-schreiben-and-planen-to-step-02.json`
+2. `transitions/from-step-{A}-to-step-{B}.json` with **two-digit** `A` and `B` (e.g. `from-step-00-to-step-01.json`).
+3. `transitions/to-step-{B}.json` (e.g. `to-step-01.json`).
+4. **Legacy:** `assets/avatar-animations/step{B}.json` (same numbering as before).
 
 **Selections** for step `S` (in order, first successful load wins):
 

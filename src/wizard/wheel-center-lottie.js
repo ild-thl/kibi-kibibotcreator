@@ -57,6 +57,8 @@
   var animationDataCache = {};
   /** Schrittnummer → geklontes SVG (letzter sichtbarer Wheel-Zustand), weil reveal() Lotties auf anderen Steps aus dem DOM entfernt. */
   var lastWheelSvgByStep = {};
+  /** Letzte erfolgreich angezeigte Wheel-Media (für kontextabhängige Step-Transitions). */
+  var lastResolvedWheelMedia = null;
 
   function pad2(n) {
     return n < 10 ? '0' + n : String(n);
@@ -145,6 +147,7 @@
       el.remove();
     });
     lastWheelSvgByStep = {};
+    lastResolvedWheelMedia = null;
   }
 
   function getActiveWheelAvatar() {
@@ -219,6 +222,21 @@
     if (stepNum == null || !rootEl) return;
     var svg = rootEl.querySelector('svg');
     if (svg) lastWheelSvgByStep[stepNum] = svg.cloneNode(true);
+  }
+
+  function mediaBaseName(url) {
+    if (!url || typeof url !== 'string') return '';
+    var clean = url.split('?')[0].split('#')[0];
+    var slash = clean.lastIndexOf('/');
+    var file = slash >= 0 ? clean.slice(slash + 1) : clean;
+    var dot = file.lastIndexOf('.');
+    return dot > 0 ? file.slice(0, dot) : file;
+  }
+
+  function rememberResolvedWheelMedia(stepNum, url) {
+    var base = mediaBaseName(url);
+    if (stepNum == null || !base) return;
+    lastResolvedWheelMedia = { step: stepNum, base: base, url: url };
   }
 
   function cacheAnimationFromInstance(url, anim) {
@@ -369,6 +387,7 @@
       root.style.pointerEvents = '';
       if (img) img.style.display = 'none';
       rememberWheelSvgFromRoot(state.currentStep, root);
+      rememberResolvedWheelMedia(state.currentStep, url);
     }
 
     if (!window.fetch) {
@@ -569,6 +588,7 @@
         } catch (eSkip) {}
       }
       rememberWheelSvgForStep(state.currentStep, anim);
+      rememberResolvedWheelMedia(state.currentStep, url);
     }
 
     try {
@@ -603,11 +623,25 @@
     var specific = BASE + 'transitions/from-step-' + pad2(fromStep) + '-to-step-' + pad2(toStep) + '.json';
     var generic = BASE + 'transitions/to-step-' + pad2(toStep) + '.json';
     var avatar = './assets/avatar-animations/step' + toStep + '.json';
+    var contextual = [];
+    if (lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
+      contextual.push(
+        BASE +
+          'transitions/from-step-' +
+          pad2(fromStep) +
+          '-' +
+          lastResolvedWheelMedia.base +
+          '-to-step-' +
+          pad2(toStep) +
+          '.json'
+      );
+      contextual.push(BASE + 'transitions/from-' + lastResolvedWheelMedia.base + '-to-step-' + pad2(toStep) + '.json');
+    }
     /* Nur 0→1 hat aktuell eine eigene Datei; sonst zuerst to-step sparen (kein 404 auf fehlendes from-…). */
     if (fromStep === 0 && toStep === 1) {
-      return [specific, generic, avatar];
+      return contextual.concat([specific, generic, avatar]);
     }
-    return [generic, specific, avatar];
+    return contextual.concat([generic, specific, avatar]);
   }
 
   function selectionCandidates(step, state, meta) {
@@ -884,6 +918,7 @@
       instances.push(anim);
       var cacheIt = function () {
         cacheAnimationFromInstance(jsonUrl, anim);
+        rememberResolvedWheelMedia(0, jsonUrl);
       };
       try {
         anim.addEventListener('DOMLoaded', cacheIt);
@@ -940,6 +975,7 @@
           } catch (eA) {}
           wrap.appendChild(root);
           rememberWheelSvgFromRoot(0, root);
+          rememberResolvedWheelMedia(0, svgUrl);
         })
         .catch(function () {
           mountStartJson();
