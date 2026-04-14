@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 320 320">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <g id="Hg">
+    <circle cx="160" cy="160" r="154.3" fill="#e09cff"/>
+  </g>
+  <g id="Schreiben__x2B__Lernen">
+    <g>
+      <polygon points="68.1 102.4 68.1 190.2 85.2 225.3 100.8 190.2 100.8 102.4 68.1 102.4" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="68.3" y1="189.4" x2="100.8" y2="189.4" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="85.4" y1="102.9" x2="85.3" y2="188.8" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+    <g>
+      <g>
+        <rect x="131.3" y="121.2" width="137.2" height="87.2" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+        <path d="M256.1,200.7s-12.2-4-29.7-4.2c-20.3-.2-27.6,3.2-27.6,3.2,0,0-9.1-2.5-28.5-2.6-18.7,0-27.1,3.5-27.1,3.5v-84.9h112.9s0,84.9,0,84.9Z" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+        <line x1="198.4" y1="199.7" x2="198.4" y2="115.6" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+      <line x1="154.7" y1="175.1" x2="187.5" y2="175.1" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="154.7" y1="158.7" x2="187.5" y2="158.7" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="154.7" y1="141.9" x2="187.5" y2="141.9" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="211" y1="175.1" x2="243.8" y2="175.1" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="211" y1="158.7" x2="243.8" y2="158.7" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="211" y1="141.9" x2="243.8" y2="141.9" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

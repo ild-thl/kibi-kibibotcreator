@@ -25,7 +25,6 @@ Create a personalized avatar for study & teaching through a multi-step wizard. T
 ├─ index.html
 ├─ README.md
 ├─ assets/
-│  ├─ avatar-animations/     (optional fallback for step transitions)
 │  ├─ wheel-animations/       (Lottie JSON: transitions + per-step selections)
 │  └─ wheel-ring.svg
 ├─ styles/
@@ -58,7 +57,7 @@ Using a server avoids potential browser restrictions around local files.
 - Run `node server.js` in the project folder
 - Open `http://localhost:3000`
 
-This is especially important if you use **Lottie JSON** (`assets/wheel-animations/**/*.json` and `assets/avatar-animations/*.json`), because `file://` loading will block XMLHttpRequests due to browser CORS rules.
+This is especially important if you use **Lottie JSON** (`assets/wheel-animations/**/*.json`), because `file://` loading will block XMLHttpRequests due to browser CORS rules.
 
 ## Configuration
 
@@ -104,6 +103,21 @@ When debug mode is on, `body` gets the class `wizard-wheel-debug`:
 - **Steps 1–8** use a red-tinted dashed circle and their step number.
 
 Implementation: `src/wizard/wheel.js` (`WizardWheel.setWheelDebug(true|false)` and `WizardWheel.isWheelDebugEnabled()` are also available in the console).
+
+## Wheel animation debug logs (development)
+
+If animation selection/fallback feels inconsistent, enable verbose resolver logs in the browser console:
+
+- **URL:** append `?wheelAnimDebug=1` (or `wheelanimdebug=1`), e.g. `index.html?wheelAnimDebug=1`
+- Logs are printed with prefix: `[wheel-anim-debug]`
+- Useful events:
+  - `candidate_list` → full ordered candidate chain for current action
+  - `candidate_try` → currently attempted file
+  - `candidate_loaded` → successful file (JSON animation or SVG)
+  - `candidate_failed` / `fetch_not_ok` / `candidate_timeout` → why fallback moved to next candidate
+  - `skip_known_missing` → file skipped immediately due to availability cache
+
+This helps identify why a specific JSON transition was skipped and an SVG fallback was shown.
 
 ## Wheel center animations (Lottie)
 
@@ -160,7 +174,6 @@ assets/wheel-animations/
    `transitions/from-step-01-sel-help-schreiben-and-planen-to-step-02.json`
 2. `transitions/from-step-{A}-to-step-{B}.json` with **two-digit** `A` and `B` (e.g. `from-step-00-to-step-01.json`).
 3. `transitions/to-step-{B}.json` (e.g. `to-step-01.json`).
-4. **Legacy:** `assets/avatar-animations/step{B}.json` (same numbering as before).
 
 **Selections** for step `S` (in order, first successful load wins):
 

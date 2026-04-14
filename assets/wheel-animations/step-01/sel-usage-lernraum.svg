@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 320 320">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <g id="Hg">
+    <circle cx="160" cy="160" r="154.3" fill="#e09cff"/>
+  </g>
+  <g id="Lernraum">
+    <g>
+      <polygon points="234.5 203.6 197.5 223.1 86.6 223.1 86.6 117.7 124.7 98.1 234.5 98.1 234.5 203.6" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="86.6" y1="117.7" x2="124.7" y2="98.1" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="197.5" y1="117.7" x2="235.2" y2="98.3" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="234.5" y1="203.6" x2="197.5" y2="223.1" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <polyline points="86.6 223.1 124.7 203.6 234.5 203.6" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="124.7" y1="98.1" x2="124.7" y2="203.6" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="86.6" y1="117.7" x2="197.5" y2="117.7" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <g>
+        <path d="M192.2,184.7s-6.6,9-36.4,9-36.4-9-36.4-9v-27.7l57.3,7.2,15.4-11.7v32.2Z" fill="#e09cff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+        <polygon points="211.1 137.8 177.2 164.2 102.6 154.9 136.9 129.4 211.1 137.8" fill="#e09cff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+        <g>
+          <line x1="107.7" y1="155.6" x2="107.7" y2="181.9" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+          <line x1="107.7" y1="181.9" x2="101.5" y2="202.1" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+          <line x1="107.7" y1="181.9" x2="108.4" y2="204.1" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+          <line x1="107.7" y1="181.9" x2="114.7" y2="202.1" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+        </g>
+      </g>
+      <line x1="197.5" y1="117.7" x2="197.5" y2="223.1" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

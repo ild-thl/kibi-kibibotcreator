@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 320 320">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <g id="Hg">
+    <circle cx="160" cy="160" r="154.3" fill="#e09cff"/>
+  </g>
+  <g id="Planen__x2B__Schreiben__x2B__Lernen">
+    <g>
+      <rect x="36.1" y="118.2" width="73.7" height="92.7" transform="translate(17.5 -6.7) rotate(6)" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <path d="M51.4,138.8c1.3,1.9,2.6,3.8,3.9,5.7.2.2.3.5.6.5.4.1.8-.2,1.1-.4,3.5-3,6.7-6.3,9.7-9.7" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <path d="M46.3,187.8c1.3,1.9,2.6,3.8,3.9,5.7.2.2.3.5.6.5.4.1.8-.2,1.1-.4,3.5-3,6.7-6.3,9.7-9.7" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <path d="M48.8,163.3c1.3,1.9,2.6,3.8,3.9,5.7.2.2.3.5.6.5.4.1.8-.2,1.1-.4,3.5-3,6.7-6.3,9.7-9.7" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="75.8" y1="142.8" x2="98.2" y2="145.1" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="73.2" y1="167.3" x2="95.7" y2="169.6" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="70.6" y1="192.2" x2="93.1" y2="194.6" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <path d="M98,112.6l-10-1c.5-5.2-3.2-9.9-8.5-10.4-5.2-.5-9.9,3.2-10.4,8.5l-10-1c-1.9-.2-3.7,1.2-3.9,3.2l-.6,6c-.2,1.9,1.2,3.7,3.2,3.9l39,4.1c1.9.2,3.7-1.2,3.9-3.2l.6-6c.2-1.9-1.2-3.7-3.2-3.9ZM78.2,114.3c-1.9-.2-3.3-1.9-3.1-3.9.2-1.9,1.9-3.3,3.9-3.1,1.9.2,3.3,1.9,3.1,3.9-.2,1.9-1.9,3.3-3.9,3.1Z" fill="#fff" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+    <g>
+      <polygon points="132.7 102.8 132.7 178.7 147.5 209 160.9 178.7 160.9 102.8 132.7 102.8" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="132.8" y1="178" x2="160.9" y2="178" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="147.6" y1="103.2" x2="147.5" y2="177.5" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+    <g>
+      <g>
+        <rect x="206.2" y="112.4" width="69" height="108.7" transform="translate(29.9 370) rotate(-78.7)" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+        <path d="M278.7,203.3s-8.8-5-22.5-7.9-21.9-1.8-21.9-1.8c0,0-6.7-3.4-21.7-6.4-14.5-2.9-21.6-1.5-21.6-1.5l13.2-66,87.6,17.6-13.2,66Z" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+        <line x1="234.1" y1="193.6" x2="247.2" y2="128.3" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      </g>
+      <line x1="203.9" y1="167.6" x2="229.4" y2="172.7" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="206.5" y1="154.9" x2="232" y2="160" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="209.1" y1="141.9" x2="234.6" y2="147" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="247.7" y1="176.4" x2="273.2" y2="181.5" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="250.2" y1="163.7" x2="275.7" y2="168.8" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="252.9" y1="150.6" x2="278.3" y2="155.7" fill="none" stroke="#a35bc9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

@@ -55,13 +55,34 @@
   var previousUiStep = null;
   /** URL → JSON, damit Übergänge ohne erneuten Netzwerk-Roundtrip starten. */
   var animationDataCache = {};
+  /** URL → true/false (existiert / fehlt), um wiederholte Fallback-Timeouts zu vermeiden. */
+  var mediaAvailabilityCache = {};
   /** Schrittnummer → geklontes SVG (letzter sichtbarer Wheel-Zustand), weil reveal() Lotties auf anderen Steps aus dem DOM entfernt. */
   var lastWheelSvgByStep = {};
   /** Letzte erfolgreich angezeigte Wheel-Media (für kontextabhängige Step-Transitions). */
   var lastResolvedWheelMedia = null;
+  var wheelAnimDebugEnabled = false;
 
   function pad2(n) {
     return n < 10 ? '0' + n : String(n);
+  }
+
+  function initWheelAnimDebugFromUrl() {
+    try {
+      var p = new URLSearchParams(window.location.search);
+      wheelAnimDebugEnabled = p.get('wheelAnimDebug') === '1' || p.get('wheelanimdebug') === '1';
+    } catch (e) {
+      wheelAnimDebugEnabled = false;
+    }
+  }
+
+  function wheelAnimDebug(eventName, payload) {
+    if (!wheelAnimDebugEnabled || !window.console || typeof window.console.info !== 'function') return;
+    var data = payload || {};
+    data.event = eventName;
+    try {
+      window.console.info('[wheel-anim-debug]', data);
+    } catch (e) {}
   }
 
   function slugify(raw) {
@@ -87,6 +108,87 @@
       return v.slice().sort().map(slugify).join('-and-');
     }
     return slugify(v);
+  }
+
+  function permute(arr) {
+    var out = [];
+    function rec(rest, acc) {
+      if (!rest.length) {
+        out.push(acc);
+        return;
+      }
+      for (var i = 0; i < rest.length; i++) {
+        var next = rest.slice();
+        var pick = next.splice(i, 1)[0];
+        rec(next, acc.concat([pick]));
+      }
+    }
+    rec(arr, []);
+    return out;
+  }
+
+  /**
+   * Varianten für Mehrfachauswahl-Slugs:
+   * - Klickreihenfolge
+   * - alphabetisch sortiert
+   * - zusätzliche Permutationen (bis 4 Werte, damit die Kandidatenliste begrenzt bleibt)
+   */
+  function multiSlugVariantsFromArray(values) {
+    if (!Array.isArray(values) || !values.length) return [];
+    var raw = values.map(slugify);
+    var ordered = raw.join('-and-');
+    var sorted = raw.slice().sort().join('-and-');
+    var seen = {};
+    var out = [];
+    function push(v) {
+      if (!v || seen[v]) return;
+      seen[v] = true;
+      out.push(v);
+    }
+    push(ordered);
+    push(sorted);
+    if (raw.length > 1 && raw.length <= 4) {
+      var perms = permute(raw);
+      for (var i = 0; i < perms.length; i++) push(perms[i].join('-and-'));
+    }
+    return out;
+  }
+
+  function valueSlugVariantsFromState(state, field) {
+    var v = state[field];
+    if (v == null || v === '') return [];
+    if (Array.isArray(v)) {
+      if (!v.length) return [];
+      return multiSlugVariantsFromArray(v);
+    }
+    return [slugify(v)];
+  }
+
+  function canonicalSelBaseVariants(state, step) {
+    var fields = STEP_FIELDS[step];
+    if (!fields || !state) return [];
+    var combos = [''];
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      var variants = valueSlugVariantsFromState(state, f);
+      if (!variants.length) continue;
+      var seg = fieldSeg(f) + '-';
+      var next = [];
+      for (var c = 0; c < combos.length; c++) {
+        for (var v = 0; v < variants.length; v++) {
+          next.push(combos[c] ? combos[c] + '__' + seg + variants[v] : seg + variants[v]);
+        }
+      }
+      combos = next;
+      /* Sicherheitsbremse gegen zu viele Varianten in Schritten mit vielen Multi-Werten. */
+      if (combos.length > 64) combos = combos.slice(0, 64);
+    }
+    var seen = {};
+    return combos.filter(function (b) {
+      if (!b || seen[b]) return false;
+      seen[b] = true;
+      return true;
+    });
   }
 
   /** Mehrfach-help: Slug in Klick-/Array-Reihenfolge, falls von der sortierten Variante abweichend. */
@@ -211,6 +313,13 @@
     for (var i = 0; i < urls.length; i++) {
       var u = urls[i];
       if (typeof u === 'string' && u.length > 5 && u.slice(-5).toLowerCase() === '.json') {
+        var isTransitionLike = u.indexOf('/sel-from-') !== -1 || u.indexOf('/transitions/') !== -1;
+        if (isTransitionLike) {
+          /* Bei Übergängen bevorzugen wir die Animation, SVG bleibt Fallback. */
+          push(u);
+          push(u.slice(0, -5) + '.svg');
+          continue;
+        }
         push(u.slice(0, -5) + '.svg');
       }
       push(u);
@@ -237,6 +346,20 @@
     var base = mediaBaseName(url);
     if (stepNum == null || !base) return;
     lastResolvedWheelMedia = { step: stepNum, base: base, url: url };
+  }
+
+  function isKnownMissingMedia(url) {
+    return mediaAvailabilityCache[url] === false;
+  }
+
+  function markMediaAvailable(url) {
+    if (!url) return;
+    mediaAvailabilityCache[url] = true;
+  }
+
+  function markMediaMissing(url) {
+    if (!url) return;
+    mediaAvailabilityCache[url] = false;
   }
 
   function cloneStepState(state, step) {
@@ -288,6 +411,50 @@
     if (url.indexOf(BASE + 'transitions/') !== 0) return 0;
     if (url.indexOf('on-load.json') !== -1) return 0;
     return 3;
+  }
+
+  function candidateLoadTimeoutMs(url) {
+    if (!url || typeof url !== 'string') return 900;
+    /* Selections wechseln oft schnell; fehlende Varianten sollen den Fallback nicht lange blockieren. */
+    if (url.indexOf(BASE + 'step-') === 0) {
+      if (url.indexOf('/sel-from-') !== -1) return 320;
+      return 140;
+    }
+    if (url.indexOf(BASE + 'transitions/') === 0) return 450;
+    return 900;
+  }
+
+  function prioritizeKnownAvailable(urls) {
+    if (!Array.isArray(urls) || urls.length < 2) return urls;
+    var transitionLike = false;
+    for (var ti = 0; ti < urls.length; ti++) {
+      var tu = urls[ti];
+      if (typeof tu === 'string' && tu.indexOf('/transitions/') !== -1) {
+        transitionLike = true;
+        break;
+      }
+    }
+    var orderedJson = [];
+    var orderedOther = [];
+    var missingJson = [];
+    var missingOther = [];
+    for (var i = 0; i < urls.length; i++) {
+      var u = urls[i];
+      var isJson = typeof u === 'string' && u.toLowerCase().slice(-5) === '.json';
+      var isMissing = mediaAvailabilityCache[u] === false;
+      if (isMissing) {
+        if (isJson) missingJson.push(u);
+        else missingOther.push(u);
+      } else if (isJson && transitionLike) {
+        orderedJson.push(u);
+      } else {
+        orderedOther.push(u);
+      }
+    }
+    /* Bei Step-Transitions: zuerst Animationen (JSON), dann SVG-Fallbacks. */
+    if (transitionLike) return orderedJson.concat(missingJson, orderedOther, missingOther);
+    /* Sonst: bekannte Fehlkandidaten ans Ende, Reihenfolge beibehalten. */
+    return orderedOther.concat(orderedJson, missingOther, missingJson);
   }
 
   /** Lädt bekannte Transition-JSONs im Hintergrund (erster Sprung wirkt sofort). */
@@ -358,6 +525,11 @@
    */
   function tryPlaySvgAtIndex(state, urls, index, wrap) {
     var url = urls[index];
+    if (isKnownMissingMedia(url)) {
+      wheelAnimDebug('skip_known_missing', { type: 'svg', url: url, index: index });
+      tryPlayIndex(state, urls, index + 1, wrap);
+      return;
+    }
     var img = wrap.querySelector('img');
     var root = document.createElement('div');
     root.className = 'wheel-center-lottie wheel-center-lottie--pending wheel-center-lottie--static';
@@ -372,6 +544,7 @@
       settled = true;
       if (loadTimer) clearTimeout(loadTimer);
       if (root.parentNode) root.remove();
+      wheelAnimDebug('candidate_failed', { type: 'svg', url: url, index: index });
       tryPlayIndex(state, urls, index + 1, wrap);
     }
 
@@ -400,6 +573,7 @@
       if (img) img.style.display = 'none';
       rememberWheelSvgFromRoot(state.currentStep, root);
       rememberResolvedWheelMedia(state.currentStep, url);
+      wheelAnimDebug('candidate_loaded', { type: 'svg', url: url, index: index });
     }
 
     if (!window.fetch) {
@@ -408,21 +582,30 @@
     }
     fetch(url)
       .then(function (r) {
-        if (!r.ok) throw new Error('svg');
+        if (!r.ok) {
+          markMediaMissing(url);
+          wheelAnimDebug('fetch_not_ok', { type: 'svg', url: url, status: r.status, index: index });
+          throw new Error('svg');
+        }
         return r.text();
       })
       .then(function (text) {
         if (settled) return;
         root.innerHTML = sanitizeSvgText(text);
         if (settled) return;
+        markMediaAvailable(url);
         revealStatic();
       })
       .catch(function () {
+        if (mediaAvailabilityCache[url] == null) markMediaMissing(url);
         fail();
       });
     loadTimer = setTimeout(function () {
-      if (!settled) fail();
-    }, 900);
+      if (!settled) {
+        wheelAnimDebug('candidate_timeout', { type: 'svg', url: url, index: index, timeoutMs: candidateLoadTimeoutMs(url) });
+        fail();
+      }
+    }, candidateLoadTimeoutMs(url));
   }
 
   /** Zeigt bis zur neuen Lottie den letzten Zustand vom **vorherigen** Schritt (Live-DOM oder Snapshot). */
@@ -478,7 +661,14 @@
     if (shouldSkipWheelAnimations(state)) return;
     if (isFileProtocol()) return;
     urls = expandWheelMediaCandidates(urls);
+    urls = prioritizeKnownAvailable(urls);
     if (!urls.length) return;
+    wheelAnimDebug('candidate_list', {
+      step: state && state.currentStep,
+      holdFromStep: holdFromStep,
+      total: urls.length,
+      urls: urls
+    });
     var hasJson = false;
     var hasSvg = false;
     for (var hi = 0; hi < urls.length; hi++) {
@@ -512,6 +702,12 @@
       return;
     }
     var url = urls[index];
+    if (isKnownMissingMedia(url)) {
+      wheelAnimDebug('skip_known_missing', { type: 'json_or_other', url: url, index: index });
+      tryPlayIndex(state, urls, index + 1, wrap);
+      return;
+    }
+    wheelAnimDebug('candidate_try', { url: url, index: index, step: state && state.currentStep });
     if (typeof url === 'string' && url.toLowerCase().slice(-4) === '.svg') {
       tryPlaySvgAtIndex(state, urls, index, wrap);
       return;
@@ -556,6 +752,8 @@
         anim.removeEventListener('config_error', advance);
         anim.removeEventListener('error', advance);
       } catch (e) {}
+      markMediaMissing(url);
+      wheelAnimDebug('candidate_failed', { type: 'json', url: url, index: index });
       tearDownAttempt();
       tryPlayIndex(state, urls, index + 1, wrap);
     }
@@ -575,6 +773,8 @@
 
       snapshotWheelLottiesToMemory(root);
       cacheAnimationFromInstance(url, anim);
+      markMediaAvailable(url);
+      wheelAnimDebug('candidate_loaded', { type: 'json', url: url, index: index });
       removeHoldFramesFromWrap(root.parentNode);
 
       instances.forEach(function (inst) {
@@ -624,17 +824,20 @@
     loadTimer = setTimeout(function () {
       if (settled) return;
       try {
-        if (anim && anim.isLoaded === false) advance();
+        if (anim && anim.isLoaded === false) {
+          wheelAnimDebug('candidate_timeout', { type: 'json', url: url, index: index, timeoutMs: candidateLoadTimeoutMs(url) });
+          advance();
+        }
       } catch (err) {
+        wheelAnimDebug('candidate_timeout_error', { type: 'json', url: url, index: index });
         advance();
       }
-    }, 900);
+    }, candidateLoadTimeoutMs(url));
   }
 
   function transitionCandidates(fromStep, toStep) {
     var specific = BASE + 'transitions/from-step-' + pad2(fromStep) + '-to-step-' + pad2(toStep) + '.json';
     var generic = BASE + 'transitions/to-step-' + pad2(toStep) + '.json';
-    var avatar = './assets/avatar-animations/step' + toStep + '.json';
     var contextual = [];
     if (fromStep !== 0 && lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
       contextual.push(
@@ -651,9 +854,9 @@
     }
     /* Nur 0→1 hat aktuell eine eigene Datei; sonst zuerst to-step sparen (kein 404 auf fehlendes from-…). */
     if (fromStep === 0 && toStep === 1) {
-      return contextual.concat([specific, generic, avatar]);
+      return contextual.concat([specific, generic]);
     }
-    return contextual.concat([generic, specific, avatar]);
+    return contextual.concat([specific, generic]);
   }
 
   function selectionCandidates(step, state, meta) {
@@ -693,11 +896,19 @@
       }
     }
 
-    var canonBase = canonicalSelBase(state, step);
+    var canonVariants = canonicalSelBaseVariants(state, step);
+    for (var cv = 0; cv < canonVariants.length; cv++) {
+      push(prefix + 'sel-' + canonVariants[cv] + '.json');
+    }
+    /* Legacy-Helfer für Schritt 1 beibehalten (falls Dateinamen außerhalb der allgemeinen Variantenlogik vorliegen). */
     var canonHelpOrder = canonicalSelBaseHelpInsertionVariant(state, step);
-    /* Zuerst Klick-Reihenfolge, wenn abweichend: sonst fehlende sortierte Datei → ~900ms Timeout bis zum nächsten Kandidaten. */
     if (canonHelpOrder) push(prefix + 'sel-' + canonHelpOrder + '.json');
+    var canonBase = canonicalSelBase(state, step);
     if (canonBase) push(prefix + 'sel-' + canonBase + '.json');
+    if (step === 1 && f === 'help_context') {
+      var hiSoloFirst = helpContextMultiInsertSlug(state);
+      if (hiSoloFirst) push(prefix + 'sel-help-' + hiSoloFirst + '.json');
+    }
 
     var others = fields.filter(function (of) {
       return of !== f && valueSlugFromState(state, of) != null;
@@ -768,10 +979,18 @@
     }
 
     var prefix0 = BASE + 'step-' + pad2(step) + '/';
+    var canonVariants = canonicalSelBaseVariants(state, step);
+    for (var cv = 0; cv < canonVariants.length; cv++) {
+      pushUnique(prefix0 + 'sel-' + canonVariants[cv] + '.json');
+    }
     var canonBase = canonicalSelBase(state, step);
     var canonHelpIns = canonicalSelBaseHelpInsertionVariant(state, step);
     if (canonHelpIns) pushUnique(prefix0 + 'sel-' + canonHelpIns + '.json');
     if (canonBase) pushUnique(prefix0 + 'sel-' + canonBase + '.json');
+    if (step === 1) {
+      var hiTop = helpContextMultiInsertSlug(state);
+      if (hiTop) pushUnique(prefix0 + 'sel-help-' + hiTop + '.json');
+    }
 
     for (var pi = 0; pi < setFields.length; pi++) {
       var f = setFields[pi];
@@ -1023,6 +1242,8 @@
       applyWheelCenterAvatarImage(state);
     }
   }
+
+  initWheelAnimDebugFromUrl();
 
   window.WizardWheelCenter = {
     notifyUiUpdate: notifyUiUpdate,

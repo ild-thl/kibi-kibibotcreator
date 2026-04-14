@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 320 320">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <g id="Hg">
+    <circle cx="160" cy="160" r="154.3" fill="#e09cff"/>
+  </g>
+  <g id="Schreiben">
+    <g>
+      <polygon points="137.7 82.4 137.7 198.5 160.3 245 180.9 198.5 180.9 82.4 137.7 82.4" fill="#fff" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="137.9" y1="197.4" x2="180.9" y2="197.4" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+      <line x1="160.5" y1="83" x2="160.3" y2="196.7" fill="none" stroke="#a35bc9" stroke-miterlimit="10" stroke-width="2"/>
+    </g>
+  </g>
+</svg>
