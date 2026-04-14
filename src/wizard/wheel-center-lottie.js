@@ -636,7 +636,7 @@
     var generic = BASE + 'transitions/to-step-' + pad2(toStep) + '.json';
     var avatar = './assets/avatar-animations/step' + toStep + '.json';
     var contextual = [];
-    if (lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
+    if (fromStep !== 0 && lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
       contextual.push(
         BASE +
           'transitions/from-step-' +
