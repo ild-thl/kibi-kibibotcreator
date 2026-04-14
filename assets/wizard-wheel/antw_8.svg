@@ -1,128 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Antw_8" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 625 625">
-  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
-  <defs>
-    <filter id="drop-shadow-1" x="403.8" y="84.6" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-2" x="480" y="218" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur1" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur1" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-3" x="452.8" y="369.7" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur2" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur2" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-4" x="336" y="468.7" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur3" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur3" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-5" x="181.8" y="469.9" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur4" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur4" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-6" x="62.8" y="369.9" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur5" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur5" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-7" x="35.5" y="217" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur6" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur6" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-8" x="115.2" y="81.9" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur7" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur7" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-    <filter id="drop-shadow-9" x="257.6" y="31.2" width="115.4" height="115.4" filterUnits="userSpaceOnUse">
-      <feOffset dx="4" dy="4"/>
-      <feGaussianBlur result="blur8" stdDeviation="0"/>
-      <feFlood flood-color="#245ebc" flood-opacity="1"/>
-      <feComposite in2="blur8" operator="in"/>
-      <feComposite in="SourceGraphic"/>
-    </filter>
-  </defs>
-  <g filter="url(#drop-shadow-1)">
+<svg id="Antw_8" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 625 625">
+  <!-- Generator: Adobe Illustrator 30.3.0, SVG Export Plug-In . SVG Version: 2.1.3 Build 182)  -->
+  <g>
     <circle cx="459.5" cy="140.3" r="55.7" fill="#c0e0ff"/>
     <path d="M437.1,114.6h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="437.7" y1="126.4" x2="482" y2="126.4" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="437.7" y1="136.8" x2="482" y2="136.8" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="437.7" y1="147.7" x2="482" y2="147.7" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-2)">
+  <g>
     <circle cx="535.6" cy="273.7" r="55.7" fill="#c0e0ff"/>
     <path d="M512.9,249.2h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="513.4" y1="261" x2="557.7" y2="261" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="513.4" y1="271.4" x2="557.7" y2="271.4" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="513.4" y1="282.3" x2="557.7" y2="282.3" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-3)">
+  <g>
     <circle cx="508.4" cy="425.4" r="55.7" fill="#c0e0ff"/>
     <path d="M483.9,399.8h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="484.5" y1="411.7" x2="528.8" y2="411.7" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="484.5" y1="422.1" x2="528.8" y2="422.1" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="484.5" y1="433.1" x2="528.8" y2="433.1" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-4)">
+  <g>
     <circle cx="391.6" cy="524.4" r="55.7" fill="#c0e0ff"/>
     <path d="M367.7,498.8h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="368.3" y1="510.6" x2="412.6" y2="510.6" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="368.3" y1="521" x2="412.6" y2="521" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="368.3" y1="531.9" x2="412.6" y2="531.9" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-5)">
+  <g>
     <circle cx="237.5" cy="525.6" r="55.7" fill="#c0e0ff"/>
     <path d="M214,501.7h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="214.7" y1="513.5" x2="259" y2="513.5" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="214.7" y1="523.9" x2="259" y2="523.9" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="214.7" y1="534.9" x2="259" y2="534.9" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-6)">
+  <g>
     <circle cx="118.5" cy="425.6" r="55.7" fill="#c0e0ff"/>
     <path d="M96,400.2h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="96.8" y1="411.9" x2="141.1" y2="411.9" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="96.8" y1="422.3" x2="141.1" y2="422.3" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="96.8" y1="433.3" x2="141.1" y2="433.3" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-7)">
+  <g>
     <circle cx="91.2" cy="272.7" r="55.7" fill="#c0e0ff"/>
     <path d="M67.4,245.9h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="68.7" y1="257.9" x2="113" y2="257.9" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="68.7" y1="268.4" x2="113" y2="268.4" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="68.7" y1="279.3" x2="113" y2="279.3" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-8)">
+  <g>
     <circle cx="170.9" cy="137.6" r="55.7" fill="#c0e0ff"/>
     <path d="M147.4,113.5h44.8c6.8,0,12.3,5.5,12.3,12.3v20.8c0,6.8-5.5,12.3-12.3,12.3h-22.4s-15.4,14.9-15.4,14.9l2.2-14.9h-9.3c-6.8,0-12.3-5.5-12.3-12.3v-20.8c0-6.8,5.5-12.3,12.3-12.3Z" fill="#fff" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="148.5" y1="125.8" x2="192.8" y2="125.8" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="148.5" y1="136.2" x2="192.8" y2="136.2" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
     <line x1="148.5" y1="147.2" x2="192.8" y2="147.2" fill="none" stroke="#4d96ff" stroke-miterlimit="10" stroke-width="2.4"/>
   </g>
-  <g filter="url(#drop-shadow-9)">
+  <g>
     <circle cx="313.3" cy="86.9" r="55.7" fill="#c0e0ff"/>
     <g>
       <path d="M296.1,91.5c0,1-.2,1.9-.7,2.6s-1.2,1.3-2.2,1.7-2.1.6-3.4.6-1.2,0-1.7-.1-1.1-.2-1.6-.3-1-.3-1.5-.6v-3.4c.8.4,1.7.7,2.5,1s1.7.4,2.6.4,1.1,0,1.4-.2.6-.4.8-.6.2-.6.2-.9-.1-.8-.4-1.1-.7-.6-1.2-.9-1.1-.6-1.7-.9c-.4-.2-.8-.4-1.3-.7s-.9-.6-1.3-1-.8-.9-1-1.4-.4-1.2-.4-2,.2-1.9.7-2.6,1.1-1.3,2-1.7,1.9-.6,3.1-.6,1.7.1,2.5.3,1.7.5,2.5.9l-1.2,2.8c-.8-.3-1.5-.6-2.1-.7s-1.3-.3-1.9-.3-.8,0-1.2.2-.6.3-.7.6-.2.6-.2.9.1.7.4,1,.6.5,1.1.8,1.1.6,1.8.9c.9.4,1.6.8,2.2,1.3s1.1,1,1.4,1.6.5,1.4.5,2.3Z" fill="#4d96ff"/>
