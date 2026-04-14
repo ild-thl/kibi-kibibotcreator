@@ -270,6 +270,7 @@
 
   function applyWheelCenterAvatarImage(state) {
     var url = '';
+    var avatarType = state && state.avatarType ? state.avatarType : 'human';
     try {
       if (window.WizardAvatar && typeof window.WizardAvatar.buildAvatarUrl === 'function') {
         url = window.WizardAvatar.buildAvatarUrl(state);
@@ -277,6 +278,7 @@
     } catch (e) {}
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
       if (url) img.src = url;
+      img.setAttribute('data-avatar-type', avatarType);
       img.style.display = 'block';
     });
   }

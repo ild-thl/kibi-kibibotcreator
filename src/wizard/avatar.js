@@ -154,13 +154,16 @@
     if (!state.avatarInitialized) return;
     clearAvatarLottie();
     const url = avatarUrl || buildAvatarUrl(state);
+    var avatarType = state.avatarType || 'human';
     const main = document.getElementById('avatarPreview');
     if (main) {
       main.onerror = function () { this.onerror = null; this.src = TRANSPARENT_IMG; };
+      main.setAttribute('data-avatar-type', avatarType);
       main.src = url;
     }
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
       img.onerror = function () { this.onerror = null; this.src = TRANSPARENT_IMG; };
+      img.setAttribute('data-avatar-type', avatarType);
       img.src = url;
     });
   }
