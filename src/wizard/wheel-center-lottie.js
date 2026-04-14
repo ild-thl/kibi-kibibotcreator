@@ -239,6 +239,18 @@
     lastResolvedWheelMedia = { step: stepNum, base: base, url: url };
   }
 
+  function cloneStepState(state, step) {
+    var fields = STEP_FIELDS[step];
+    var out = {};
+    if (!fields || !state) return out;
+    for (var i = 0; i < fields.length; i++) {
+      var f = fields[i];
+      var v = state[f];
+      out[f] = Array.isArray(v) ? v.slice() : v;
+    }
+    return out;
+  }
+
   function cacheAnimationFromInstance(url, anim) {
     if (!url || !anim) return;
     try {
@@ -660,6 +672,25 @@
       if (!u || seen[u]) return;
       seen[u] = true;
       out.push(u);
+    }
+
+    if (meta && Object.prototype.hasOwnProperty.call(meta, 'previousValue')) {
+      var prevState = cloneStepState(state, step);
+      prevState[f] = meta.previousValue;
+      var prevBase = canonicalSelBase(prevState, step);
+      var nextBase = canonicalSelBase(state, step);
+      if (prevBase && nextBase && prevBase !== nextBase) {
+        push(prefix + 'sel-from-' + prevBase + '-to-' + nextBase + '.json');
+      }
+      var prevIns = canonicalSelBaseHelpInsertionVariant(prevState, step);
+      var nextIns = canonicalSelBaseHelpInsertionVariant(state, step);
+      if (prevIns && nextIns && prevIns !== nextIns) {
+        push(prefix + 'sel-from-' + prevIns + '-to-' + nextIns + '.json');
+      }
+      var prevSlug = meta.previousValue == null || meta.previousValue === '' ? null : slugify(meta.previousValue);
+      if (prevSlug && prevSlug !== vSlug) {
+        push(prefix + 'sel-from-' + fs + '-' + prevSlug + '-to-' + fs + '-' + vSlug + '.json');
+      }
     }
 
     var canonBase = canonicalSelBase(state, step);

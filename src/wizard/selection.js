@@ -13,6 +13,8 @@
         const isMulti = this.dataset.multi === 'true';
         if (!field) return;
 
+        var previousValue = isMulti ? null : state[field];
+        var previousValues = isMulti && Array.isArray(state[field]) ? state[field].slice() : null;
         var wasInList = isMulti && Array.isArray(state[field]) && state[field].indexOf(this.dataset.value) >= 0;
 
         if (isMulti) {
@@ -88,7 +90,9 @@
             field: field,
             value: this.dataset.value,
             isMulti: isMulti,
-            added: added
+            added: added,
+            previousValue: previousValue,
+            previousValues: previousValues
           });
         }
 

@@ -164,10 +164,16 @@ assets/wheel-animations/
 
 **Selections** for step `S` (in order, first successful load wins):
 
-1. **Canonical full combo:** `step-NN/sel-{seg1}-{slug1}__{seg2}-{slug2}__….json`  
+1. **Selection transition (value change in same field):**  
+   `step-NN/sel-from-{seg}-{oldSlug}-to-{seg}-{newSlug}.json`  
+   Example (step 1): `sel-from-usage-lernraum-to-usage-lernveranstaltung.json`
+2. **Selection transition (full previous state → full new state):**  
+   `step-NN/sel-from-{oldCanonicalBase}-to-{newCanonicalBase}.json`  
+   Example (step 1): `sel-from-usage-lernraum__help-lernen-to-usage-lernveranstaltung__help-lernen.json`
+3. **Canonical full combo:** `step-NN/sel-{seg1}-{slug1}__{seg2}-{slug2}__….json`  
    – one pair per field in that step that already has a value, in **`STEP_FIELDS` order** (same order as the table below), independent of which option was clicked last. Example step 1: `sel-usage-lernraum__help-lernen.json`.
-2. **Clicked-first combo** (legacy / alternate authoring): same pairs but the **clicked** field’s segment comes first in the filename.
-3. **Pairwise** (clicked field vs each other set field), then **solo** for the clicked value.
+4. **Clicked-first combo** (legacy / alternate authoring): same pairs but the **clicked** field’s segment comes first in the filename.
+5. **Pairwise** (clicked field vs each other set field), then **solo** for the clicked value.
 
 `{seg}` is a short alias for the `data-field` / state key (e.g. `usage_context` → `usage`, `help_context` → `help`). See `FIELD_SEGMENT` in `wheel-center-lottie.js` for the full list.
 
@@ -185,6 +191,7 @@ For **arrays** (multi-select), values are **sorted**, slugified, and joined with
 | Then choose “Lernraum” | `sel-usage-lernraum__help-lernen.json`, then `sel-usage-lernraum.json` |
 
 So you can author **either** the **combo** file, **or** only the **solo** files, depending on how granular your motion design is. Missing files are skipped automatically.
+If you want a smooth animation when users switch a single-select answer (e.g. Lernraum → Lernveranstaltung), add the `sel-from-...-to-...` file for that change; otherwise the resolver falls back to the normal `sel-...` state files.
 
 ### Steps and fields (for `step-NN` clips)
 
