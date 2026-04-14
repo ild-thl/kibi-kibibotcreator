@@ -108,6 +108,7 @@ Implementation: `src/wizard/wheel.js` (`WizardWheel.setWheelDebug(true|false)` a
 ## Wheel center animations (Lottie)
 
 Center animations are driven by **`src/wizard/wheel-center-lottie.js`** (Lottie Web is loaded from the CDN in `index.html`). They play **inside** `.wizard-wheel-avatar` on the **currently visible** step.
+For every animation candidate (`*.json`), the resolver first tries a file with the same path/name but extension `*.svg`. If the SVG exists, it is shown as a static wheel-center graphic; otherwise fallback continues with the JSON animation chain.
 
 ### When animations run
 
@@ -146,6 +147,7 @@ assets/wheel-animations/
 
 - **`transitions/`** – clips when **entering** a step (`currentStep` after navigation).
 - **`step-NN/`** – `NN` = wizard step **01–08** (two digits), matching `state.currentStep` (1 = first question step after start, …, 8 = avatar appearance).
+- You can provide **either** Lottie `*.json` **or** static `*.svg` with the same base filename. Example: `to-step-02.json` and/or `to-step-02.svg`.
 
 ### How the app picks a file (fallback chain)
 
