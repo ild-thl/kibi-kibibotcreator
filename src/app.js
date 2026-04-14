@@ -348,6 +348,9 @@
     if (window.WizardWheelCenter && window.WizardWheelCenter.resetNavigationTracking) {
       window.WizardWheelCenter.resetNavigationTracking();
     }
+    if (window.WizardWheelCenter && typeof window.WizardWheelCenter.resetWheelMediaMemory === 'function') {
+      window.WizardWheelCenter.resetWheelMediaMemory();
+    }
     if (window.WizardWheelCenter && window.WizardWheelCenter.clearLottieLayers) {
       window.WizardWheelCenter.clearLottieLayers();
     }

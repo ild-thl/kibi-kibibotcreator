@@ -123,6 +123,9 @@ This helps identify why a specific JSON transition was skipped and an SVG fallba
 
 Center animations are driven by **`src/wizard/wheel-center-lottie.js`** (Lottie Web is loaded from the CDN in `index.html`). They play **inside** `.wizard-wheel-avatar` on the **currently visible** step.
 For every animation candidate (`*.json`), the resolver first tries a file with the same path/name but extension `*.svg`. If the SVG exists, it is shown as a static wheel-center graphic; otherwise fallback continues with the JSON animation chain.
+For **step selection** files under `step-NN/sel-*.json`, the JSON animation is tried **before** the matching SVG so revisiting a step can replay the same motion clip when both exist.
+
+When you **navigate back** to a step you already completed, the app remembers the **last successfully shown** wheel clip for that step (for the same answers) and tries it first, then falls back to the normal resolver list.
 
 ### When animations run
 
@@ -135,7 +138,7 @@ Other animations are **not** played when:
 - `currentStep === 9` (summary has no wheel), or
 - `currentStep === 8` **and** `avatarInitialized === true` (center shows the static DiceBear preview instead).
 
-Multi-select **deselect** does not trigger a clip (only **adding** a value does).
+Multi-select **deselect** also refreshes the wheel clip for the **remaining** selection (same resolver as restore).
 
 ### Where to put files
 

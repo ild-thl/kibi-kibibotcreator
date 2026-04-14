@@ -61,6 +61,14 @@
   var lastWheelSvgByStep = {};
   /** Letzte erfolgreich angezeigte Wheel-Media (für kontextabhängige Step-Transitions). */
   var lastResolvedWheelMedia = null;
+  /** Schritt → zuletzt erfolgreich angezeigte Media-URL + Auswahl-Fingerprint (Wiederkehr auf denselben Schritt). */
+  var lastWheelMediaByStep = {};
+  /**
+   * Abgeschlossene Schritte: zuletzt gezeigte Step-Auswahl (nur sel unter step-NN/), unabhängig von Fingerprint.
+   * SVG-Klon überlebt clearLottieLayers (im Gegensatz zu lastWheelSvgByStep).
+   */
+  var completedStepSelectionWheelCache = {};
+  var completedStepWheelSvgClone = {};
   var wheelAnimDebugEnabled = false;
 
   function pad2(n) {
@@ -315,7 +323,10 @@
     for (var i = 0; i < urls.length; i++) {
       var u = urls[i];
       if (typeof u === 'string' && u.length > 5 && u.slice(-5).toLowerCase() === '.json') {
-        var isTransitionLike = u.indexOf('/sel-from-') !== -1 || u.indexOf('/transitions/') !== -1;
+        var isStepSelJson =
+          u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1 && u.slice(-5).toLowerCase() === '.json';
+        var isTransitionLike =
+          u.indexOf('/sel-from-') !== -1 || u.indexOf('/transitions/') !== -1 || isStepSelJson;
         if (isTransitionLike) {
           /* Bei Übergängen bevorzugen wir die Animation, SVG bleibt Fallback. */
           push(u);
@@ -348,6 +359,53 @@
     var base = mediaBaseName(url);
     if (stepNum == null || !base) return;
     lastResolvedWheelMedia = { step: stepNum, base: base, url: url };
+  }
+
+  /** Fingerprint der Auswahl für einen Schritt (gleiche Auswahl → gleiche „letzte“ Grafik wieder möglich). */
+  function stepWheelFingerprint(step, state) {
+    if (!state) return '';
+    if (step === 0) return '0|start';
+    var base = canonicalSelBase(state, step) || '';
+    if (step === 1) {
+      /* Kein JSON.stringify(help_context): Array-Reihenfolge kann wechseln, canonicalSelBase nutzt ohnehin sortierte Slugs. */
+      var hi = helpContextMultiInsertSlug(state);
+      return '1|' + base + '|' + (hi || '');
+    }
+    return String(step) + '|' + base;
+  }
+
+  function rememberLastWheelMediaForStep(stepNum, state, url) {
+    if (stepNum == null || !state || !url) return;
+    lastWheelMediaByStep[stepNum] = { url: url, fp: stepWheelFingerprint(stepNum, state) };
+  }
+
+  /** Nur echte Auswahl-Medien unter assets/.../step-NN/… (keine transitions/). */
+  function isStepFolderSelectionUrl(stepNum, url) {
+    if (!url || typeof url !== 'string') return false;
+    var seg = '/step-' + pad2(stepNum) + '/';
+    return url.indexOf(seg) !== -1 && url.indexOf('/sel-') !== -1;
+  }
+
+  /**
+   * Wenn der Schritt zum Zeitpunkt der Anzeige gültig abgeschlossen ist: URL + SVG-Snapshot merken
+   * (Wiederaufruf desselben Schritts ohne Fingerabdruck-Rate).
+   */
+  function rememberCompletedStepWheelVisual(stepNum, state, url, rootEl) {
+    if (stepNum == null || !state || !url || !rootEl) return;
+    if (!isStepFolderSelectionUrl(stepNum, url)) return;
+    if (!window.WizardValidation || typeof window.WizardValidation.isStepValid !== 'function') return;
+    if (!window.WizardValidation.isStepValid(state, stepNum)) return;
+    completedStepSelectionWheelCache[stepNum] = { url: url };
+    try {
+      var svg = rootEl.querySelector('svg');
+      if (svg) completedStepWheelSvgClone[stepNum] = svg.cloneNode(true);
+    } catch (e) {}
+  }
+
+  function resetWheelMediaMemory() {
+    lastWheelMediaByStep = {};
+    completedStepSelectionWheelCache = {};
+    completedStepWheelSvgClone = {};
   }
 
   function isKnownMissingMedia(url) {
@@ -575,6 +633,8 @@
       if (img) img.style.display = 'none';
       rememberWheelSvgFromRoot(state.currentStep, root);
       rememberResolvedWheelMedia(state.currentStep, url);
+      rememberLastWheelMediaForStep(state.currentStep, state, url);
+      rememberCompletedStepWheelVisual(state.currentStep, state, url, root);
       wheelAnimDebug('candidate_loaded', { type: 'svg', url: url, index: index });
     }
 
@@ -690,7 +750,26 @@
     var wrap = getActiveWheelAvatar();
     if (!wrap) return;
     abortPendingInWrap(wrap);
-    injectHoldFrame(wrap, holdFromStep, state.currentStep);
+    var curStep = state && state.currentStep;
+    var useCompletedHold =
+      curStep != null &&
+      window.WizardValidation &&
+      typeof window.WizardValidation.isStepValid === 'function' &&
+      window.WizardValidation.isStepValid(state, curStep) &&
+      completedStepWheelSvgClone[curStep];
+    if (useCompletedHold) {
+      removeHoldFramesFromWrap(wrap);
+      var ch = document.createElement('div');
+      ch.className = 'wheel-center-hold-frame';
+      ch.setAttribute('aria-hidden', 'true');
+      ch.appendChild(completedStepWheelSvgClone[curStep].cloneNode(true));
+      wrap.appendChild(ch);
+      var imgHold = wrap.querySelector('img');
+      if (imgHold) imgHold.style.display = 'none';
+      wheelAnimDebug('wheel_completed_step_hold', { step: curStep });
+    } else {
+      injectHoldFrame(wrap, holdFromStep, state.currentStep);
+    }
     tryPlayIndex(state, urls, 0, wrap);
   }
 
@@ -803,6 +882,8 @@
       }
       rememberWheelSvgForStep(state.currentStep, anim);
       rememberResolvedWheelMedia(state.currentStep, url);
+      rememberLastWheelMediaForStep(state.currentStep, state, url);
+      rememberCompletedStepWheelVisual(state.currentStep, state, url, root);
     }
 
     try {
@@ -1095,9 +1176,43 @@
       return;
     }
     if (shouldSkipWheelAnimations(state)) return;
+    var prefUrls = [];
+    var stepComplete =
+      window.WizardValidation &&
+      typeof window.WizardValidation.isStepValid === 'function' &&
+      window.WizardValidation.isStepValid(state, cur);
+    var selDone = stepComplete && completedStepSelectionWheelCache[cur] && completedStepSelectionWheelCache[cur].url;
+    if (selDone) {
+      prefUrls.push(completedStepSelectionWheelCache[cur].url);
+      wheelAnimDebug('wheel_completed_step_url_pref', { step: cur, url: completedStepSelectionWheelCache[cur].url });
+    } else {
+      var fpNow = stepWheelFingerprint(cur, state);
+      var cached = lastWheelMediaByStep[cur];
+      if (cached && cached.url && cached.fp === fpNow) {
+        prefUrls.push(cached.url);
+        wheelAnimDebug('wheel_media_cache_hit', { step: cur, fp: fpNow, url: cached.url });
+      } else if (cached && cached.url) {
+        wheelAnimDebug('wheel_media_cache_miss', {
+          step: cur,
+          fp: fpNow,
+          cachedFp: cached.fp,
+          cachedUrl: cached.url
+        });
+      }
+    }
     var restoreUrls = restoreStepWheelCandidates(cur, state);
     var transUrls = transitionCandidates(from, cur);
-    var urls = restoreUrls.length ? restoreUrls.concat(transUrls) : transUrls;
+    var urls;
+    /*
+     * Rückwärts auf einen bereits gültigen Schritt: nur Step-Auswahl (pref + restore).
+     * Übergangs-JSONs (from-step / to-step) würden sonst oft kurz nach der korrekten Grafik starten
+     * und wie ein „alter“ Zwischenschritt wirken.
+     */
+    if (selDone && from > cur) {
+      urls = prefUrls.concat(restoreUrls);
+    } else {
+      urls = prefUrls.concat(restoreUrls.length ? restoreUrls.concat(transUrls) : transUrls);
+    }
     playCandidateUrls(state, urls, from);
   }
 
@@ -1171,6 +1286,7 @@
       var cacheIt = function () {
         cacheAnimationFromInstance(jsonUrl, anim);
         rememberResolvedWheelMedia(0, jsonUrl);
+        rememberLastWheelMediaForStep(0, state, jsonUrl);
       };
       try {
         anim.addEventListener('DOMLoaded', cacheIt);
@@ -1228,6 +1344,7 @@
           wrap.appendChild(root);
           rememberWheelSvgFromRoot(0, root);
           rememberResolvedWheelMedia(0, svgUrl);
+          rememberLastWheelMediaForStep(0, state, svgUrl);
         })
         .catch(function () {
           mountStartJson();
@@ -1251,6 +1368,7 @@
     notifyUiUpdate: notifyUiUpdate,
     notifySelection: notifySelection,
     resetNavigationTracking: resetNavigationTracking,
+    resetWheelMediaMemory: resetWheelMediaMemory,
     refreshWheelCenterForState: refreshWheelCenterForState,
     ensureStartStepLoop: ensureStartStepLoop,
     /** @deprecated Alias – nutze ensureStartStepLoop */
