@@ -793,7 +793,7 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 
 /* Typ-spezifisches Feintuning im Kreis (Mensch/Roboter saubere Lage im Innenhintergrund). */
 .wizard-wheel-avatar img[data-avatar-type="human"] {
-  transform: scale(0.87) translateY(-7%);
+  transform: scale(0.72) translateY(-4%);
   transform-origin: center;
 }
 
@@ -804,7 +804,7 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 
 /* Fallback-Erkennung über URL (falls data-avatar-type noch nicht gesetzt ist). */
 .wizard-wheel-avatar img[src*="/avataaars/"] {
-  transform: scale(0.87) translateY(-7%);
+  transform: scale(0.72) translateY(-4%);
   transform-origin: center;
 }
 

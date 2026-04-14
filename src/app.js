@@ -29,8 +29,8 @@
     decision_mode: '',           // Einfachauswahl (Entscheidungsverhalten)
     // Schritt 6
     feedback: [],                // Mehrfachauswahl: Reaktion bei Fehlern/Problemen
-    // Schritt 7 – Avatar-Optik (null = noch nichts gewählt)
-    avatarType: 'human',
+    // Schritt 7 – Avatar-Optik (null = noch kein Typ gewählt, erst Klick in Schritt 8)
+    avatarType: null,
     avatarSkinColor: null,
     avatarTop: null,
     avatarHairColor: null,
@@ -335,7 +335,7 @@
     state.privacy = [];
 
     // Avatar-Grundzustand wiederherstellen
-    state.avatarType = 'human';
+    state.avatarType = null;
     state.avatarSkinColor = null;
     state.avatarTop = null;
     state.avatarHairColor = null;

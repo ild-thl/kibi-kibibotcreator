@@ -5,12 +5,9 @@
   const DICEBEAR = 'https://api.dicebear.com/9.x/avataaars/svg';
 
   const avatarSkinColors = [
-    { label: 'Sehr hell', value: 'ffdbb4' },
     { label: 'Hell', value: 'edb98a' },
     { label: 'Mittel', value: 'd08b5b' },
-    { label: 'Gebräunt', value: 'ae5d29' },
-    { label: 'Dunkel', value: '614335' },
-    { label: 'Warm', value: 'fd9841' }
+    { label: 'Dunkel', value: '614335' }
   ];
   /** UI: Kurz / Lang / Lockig → Dicebear Avataaars `top`: Kurz flach, Lang gerade, Afro. */
   const avatarFrisurOpts = [
@@ -20,8 +17,7 @@
   ];
   const avatarHairColors = [
     { label: 'Schwarz', value: '2c1b18' }, { label: 'Braun', value: 'b58143' },
-    { label: 'Blond', value: 'ecdcbf' }, { label: 'Auburn', value: 'a55728' },
-    { label: 'Grau', value: '4a312c' }
+    { label: 'Blond', value: 'ecdcbf' }
   ];
   /** UI: Kein Bart / Vollbart / Schnurrbart → Dicebear: keins, beardLight (Leichter Bart), moustacheFancy (Schnurrbart elegant). */
   const avatarFacialHairOpts = [
@@ -56,7 +52,8 @@
   }
 
   function buildAvatarUrl(state) {
-    const avatarType = state.avatarType || 'human';
+    if (!state || !state.avatarType) return TRANSPARENT_IMG;
+    const avatarType = state.avatarType;
     const humorMood = state.personality_humor === 'Ernst' ? 'serious' : 'happy';
     if (avatarType !== 'human') {
       if (avatarType === 'robot') {
@@ -122,9 +119,8 @@
   function renderAvatarStep(state, deps) {
     var allowedAvatarTypes = { human: true, robot: true, owl: true };
     if (state.avatarType && !allowedAvatarTypes[state.avatarType]) {
-      state.avatarType = 'human';
+      state.avatarType = null;
     }
-    if (!state.avatarType) state.avatarType = 'human';
     if (state.avatarType === 'human') syncHumanClothingFromTone(state);
     const frisurOpts = avatarFrisurOpts;
     const validTops = frisurOpts.map(function (o) { return o.value; });
@@ -137,6 +133,18 @@
     var fh = state.avatarFacialHair;
     if (state.avatarInitialized && fh !== '' && fh != null && !validFacialVals.includes(fh)) {
       state.avatarFacialHair = '';
+    }
+    var validHairVals = avatarHairColors.map(function (o) {
+      return o.value;
+    });
+    if (state.avatarInitialized && state.avatarHairColor != null && !validHairVals.includes(state.avatarHairColor) && avatarHairColors[0]) {
+      state.avatarHairColor = avatarHairColors[0].value;
+    }
+    var validSkinVals = avatarSkinColors.map(function (o) {
+      return o.value;
+    });
+    if (state.avatarInitialized && state.avatarSkinColor != null && !validSkinVals.includes(state.avatarSkinColor) && avatarSkinColors[0]) {
+      state.avatarSkinColor = avatarSkinColors[0].value;
     }
     if (!state.avatarMouth) {
       if (state.personality_humor === 'Humorvoll') state.avatarMouth = 'smile';
@@ -154,7 +162,7 @@
     if (!state.avatarInitialized) return;
     clearAvatarLottie();
     const url = avatarUrl || buildAvatarUrl(state);
-    var avatarType = state.avatarType || 'human';
+    var avatarType = state.avatarType || '';
     const main = document.getElementById('avatarPreview');
     if (main) {
       main.onerror = function () { this.onerror = null; this.src = TRANSPARENT_IMG; };

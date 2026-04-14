@@ -121,6 +121,9 @@
     if (state.role) {
       document.querySelector('.card-select[data-field="role"][data-value="' + state.role + '"]')?.classList.add('selected');
     }
+    document.querySelectorAll('.card-select[data-field="avatarType"]').forEach(function (b) {
+      b.classList.remove('selected');
+    });
     if (state.avatarType) {
       document.querySelector('.card-select[data-field="avatarType"][data-value="' + state.avatarType + '"]')?.classList.add('selected');
     }
