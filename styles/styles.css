@@ -322,6 +322,19 @@ body {
   z-index: 60;
 }
 
+/* Override Tailwind `w-screen px-16` in footer inner wrapper:
+   use centered content width so nav buttons stay optically centered. */
+#wizardNavBar > div {
+  width: 100% !important;
+  max-width: 1280px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 4rem !important;
+  padding-right: 4rem !important;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
 /* Weiter / Zusammenfassung: dezent ausgegraut bei unvollständigem Schritt (nicht Testmodus); Button bleibt klickbar → Validierung. */
 #btnNext.wizard-nav-next--muted {
   opacity: 0.68;
@@ -417,6 +430,26 @@ body {
 
 /* Wenn Step 2 untereinander gestapelt wird: gleicher Abstand zwischen Antwortstil und Ton */
 @media (max-width: 1024px) {
+  /* Header: keep room for settings gear to avoid overlap with long title. */
+  body > div.w-screen > header {
+    padding-right: 2.5rem;
+  }
+
+  body > div.w-screen > header h1 {
+    line-height: 1.2;
+  }
+
+  #btnSettings.settings-gear {
+    right: 0.25rem;
+    top: 0.1rem;
+    font-size: 1.55rem;
+  }
+
+  #wizardNavBar > div {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
   #step2 .wizard-step-grid {
     row-gap: 0.9rem;
   }
@@ -1010,9 +1043,18 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 }
 
 @media (max-width: 1024px) {
+  /* Outer page wrapper from index.html (Tailwind: w-screen px-16 py-12 pb-28) */
+  body > div.w-screen {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 5.5rem !important;
+  }
+
   /* Auf schmalen Screens normale Struktur: Überschrift wieder oberhalb */
   #step0:not(.hidden) {
     display: block;
+    padding-top: 1rem;
   }
   #step1:not(.hidden),
   #step2:not(.hidden),
@@ -1025,6 +1067,7 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
     display: block;
     min-height: auto;
     padding-bottom: 0;
+    padding-top: 1rem;
   }
 
   /* mobile: keine extra Verschiebung */
@@ -1038,6 +1081,10 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   #step7:not(.hidden) > h2,
   #step8:not(.hidden) > h2 {
     margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0.9rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
 
   /* Mobile: Desktop-Panel-`::before` deaktivieren, damit kein weißer Hintergrund
@@ -1079,10 +1126,35 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
     grid-template-columns: 1fr;
   }
 
+  /* Step 2: fixed desktop button columns can overflow on smaller widths. */
+  #step2 .wizard-col-main .flex.flex-wrap.gap-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Step 3: replace fixed 7rem columns on tablet/mobile widths. */
+  #step3 .role-options,
+  #step3 .name-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #step3 #inputName {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .wizard-wheel {
+    width: min(420px, 100%);
+    height: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
   /* Für schmale Screens: Wheel oben, Fragen darunter (keine festen grid-column/row mehr) */
   .wizard-col-wheel {
     grid-column: 1;
     grid-row: 1;
+    display: flex;
+    justify-content: center;
   }
 
   .wizard-col-main {
@@ -1109,18 +1181,92 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
     height: 340px;
   }
 
-  .wizard-wheel {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
 }
 
 @media (max-width: 520px) {
-  /* Wheel geometrie bleibt erhalten, indem das komplette Wheel skaliert wird */
+  #step0:not(.hidden) > h2,
+  #step1:not(.hidden) > h2,
+  #step2:not(.hidden) > h2,
+  #step3:not(.hidden) > h2,
+  #step4:not(.hidden) > h2,
+  #step5:not(.hidden) > h2,
+  #step6:not(.hidden) > h2,
+  #step7:not(.hidden) > h2,
+  #step8:not(.hidden) > h2 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    margin-top: 0;
+  }
+
+  #step1:not(.hidden),
+  #step2:not(.hidden),
+  #step3:not(.hidden),
+  #step4:not(.hidden),
+  #step5:not(.hidden),
+  #step6:not(.hidden),
+  #step7:not(.hidden),
+  #step8:not(.hidden) {
+    padding-top: 0.9rem;
+  }
+
+  #step0:not(.hidden) {
+    padding-top: 0.9rem;
+  }
+
+  body > div.w-screen > header {
+    padding-right: 2.25rem;
+  }
+
+  #btnSettings.settings-gear {
+    right: 0.1rem;
+    top: 0;
+    font-size: 1.45rem;
+  }
+
+  #wizardNavBar {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  #wizardNavBar > div {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    gap: 0.5rem;
+  }
+
+  body > div.w-screen {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 0.75rem !important;
+  }
+
+  header {
+    margin-bottom: 1rem !important;
+  }
+
+  /* Use native responsive width instead of transform scaling to avoid overflow/offset. */
   .wizard-wheel {
-    --wheel-scale: min(1, calc((100vw - 64px) / 420px));
-    transform: scale(var(--wheel-scale));
-    transform-origin: top center;
+    width: min(320px, 82vw);
+    height: auto;
+    --wheel-hotspot-size: 4.75rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Step 2: one column on very small phones to avoid horizontal pressure. */
+  #step2 .wizard-col-main .flex.flex-wrap.gap-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Step 3: one column on very small phones for stable layout. */
+  #step3 .role-options,
+  #step3 .name-options {
+    grid-template-columns: 1fr;
+  }
+
+  #step3 .name-options .card-select[data-suggestion=""] {
+    width: 100%;
+    white-space: normal;
   }
 }
 
