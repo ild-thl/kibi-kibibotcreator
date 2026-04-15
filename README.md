@@ -195,6 +195,10 @@ Notes:
   - From step 0, clicking **Start** jumps to the first incomplete step.
   - From other steps, **Start** returns to step 0.
   - Forward jumps require validation unless test mode is active.
+- Step 3:
+  - The wizard offers randomly generated name suggestions.
+  - Suggestions include male, female, and neutral names.
+  - Names are drawn from fixed internal pools (`NAME_SUGGESTIONS_MALE`, `..._FEMALE`, `..._NEUTRAL`) and assigned once during app initialization; reloading the page can produce a different set.
 - Step 8:
   - Mouth is derived from step 2 humor.
   - Clothing is derived from step 2 tone (for human).
