@@ -891,6 +891,48 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   object-fit: contain;
 }
 
+.lang-switch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.lang-switch__btn {
+  min-width: 2.25rem;
+  padding: 0.35rem 0.55rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: #4b5563;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.lang-switch__btn:hover {
+  color: #111827;
+  background: #f3f4f6;
+}
+
+.lang-switch__btn--active {
+  background: #007aff;
+  color: #fff;
+}
+
+.lang-switch__btn--active:hover {
+  background: #0056b3;
+  color: #fff;
+}
+
 .settings-gear {
   position: absolute;
   top: 0;

@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "Profile Assistant"
+  },
+  "header": {
+    "title": "Your avatar for study and teaching!",
+    "settingsAria": "Settings"
+  },
+  "lang": {
+    "switchAria": "Choose language",
+    "de": "Deutsch",
+    "en": "English"
+  },
+  "wheel": {
+    "startAria": "Start",
+    "avatarPreviewAlt": "Avatar preview"
+  },
+  "steps": {
+    "0": {
+      "title": "Welcome",
+      "lead": "Create your personal avatar and tailor your chatbot to your needs and learning style.",
+      "hint": "On the following pages you will set up your avatar step by step.",
+      "welcomeGraphicAlt": "Illustration: personal avatar and tailored chatbot"
+    },
+    "1": {
+      "title": "Use & purpose",
+      "usageQuestion": "What should your avatar be used for?",
+      "helpQuestion": "What should your avatar help you with?"
+    },
+    "2": {
+      "title": "Personality & tone",
+      "feelQuestion": "How should your avatar feel?",
+      "greeting": "Address",
+      "humor": "Humour",
+      "answerStyle": "Answer style",
+      "tone": "Tone",
+      "style": "Style"
+    },
+    "3": {
+      "title": "Role & name",
+      "roleQuestion": "What role should your avatar have?",
+      "nameQuestion": "What should your avatar be called?"
+    },
+    "4": {
+      "title": "Workflow & interaction",
+      "workflowQuestion": "How should your avatar work with you?",
+      "examplesQuestion": "Should your avatar use examples?"
+    },
+    "5": {
+      "title": "Knowledge & competence",
+      "knowledgeQuestion": "What should your avatar know about you?",
+      "sourceQuestion": "What knowledge should your avatar use?",
+      "decisionQuestion": "How should your avatar make decisions?"
+    },
+    "6": {
+      "title": "Learning & feedback",
+      "feedbackQuestion": "How should your avatar handle mistakes?"
+    },
+    "7": {
+      "title": "Privacy principles",
+      "privacyQuestion": "What may your avatar do with your data?"
+    },
+    "8": {
+      "title": "Visual design",
+      "lookQuestion": "What should your avatar look like?",
+      "typeLabel": "Avatar type",
+      "skinLabel": "Skin tone",
+      "hairColorLabel": "Hair colour",
+      "hairStyleLabel": "Hairstyle",
+      "beardLabel": "Facial hair"
+    },
+    "9": {
+      "title": "Your personalised avatar is ready",
+      "subtitle": "You can now use or export your avatar!",
+      "boxTitle": "Summary",
+      "avatarAlt": "Avatar"
+    }
+  },
+  "summary": {
+    "usage": "Use",
+    "help": "Support",
+    "role": "Role",
+    "name": "Name",
+    "personality": "Personality and tone",
+    "interaction": "Interaction",
+    "knowledge": "Knowledge and competence",
+    "feedback": "Learning and feedback",
+    "privacy": "Privacy",
+    "personalityGreeting": "Address: {{value}}",
+    "personalityHumor": "Humour: {{value}}",
+    "personalityAnswer": "Answer style: {{value}}",
+    "personalityTone": "Tone: {{value}}",
+    "personalityStyle": "Style: {{value}}",
+    "interactionWorkflow": "Workflow: {{value}}",
+    "interactionExamples": "Examples: {{value}}",
+    "knowledgeAbout": "About you: {{value}}",
+    "knowledgeSource": "Knowledge base: {{value}}",
+    "decision": "Decisions: {{value}}",
+    "empty": "–"
+  },
+  "nav": {
+    "back": "Back",
+    "next": "Next",
+    "summary": "Summary",
+    "survey": "Continue to survey",
+    "stepStart": "Start"
+  },
+  "validation": {
+    "default": "Please make a selection or enter a value before continuing.",
+    "jump": "Please make a selection or enter a value before jumping to this step.",
+    "ok": "OK"
+  },
+  "settings": {
+    "title": "Settings",
+    "prompt": "What would you like to do?",
+    "export": "Export",
+    "reset": "Reset avatar",
+    "cancel": "Cancel"
+  },
+  "name": {
+    "placeholder": "Your avatar's name",
+    "suggestion": "Suggestion {{n}}: {{name}}",
+    "fixedChatbot": "Suggestion 4: Chatbot",
+    "manual": "Custom entry"
+  },
+  "avatar": {
+    "skin": { "light": "Light", "medium": "Medium", "dark": "Dark" },
+    "hairStyle": { "short": "Short", "long": "Long", "curly": "Curly" },
+    "hairColor": { "black": "Black", "brown": "Brown", "blond": "Blond" },
+    "beard": { "none": "No beard", "full": "Full beard", "mustache": "Moustache" },
+    "type": { "human": "Human", "robot": "Robot", "owl": "Owl" }
+  },
+  "options": {
+    "usage_context": {
+      "lernraum": "Learning space",
+      "lernveranstaltung": "Learning event",
+      "th-weit": "University-wide"
+    },
+    "help_context": {
+      "lernen": "Learning",
+      "planen": "Planning",
+      "schreiben": "Writing"
+    },
+    "role": {
+      "experte": "Expert",
+      "kollege": "Colleague",
+      "mentor": "Mentor",
+      "tutor": "Tutor",
+      "lehrer": "Teacher",
+      "buddy": "Buddy",
+      "coach": "Coach"
+    },
+    "personality_greeting": {
+      "duzen": "Informal (du)",
+      "siezen": "Formal (Sie)"
+    },
+    "personality_humor": {
+      "humorvoll": "Humorous",
+      "ernst": "Serious"
+    },
+    "personality_answer": {
+      "kurz-knapp": "Short & concise",
+      "ausführlich": "Detailed"
+    },
+    "personality_tone": {
+      "locker": "Casual",
+      "professionell": "Professional"
+    },
+    "personality_style": {
+      "persönlich": "Personal",
+      "sachlich": "Factual"
+    },
+    "interaction_workflow": {
+      "schritt-für-schritt-erklären": "Explain step by step",
+      "zuerst-fragen-stellen-und-dann-antworten": "Ask questions first, then answer",
+      "direkt-vorschläge-machen": "Make suggestions directly"
+    },
+    "interaction_examples": {
+      "häufig-beispiele-nutzen": "Use examples often",
+      "gelegentlich-beispiele-nutzen": "Use examples occasionally",
+      "keine-beispiele-nutzen": "Do not use examples"
+    },
+    "knowledge": {
+      "studiengang": "Degree programme",
+      "modulplan": "Module plan",
+      "lernfortschritt": "Learning progress"
+    },
+    "knowledge_source": {
+      "allgemeines-wissen": "General knowledge",
+      "studiengangswissen": "Programme knowledge"
+    },
+    "decision_mode": {
+      "trifft-entscheidungen": "Makes decisions",
+      "gibt-empfehlungen": "Gives recommendations",
+      "trifft-keine-entscheidungen": "Does not make decisions"
+    },
+    "feedback": {
+      "fehler-freundlich-erklären": "Explain errors kindly",
+      "unsicherheit-offen-zeigen": "Show uncertainty openly",
+      "mit-übungen-helfen": "Help with exercises"
+    },
+    "privacy": {
+      "auf-andere-systeme-zugreifen": "Access other systems",
+      "sich-an-gespräche-erinnern": "Remember conversations",
+      "feedback-an-lehrende-weitergeben": "Share feedback with teachers",
+      "keine-daten-speichern": "Do not store data"
+    }
+  },
+  "assets": {
+    "startWelcome": "start-willkommen-grafik.svg"
+  }
+}

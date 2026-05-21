@@ -26,13 +26,16 @@
     suggestionButtons.forEach(function (btn, idx) {
       var name = names[idx] || '';
       btn.dataset.suggestion = name;
-      btn.textContent = name;
+      if (window.WizardI18n && window.WizardI18n.t) {
+        btn.textContent = window.WizardI18n.t('name.suggestion', { n: idx + 1, name: name });
+      } else {
+        btn.textContent = name;
+      }
     });
 
-    document.querySelectorAll(selector + ' .card-select[data-field="nameChoice"][data-fixed-name]').forEach(function (btn) {
-      var s = btn.dataset.suggestion || '';
-      if (s) btn.textContent = s;
-    });
+    if (window.WizardI18n && window.WizardI18n.applyNameSuggestionButtons) {
+      window.WizardI18n.applyNameSuggestionButtons();
+    }
   }
 
   window.NameSuggestions = {

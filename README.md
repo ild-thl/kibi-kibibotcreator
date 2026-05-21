@@ -218,6 +218,32 @@ Notes:
 - Verify you opened the correct `index.html` from this repository.
 - Prefer local server mode instead of `file://` when testing animation files.
 
+## Internationalization (i18n)
+
+The wizard supports **German** (`de`) and **English** (`en`). UI strings live in JSON locale files; selection state uses stable **option keys** (not translated labels).
+
+### Layout
+
+- `src/i18n/locales/de.json`, `en.json` — UI copy and option labels
+- `src/i18n/index.js` — `WizardI18n.t()`, `setLocale()`, `applyI18n()`, `assetUrl()`
+- `src/i18n/legacy.js` — maps old German display values to option keys (one-time migration)
+- `assets/i18n/{locale}/` — locale-specific images (e.g. `start-willkommen-grafik.svg`)
+
+### Language selection
+
+Priority: URL `?lang=en` → `localStorage` key `wizard.locale` → browser language → default `de`.
+
+Use the **DE | EN** switch in the header to change language at runtime.
+
+### Adding a language
+
+1. Copy `src/i18n/locales/en.json` to e.g. `fr.json` and translate all keys.
+2. Add the code to `SUPPORTED` in `src/i18n/index.js`.
+3. Create `assets/i18n/fr/` and add localized SVGs (same filenames as in `de`/`en`).
+4. Add a header button with `data-lang="fr"`.
+
+Wheel animation filenames stay slug-based on option keys and do not need per-locale copies unless you add language-specific clips later.
+
 ## License
 
 No license is defined yet. Add a `LICENSE` file to specify usage terms.

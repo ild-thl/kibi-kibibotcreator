@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "Profil-Assistent"
+  },
+  "header": {
+    "title": "Dein Avatar für Studium und Lehre!",
+    "settingsAria": "Einstellungen"
+  },
+  "lang": {
+    "switchAria": "Sprache wählen",
+    "de": "Deutsch",
+    "en": "English"
+  },
+  "wheel": {
+    "startAria": "Start",
+    "avatarPreviewAlt": "Avatar Vorschau"
+  },
+  "steps": {
+    "0": {
+      "title": "Willkommen",
+      "lead": "Erstelle deinen persönlichen Avatar und passe deinen Chatbot an deine Bedürfnisse und dein Lernverhalten an.",
+      "hint": "Auf den nächsten Seiten stellst du deinen Avatar Schritt für Schritt ein.",
+      "welcomeGraphicAlt": "Illustration: persönlicher Avatar und angepasster Chatbot"
+    },
+    "1": {
+      "title": "Einsatz & Zweck",
+      "usageQuestion": "Für was soll dein Avatar eingesetzt werden?",
+      "helpQuestion": "Wobei soll dir der Avatar helfen?"
+    },
+    "2": {
+      "title": "Persönlichkeit & Ton",
+      "feelQuestion": "Wie soll sich dein Avatar anfühlen?",
+      "greeting": "Anrede",
+      "humor": "Humor",
+      "answerStyle": "Antwortstil",
+      "tone": "Ton",
+      "style": "Stil"
+    },
+    "3": {
+      "title": "Rolle & Name",
+      "roleQuestion": "Welche Rolle soll dein Avatar bekommen?",
+      "nameQuestion": "Wie soll dein Avatar heißen?"
+    },
+    "4": {
+      "title": "Arbeitsweise & Interaktion",
+      "workflowQuestion": "Wie soll Dein Avatar mit dir arbeiten?",
+      "examplesQuestion": "Soll Dein Avatar mit Beispielen arbeiten?"
+    },
+    "5": {
+      "title": "Wissen & Kompetenz",
+      "knowledgeQuestion": "Was soll dein Avatar über dich wissen?",
+      "sourceQuestion": "Welches Wissen soll dein Avatar nutzen?",
+      "decisionQuestion": "Wie soll dein Avatar entscheiden?"
+    },
+    "6": {
+      "title": "Lernen & Feedback",
+      "feedbackQuestion": "Wie soll dein Avatar mit Fehlern umgehen?"
+    },
+    "7": {
+      "title": "Datenschutzprinzipien",
+      "privacyQuestion": "Was darf dein Avatar mit deinen Daten tun?"
+    },
+    "8": {
+      "title": "Visuelle Gestaltung",
+      "lookQuestion": "Wie soll dein Avatar aussehen?",
+      "typeLabel": "Avatar-Typ",
+      "skinLabel": "Hautfarbe",
+      "hairColorLabel": "Haarfarbe",
+      "hairStyleLabel": "Frisur",
+      "beardLabel": "Bart"
+    },
+    "9": {
+      "title": "Dein personalisierter Avatar ist bereit",
+      "subtitle": "Du kannst Deinen Avatar jetzt nutzen oder exportieren!",
+      "boxTitle": "Zusammenfassung",
+      "avatarAlt": "Avatar"
+    }
+  },
+  "summary": {
+    "usage": "Einsatz",
+    "help": "Hilfestellung",
+    "role": "Rolle",
+    "name": "Name",
+    "personality": "Persönlichkeit und Ton",
+    "interaction": "Interaktion",
+    "knowledge": "Wissen und Kompetenz",
+    "feedback": "Lernen und Feedback",
+    "privacy": "Datenschutz",
+    "personalityGreeting": "Anrede: {{value}}",
+    "personalityHumor": "Humor: {{value}}",
+    "personalityAnswer": "Antwortstil: {{value}}",
+    "personalityTone": "Ton: {{value}}",
+    "personalityStyle": "Stil: {{value}}",
+    "interactionWorkflow": "Arbeit: {{value}}",
+    "interactionExamples": "Beispiele: {{value}}",
+    "knowledgeAbout": "Über dich: {{value}}",
+    "knowledgeSource": "Wissensbasis: {{value}}",
+    "decision": "Entscheidungen: {{value}}",
+    "empty": "–"
+  },
+  "nav": {
+    "back": "Zurück",
+    "next": "Weiter",
+    "summary": "Zusammenfassung",
+    "survey": "Weiter zur Umfrage",
+    "stepStart": "Start"
+  },
+  "validation": {
+    "default": "Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.",
+    "jump": "Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du zu diesem Schritt springst.",
+    "ok": "Alles klar"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "prompt": "Was möchtest du tun?",
+    "export": "Export",
+    "reset": "Avatar zurücksetzen",
+    "cancel": "Abbrechen"
+  },
+  "name": {
+    "placeholder": "Name deines Avatars",
+    "suggestion": "Vorschlag {{n}}: {{name}}",
+    "fixedChatbot": "Vorschlag 4: Chatbot",
+    "manual": "Eigene Eingabe"
+  },
+  "avatar": {
+    "skin": { "light": "Hell", "medium": "Mittel", "dark": "Dunkel" },
+    "hairStyle": { "short": "Kurz", "long": "Lang", "curly": "Lockig" },
+    "hairColor": { "black": "Schwarz", "brown": "Braun", "blond": "Blond" },
+    "beard": { "none": "Kein Bart", "full": "Vollbart", "mustache": "Schnurrbart" },
+    "type": { "human": "Mensch", "robot": "Roboter", "owl": "Eule" }
+  },
+  "options": {
+    "usage_context": {
+      "lernraum": "Lernraum",
+      "lernveranstaltung": "Lernveranstaltung",
+      "th-weit": "TH-Weit"
+    },
+    "help_context": {
+      "lernen": "Lernen",
+      "planen": "Planen",
+      "schreiben": "Schreiben"
+    },
+    "role": {
+      "experte": "Experte",
+      "kollege": "Kollege",
+      "mentor": "Mentor",
+      "tutor": "Tutor",
+      "lehrer": "Lehrer",
+      "buddy": "Buddy",
+      "coach": "Coach"
+    },
+    "personality_greeting": {
+      "duzen": "Duzen",
+      "siezen": "Siezen"
+    },
+    "personality_humor": {
+      "humorvoll": "Humorvoll",
+      "ernst": "Ernst"
+    },
+    "personality_answer": {
+      "kurz-knapp": "Kurz & knapp",
+      "ausführlich": "Ausführlich"
+    },
+    "personality_tone": {
+      "locker": "Locker",
+      "professionell": "Professionell"
+    },
+    "personality_style": {
+      "persönlich": "Persönlich",
+      "sachlich": "Sachlich"
+    },
+    "interaction_workflow": {
+      "schritt-für-schritt-erklären": "Schritt für Schritt erklären",
+      "zuerst-fragen-stellen-und-dann-antworten": "Zuerst fragen stellen und dann antworten",
+      "direkt-vorschläge-machen": "Direkt Vorschläge machen"
+    },
+    "interaction_examples": {
+      "häufig-beispiele-nutzen": "Häufig Beispiele nutzen",
+      "gelegentlich-beispiele-nutzen": "Gelegentlich Beispiele nutzen",
+      "keine-beispiele-nutzen": "Keine Beispiele nutzen"
+    },
+    "knowledge": {
+      "studiengang": "Studiengang",
+      "modulplan": "Modulplan",
+      "lernfortschritt": "Lernfortschritt"
+    },
+    "knowledge_source": {
+      "allgemeines-wissen": "Allgemeines Wissen",
+      "studiengangswissen": "Studiengangswissen"
+    },
+    "decision_mode": {
+      "trifft-entscheidungen": "Trifft Entscheidungen",
+      "gibt-empfehlungen": "Gibt Empfehlungen",
+      "trifft-keine-entscheidungen": "Trifft keine Entscheidungen"
+    },
+    "feedback": {
+      "fehler-freundlich-erklären": "Fehler freundlich erklären",
+      "unsicherheit-offen-zeigen": "Unsicherheit offen zeigen",
+      "mit-übungen-helfen": "Mit Übungen helfen"
+    },
+    "privacy": {
+      "auf-andere-systeme-zugreifen": "Auf andere Systeme zugreifen",
+      "sich-an-gespräche-erinnern": "Sich an Gespräche erinnern",
+      "feedback-an-lehrende-weitergeben": "Feedback an Lehrende weitergeben",
+      "keine-daten-speichern": "Keine Daten speichern"
+    }
+  },
+  "assets": {
+    "startWelcome": "start-willkommen-grafik.svg"
+  }
+}

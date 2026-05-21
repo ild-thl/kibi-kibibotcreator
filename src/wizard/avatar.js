@@ -5,26 +5,34 @@
   const DICEBEAR = 'https://api.dicebear.com/9.x/avataaars/svg';
 
   const avatarSkinColors = [
-    { label: 'Hell', value: 'edb98a' },
-    { label: 'Mittel', value: 'd08b5b' },
-    { label: 'Dunkel', value: '614335' }
+    { labelKey: 'avatar.skin.light', value: 'edb98a' },
+    { labelKey: 'avatar.skin.medium', value: 'd08b5b' },
+    { labelKey: 'avatar.skin.dark', value: '614335' }
   ];
   /** UI: Kurz / Lang / Lockig → Dicebear Avataaars `top`: Kurz flach, Lang gerade, Afro. */
   const avatarFrisurOpts = [
-    { label: 'Kurz', value: 'shortFlat' },
-    { label: 'Lang', value: 'straight01' },
-    { label: 'Lockig', value: 'fro' }
+    { labelKey: 'avatar.hairStyle.short', value: 'shortFlat' },
+    { labelKey: 'avatar.hairStyle.long', value: 'straight01' },
+    { labelKey: 'avatar.hairStyle.curly', value: 'fro' }
   ];
   const avatarHairColors = [
-    { label: 'Schwarz', value: '2c1b18' }, { label: 'Braun', value: 'b58143' },
-    { label: 'Blond', value: 'ecdcbf' }
+    { labelKey: 'avatar.hairColor.black', value: '2c1b18' },
+    { labelKey: 'avatar.hairColor.brown', value: 'b58143' },
+    { labelKey: 'avatar.hairColor.blond', value: 'ecdcbf' }
   ];
   /** UI: Kein Bart / Vollbart / Schnurrbart → Dicebear: keins, beardLight (Leichter Bart), moustacheFancy (Schnurrbart elegant). */
   const avatarFacialHairOpts = [
-    { label: 'Kein Bart', value: '' },
-    { label: 'Vollbart', value: 'beardLight' },
-    { label: 'Schnurrbart', value: 'moustacheFancy' }
+    { labelKey: 'avatar.beard.none', value: '' },
+    { labelKey: 'avatar.beard.full', value: 'beardLight' },
+    { labelKey: 'avatar.beard.mustache', value: 'moustacheFancy' }
   ];
+
+  function optionLabel(labelKey, fallback) {
+    if (window.WizardI18n && window.WizardI18n.t && labelKey) {
+      return window.WizardI18n.t(labelKey);
+    }
+    return fallback || '';
+  }
   /** Mensch: Kleidung folgt Schritt 2 „Ton“ (nicht mehr wählbar in Schritt 8). */
   const HUMAN_CLOTHING_LOCKER = 'shirtCrewNeck';
   const HUMAN_CLOTHING_PROFESSIONELL = 'collarAndSweater';
@@ -45,8 +53,8 @@
   function syncHumanClothingFromTone(state) {
     if (!state || state.avatarType !== 'human') return null;
     var v = HUMAN_CLOTHING_LOCKER;
-    if (state.personality_tone === 'Professionell') v = HUMAN_CLOTHING_PROFESSIONELL;
-    else if (state.personality_tone === 'Locker') v = HUMAN_CLOTHING_LOCKER;
+    if (state.personality_tone === 'professionell') v = HUMAN_CLOTHING_PROFESSIONELL;
+    else if (state.personality_tone === 'locker') v = HUMAN_CLOTHING_LOCKER;
     state.avatarClothing = v;
     return v;
   }
@@ -54,7 +62,7 @@
   function buildAvatarUrl(state) {
     if (!state || !state.avatarType) return TRANSPARENT_IMG;
     const avatarType = state.avatarType;
-    const humorMood = state.personality_humor === 'Ernst' ? 'serious' : 'happy';
+    const humorMood = state.personality_humor === 'ernst' ? 'serious' : 'happy';
     if (avatarType !== 'human') {
       if (avatarType === 'robot') {
         const seed = (state.name || state.id || 'avatar') + '-robot';
@@ -92,7 +100,8 @@
     const container = document.getElementById(containerId);
     if (!container) return;
     container.innerHTML = options.map(function (o) {
-      return '<button type="button" class="avatar-opt card-select px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-kind="' + dataKind + '" data-value="' + (o.value || '') + '">' + o.label + '</button>';
+      var label = optionLabel(o.labelKey, o.label || '');
+      return '<button type="button" class="avatar-opt card-select px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-kind="' + dataKind + '" data-value="' + (o.value || '') + '">' + label + '</button>';
     }).join('');
     container.querySelectorAll('.avatar-opt').forEach(function (b) {
       var val = b.dataset.value || '';
@@ -147,8 +156,8 @@
       state.avatarSkinColor = avatarSkinColors[0].value;
     }
     if (!state.avatarMouth) {
-      if (state.personality_humor === 'Humorvoll') state.avatarMouth = 'smile';
-      else if (state.personality_humor === 'Ernst') state.avatarMouth = 'serious';
+      if (state.personality_humor === 'humorvoll') state.avatarMouth = 'smile';
+      else if (state.personality_humor === 'ernst') state.avatarMouth = 'serious';
     }
     var showHumanOptions = state.avatarType === 'human';
     document.querySelectorAll('.avatar-human-only').forEach(function (el) { el.classList.toggle('hidden', !showHumanOptions); });

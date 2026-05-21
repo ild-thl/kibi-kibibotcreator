@@ -27,7 +27,11 @@
 
     var currentLabel = document.getElementById('currentStep');
     var totalLabel = document.getElementById('totalSteps');
-    if (currentLabel) currentLabel.textContent = state.currentStep === 0 ? 'Start' : String(state.currentStep);
+    if (currentLabel) {
+      currentLabel.textContent = state.currentStep === 0
+        ? (window.WizardI18n && window.WizardI18n.t ? window.WizardI18n.t('nav.stepStart') : 'Start')
+        : String(state.currentStep);
+    }
     if (totalLabel) totalLabel.textContent = totalSteps;
 
     var progress = document.getElementById('progressBar');
@@ -44,7 +48,15 @@
     if (navBarEl) navBarEl.classList.toggle('hidden', state.currentStep === 0);
     if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
     if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === totalSteps);
-    if (nextBtnEl) nextBtnEl.textContent = state.currentStep === (totalSteps - 1) ? 'Zusammenfassung' : 'Weiter';
+    if (nextBtnEl) {
+      if (window.WizardI18n && window.WizardI18n.t) {
+        nextBtnEl.textContent = state.currentStep === (totalSteps - 1)
+          ? window.WizardI18n.t('nav.summary')
+          : window.WizardI18n.t('nav.next');
+      } else {
+        nextBtnEl.textContent = state.currentStep === (totalSteps - 1) ? 'Zusammenfassung' : 'Weiter';
+      }
+    }
     if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== totalSteps);
     if (settingsBtnEl) settingsBtnEl.classList.toggle('hidden', state.currentStep === 0);
 
@@ -75,7 +87,11 @@
     while (state.currentStep < targetStep) {
       if (!(deps && typeof deps.isCurrentStepValid === 'function' && deps.isCurrentStepValid())) {
         if (deps && typeof deps.showValidationMessage === 'function') {
-          deps.showValidationMessage('Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du zu diesem Schritt springst.');
+          deps.showValidationMessage(
+            window.WizardI18n && window.WizardI18n.t
+              ? window.WizardI18n.t('validation.jump')
+              : 'Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du zu diesem Schritt springst.'
+          );
         }
         break;
       }
@@ -90,7 +106,11 @@
   function next(state, totalSteps, deps) {
     if (!(deps && typeof deps.isCurrentStepValid === 'function' && deps.isCurrentStepValid())) {
       if (deps && typeof deps.showValidationMessage === 'function') {
-        deps.showValidationMessage('Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.');
+        deps.showValidationMessage(
+          window.WizardI18n && window.WizardI18n.t
+            ? window.WizardI18n.t('validation.default')
+            : 'Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.'
+        );
       }
       return;
     }
