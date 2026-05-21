@@ -195,12 +195,11 @@
     ).filter(function (btn) {
       return !btn.hasAttribute('data-fixed-name');
     });
-    suggestionButtons.forEach(function (btn, idx) {
-      var suggestion = btn.getAttribute('data-suggestion') || '';
-      btn.textContent = t('name.suggestion', { n: idx + 1, name: suggestion });
+    suggestionButtons.forEach(function (btn) {
+      btn.textContent = btn.getAttribute('data-suggestion') || '';
     });
     document.querySelectorAll('#step3 .card-select[data-field="nameChoice"][data-fixed-name]').forEach(function (btn) {
-      btn.textContent = t('name.fixedChatbot');
+      btn.textContent = btn.getAttribute('data-suggestion') || t('name.chatbot');
     });
     document.querySelectorAll('#step3 .card-select[data-field="nameChoice"][data-suggestion=""]').forEach(function (btn) {
       btn.textContent = t('name.manual');

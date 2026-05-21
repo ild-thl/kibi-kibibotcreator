@@ -112,6 +112,7 @@
   },
   "settings": {
     "title": "Einstellungen",
+    "language": "Sprache",
     "prompt": "Was möchtest du tun?",
     "export": "Export",
     "reset": "Avatar zurücksetzen",
@@ -119,8 +120,7 @@
   },
   "name": {
     "placeholder": "Name deines Avatars",
-    "suggestion": "Vorschlag {{n}}: {{name}}",
-    "fixedChatbot": "Vorschlag 4: Chatbot",
+    "chatbot": "Chatbot",
     "manual": "Eigene Eingabe"
   },
   "avatar": {

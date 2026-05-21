@@ -112,6 +112,7 @@
   },
   "settings": {
     "title": "Settings",
+    "language": "Language",
     "prompt": "What would you like to do?",
     "export": "Export",
     "reset": "Reset avatar",
@@ -119,8 +120,7 @@
   },
   "name": {
     "placeholder": "Your avatar's name",
-    "suggestion": "Suggestion {{n}}: {{name}}",
-    "fixedChatbot": "Suggestion 4: Chatbot",
+    "chatbot": "Chatbot",
     "manual": "Custom entry"
   },
   "avatar": {
@@ -151,8 +151,8 @@
       "coach": "Coach"
     },
     "personality_greeting": {
-      "duzen": "Informal (du)",
-      "siezen": "Formal (Sie)"
+      "duzen": "Informal",
+      "siezen": "Formal"
     },
     "personality_humor": {
       "humorvoll": "Humorous",

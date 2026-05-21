@@ -892,30 +892,38 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 }
 
 .lang-switch {
-  position: absolute;
-  top: 0;
-  left: 0;
   display: inline-flex;
   gap: 0.25rem;
-  padding: 0.2rem;
-  border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.85);
+  padding: 0.25rem;
+  border-radius: 0.875rem;
+  background: #f3f4f6;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.lang-switch--full {
+  display: flex;
+  width: 100%;
+}
+
+.lang-switch--full .lang-switch__btn {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8125rem;
 }
 
 .lang-switch__btn {
   min-width: 2.25rem;
-  padding: 0.35rem 0.55rem;
+  padding: 0.4rem 0.65rem;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.625rem;
   background: transparent;
   color: #4b5563;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .lang-switch__btn:hover {
@@ -1044,9 +1052,8 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 .settings-card {
   position: relative;
   z-index: 51;
-  min-width: 280px;
-  max-width: 360px;
-  padding: 1.5rem 1.75rem 1.25rem;
+  width: min(100%, 22rem);
+  padding: 1.35rem 1.35rem 1rem;
   border-radius: 1.25rem;
   background: #ffffff;
   border: 1px solid #e5e7eb;
@@ -1055,26 +1062,106 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 }
 
 .settings-title {
-  margin: 0 0 0.25rem;
+  margin: 0 0 1.1rem;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
   color: #111827;
 }
 
-.settings-text {
-  margin: 0 0 1rem;
-  font-size: 0.9rem;
-  color: #4b5563;
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settings-section + .settings-divider {
+  margin-top: 1rem;
+}
+
+.settings-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.settings-divider {
+  height: 1px;
+  margin: 1rem 0;
+  background: #e5e7eb;
 }
 
 .settings-actions {
   display: flex;
-  gap: 0.75rem;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
 }
 
-.settings-actions button:disabled {
+.settings-footer {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.settings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.875rem;
+  border: 2px solid transparent;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.settings-btn:active {
+  transform: scale(0.98);
+}
+
+.settings-btn--primary {
+  background: #007aff;
+  color: #fff;
+  border-color: #007aff;
+}
+
+.settings-btn--primary:hover {
+  background: #0056b3;
+  border-color: #0056b3;
+}
+
+.settings-btn--danger {
+  background: #fff;
+  color: #b91c1c;
+  border-color: #fecaca;
+}
+
+.settings-btn--danger:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.settings-btn--ghost {
+  background: transparent;
+  color: #4b5563;
+  border-color: #e5e7eb;
+  font-weight: 500;
+}
+
+.settings-btn--ghost:hover {
+  background: #f9fafb;
+  color: #111827;
+}
+
+.settings-actions button:disabled,
+.settings-footer button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
   filter: grayscale(0.25);

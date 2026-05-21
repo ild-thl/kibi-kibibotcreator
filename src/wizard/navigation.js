@@ -58,7 +58,7 @@
       }
     }
     if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== totalSteps);
-    if (settingsBtnEl) settingsBtnEl.classList.toggle('hidden', state.currentStep === 0);
+    if (settingsBtnEl) settingsBtnEl.classList.remove('hidden');
 
     if (deps && typeof deps.updateSettingsActions === 'function') deps.updateSettingsActions();
     var wizardContent = document.getElementById('wizardContent');

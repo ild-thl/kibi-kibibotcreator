@@ -26,11 +26,7 @@
     suggestionButtons.forEach(function (btn, idx) {
       var name = names[idx] || '';
       btn.dataset.suggestion = name;
-      if (window.WizardI18n && window.WizardI18n.t) {
-        btn.textContent = window.WizardI18n.t('name.suggestion', { n: idx + 1, name: name });
-      } else {
-        btn.textContent = name;
-      }
+      btn.textContent = name;
     });
 
     if (window.WizardI18n && window.WizardI18n.applyNameSuggestionButtons) {

@@ -16,13 +16,9 @@
   <div class="w-screen mx-auto px-16 py-12 pb-28">
     <!-- Header -->
     <header class="relative mb-12 flex items-start justify-center">
-      <div class="lang-switch" id="langSwitch" role="group" data-i18n-aria="lang.switchAria">
-        <button type="button" class="lang-switch__btn" data-lang="de" aria-pressed="true">DE</button>
-        <button type="button" class="lang-switch__btn" data-lang="en" aria-pressed="false">EN</button>
-      </div>
       <h1 class="text-2xl font-semibold tracking-tight text-gray-900" data-i18n="header.title">Dein Avatar für Studium und Lehre!</h1>
       <button type="button" id="btnSettings"
-              class="settings-gear hidden"
+              class="settings-gear"
               data-i18n-aria="header.settingsAria"
               aria-label="Einstellungen">
         ⚙
@@ -458,25 +454,35 @@
     <div id="settingsModal" class="settings-modal hidden">
       <div class="settings-backdrop"></div>
       <div class="settings-card">
-        <p class="settings-title" data-i18n="settings.title">Einstellungen</p>
-        <p class="settings-text" data-i18n="settings.prompt">Was möchtest du tun?</p>
-        <div class="settings-actions">
-          <button type="button" id="settingsExport"
-                  class="px-5 py-2.5 rounded-2xl bg-[#2563eb] text-white font-semibold text-sm hover:bg-[#1d4ed8] transition-colors"
-                  data-i18n="settings.export">
-            Export
-          </button>
-          <button type="button" id="settingsResetAvatar"
-                  class="px-5 py-2.5 rounded-2xl bg-[#ef4444] text-white font-semibold text-sm hover:bg-[#b91c1c] transition-colors"
-                  data-i18n="settings.reset">
-            Avatar zurücksetzen
-          </button>
-          <button type="button" id="settingsCancel"
-                  class="px-5 py-2.5 rounded-2xl border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-                  data-i18n="settings.cancel">
+        <h2 class="settings-title" data-i18n="settings.title">Einstellungen</h2>
+
+        <section class="settings-section">
+          <span class="settings-label" data-i18n="settings.language">Sprache</span>
+          <div class="lang-switch lang-switch--full" id="langSwitch" role="group" data-i18n-aria="lang.switchAria">
+            <button type="button" class="lang-switch__btn" data-lang="de" aria-pressed="true">DE</button>
+            <button type="button" class="lang-switch__btn" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </section>
+
+        <div class="settings-divider" role="presentation"></div>
+
+        <section class="settings-section">
+          <span class="settings-label" data-i18n="settings.prompt">Was möchtest du tun?</span>
+          <div class="settings-actions">
+            <button type="button" id="settingsExport" class="settings-btn settings-btn--primary" data-i18n="settings.export">
+              Export
+            </button>
+            <button type="button" id="settingsResetAvatar" class="settings-btn settings-btn--danger" data-i18n="settings.reset">
+              Avatar zurücksetzen
+            </button>
+          </div>
+        </section>
+
+        <footer class="settings-footer">
+          <button type="button" id="settingsCancel" class="settings-btn settings-btn--ghost" data-i18n="settings.cancel">
             Abbrechen
           </button>
-        </div>
+        </footer>
       </div>
     </div>
   </div>
