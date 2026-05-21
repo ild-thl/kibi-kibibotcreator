@@ -1,5 +1,10 @@
 ;(function () {
-  var BASE = './assets/wizard-wheel/';
+  function wheelBase() {
+    if (window.WizardTheme && typeof window.WizardTheme.wheelBaseUrl === 'function') {
+      return window.WizardTheme.wheelBaseUrl();
+    }
+    return './assets/wizard-wheel/light/';
+  }
   var VIEWBOX = 625;
   var START_COORD = { x: 313.6, y: 86.1 };
   var STEP_COORDS = {
@@ -52,23 +57,23 @@
 
   function progressAssetUrl(state) {
     var n = consecutiveCompletedSteps(state);
-    if (n <= 0) return BASE + 'alle_antw_off.svg';
-    return BASE + 'antw_' + n + '.svg';
+    if (n <= 0) return wheelBase() + 'alle_antw_off.svg';
+    return wheelBase() + 'antw_' + n + '.svg';
   }
 
   function stepOverlayAssetUrl(state) {
     var cs = state.currentStep;
-    if (cs === 0) return BASE + 'start.svg';
+    if (cs === 0) return wheelBase() + 'start.svg';
     if (cs === 9) {
       var eightOk = window.WizardValidation && window.WizardValidation.isStepValid(state, 8);
-      return BASE + (eightOk ? 'schritt_8_2.svg' : 'schritt_8_1.svg');
+      return wheelBase() + (eightOk ? 'schritt_8_2.svg' : 'schritt_8_1.svg');
     }
     if (cs >= 1 && cs <= 8) {
       var ok = window.WizardValidation && window.WizardValidation.isStepValid(state, cs);
       var suffix = ok ? '2' : '1';
-      return BASE + 'schritt_' + cs + '_' + suffix + '.svg';
+      return wheelBase() + 'schritt_' + cs + '_' + suffix + '.svg';
     }
-    return BASE + 'start.svg';
+    return wheelBase() + 'start.svg';
   }
 
   /** Aktualisiert Fortschritts- und Schritt-Overlay in allen Wheel-Instanzen (jeder Section eine Kopie). */
@@ -82,6 +87,9 @@
     if (!state) return;
     ensureWheelHotspots();
     syncNameForValidation(state);
+    if (window.WizardTheme && typeof window.WizardTheme.syncWheelStaticLayers === 'function') {
+      window.WizardTheme.syncWheelStaticLayers();
+    }
     var prog = progressAssetUrl(state);
     var step = stepOverlayAssetUrl(state);
     document.querySelectorAll('.wizard-wheel-progress').forEach(function (img) {

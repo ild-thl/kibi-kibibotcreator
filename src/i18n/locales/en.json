@@ -11,6 +11,9 @@
     "de": "Deutsch",
     "en": "English"
   },
+  "theme": {
+    "switchAria": "Choose appearance"
+  },
   "wheel": {
     "startAria": "Start",
     "avatarPreviewAlt": "Avatar preview"
@@ -113,10 +116,13 @@
   "settings": {
     "title": "Settings",
     "language": "Language",
+    "appearance": "Appearance",
+    "themeLight": "Light",
+    "themeDark": "Dark",
     "prompt": "What would you like to do?",
     "export": "Export",
     "reset": "Reset avatar",
-    "cancel": "Cancel"
+    "cancel": "OK"
   },
   "name": {
     "placeholder": "Your avatar's name",

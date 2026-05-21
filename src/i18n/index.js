@@ -179,6 +179,9 @@
     document.title = t('meta.title');
     document.documentElement.lang = locale;
     updateLangSwitchUi();
+    if (window.WizardTheme && typeof window.WizardTheme.updateThemeSwitchUi === 'function') {
+      window.WizardTheme.updateThemeSwitchUi();
+    }
   }
 
   function updateLangSwitchUi() {
@@ -263,6 +266,7 @@
     assetUrl: assetUrl,
     applyI18n: applyI18n,
     applyNameSuggestionButtons: applyNameSuggestionButtons,
+    updateLangSwitchUi: updateLangSwitchUi,
     bindLangSwitch: bindLangSwitch
   };
 

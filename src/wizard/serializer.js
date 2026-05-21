@@ -23,6 +23,7 @@
     return {
       exportedAt: new Date().toISOString(),
       locale: window.WizardI18n ? window.WizardI18n.getLocale() : 'de',
+      theme: window.WizardTheme ? window.WizardTheme.getTheme() : 'light',
       usagecontext: state.usage_context,
       helpcontext: state.help_context,
       role: state.role,
@@ -56,6 +57,7 @@
     params.set('newtest', 'Y');
     if (state.id) params.set('id', state.id);
     if (window.WizardI18n) params.set('lang', window.WizardI18n.getLocale());
+    if (window.WizardTheme) params.set('theme', window.WizardTheme.getTheme());
     params.set('usagecontext', state.usage_context);
     params.set('helpcontext', Array.isArray(state.help_context) ? state.help_context.join(',') : state.help_context);
     params.set('role', state.role);

@@ -384,6 +384,12 @@
 
   function showSettingsModal() {
     updateSettingsActions();
+    if (window.WizardI18n && typeof window.WizardI18n.updateLangSwitchUi === 'function') {
+      window.WizardI18n.updateLangSwitchUi();
+    }
+    if (window.WizardTheme && typeof window.WizardTheme.updateThemeSwitchUi === 'function') {
+      window.WizardTheme.updateThemeSwitchUi();
+    }
     if (window.WizardUiUtils && window.WizardUiUtils.showById) {
       window.WizardUiUtils.showById('settingsModal');
       return;
@@ -401,6 +407,13 @@
     var modal = document.getElementById('settingsModal');
     if (!modal) return;
     modal.classList.add('hidden');
+  }
+
+  function onThemeChange() {
+    updateWizardWheelGraphics();
+    if (window.WizardWheelCenter && typeof window.WizardWheelCenter.refreshWheelCenterForState === 'function') {
+      window.WizardWheelCenter.refreshWheelCenterForState(state);
+    }
   }
 
   function onLocaleChange() {
@@ -528,6 +541,9 @@
   }
 
   function boot() {
+    if (window.WizardTheme && window.WizardTheme.bindThemeSwitch) {
+      window.WizardTheme.bindThemeSwitch(onThemeChange);
+    }
     if (window.WizardI18n && window.WizardI18n.bindLangSwitch) {
       window.WizardI18n.bindLangSwitch(onLocaleChange);
     }

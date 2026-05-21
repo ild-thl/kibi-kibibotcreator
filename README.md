@@ -244,6 +244,36 @@ Use the **DE | EN** switch in the header to change language at runtime.
 
 Wheel animation filenames stay slug-based on option keys and do not need per-locale copies unless you add language-specific clips later.
 
+## Appearance (light / dark)
+
+Themes are controlled by `WizardTheme` (`src/theme/index.js`) and CSS variables on `html[data-theme="light|dark"]`.
+
+### Selection
+
+Priority: URL `?theme=dark` → `localStorage` key `wizard.theme` → system `prefers-color-scheme` → default `light`.
+
+Toggle **Hell / Dunkel** (or **Light / Dark**) in the settings modal (gear icon).
+
+### Colours (defaults)
+
+| Element | Light | Dark |
+|--------|-------|------|
+| Page background | Gradient `#eef2ff` → `#e0e7ff` → `#f5f3ff` | `#81a1c1` |
+| Next / summary button | `#3b82f6` | `#a3be8c` |
+
+Accent colour (selected cards, validation OK, settings export) follows the next-button colour per theme.
+
+### Wizard wheel graphics
+
+Theme-specific wheel SVGs live in parallel folders (same filenames):
+
+- `assets/wizard-wheel/light/` — background (`hg.svg`), progress (`antw_*`, `alle_antw_off.svg`), step overlays (`start.svg`, `schritt_*`)
+- `assets/wizard-wheel/dark/` — dark variants (replace SVGs here when ready)
+
+Center wheel animations under `assets/wheel-animations/` are **theme-neutral** and are not switched.
+
+Legacy SVGs in `assets/wizard-wheel/*.svg` (root) are unused; only `light/` and `dark/` are loaded.
+
 ## License
 
 No license is defined yet. Add a `LICENSE` file to specify usage terms.

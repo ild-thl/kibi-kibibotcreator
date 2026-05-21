@@ -1,5 +1,59 @@
+/* Theme: Hell / Dunkel (WizardTheme + data-theme auf <html>) */
+:root {
+  /* Text immer dunkel – unabhängig vom Erscheinungsbild */
+  --color-text-content: #111827;
+  --color-text-muted: #4b5563;
+  --color-text-label: #374151;
+}
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --color-bg-page: #eef2ff;
+  --color-bg-gradient: linear-gradient(90deg, #eef2ff 0%, #e0e7ff 50%, #f5f3ff 100%);
+  --color-surface: #ffffff;
+  --color-surface-border: #e5e7eb;
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+  --color-accent-soft: rgba(59, 130, 246, 0.08);
+  --color-nav-next: #3b82f6;
+  --color-nav-next-hover: #2563eb;
+  --color-nav-next-muted: #8eaecf;
+  --color-nav-next-muted-hover: #7c9cbb;
+  --color-nav-bar-bg: rgba(238, 242, 255, 0.95);
+  --color-input-focus: #3b82f6;
+  --color-modal-bg: #ffffff;
+  --color-modal-border: #e5e7eb;
+  --color-settings-segment-bg: #f3f4f6;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg-page: #81a1c1;
+  --color-bg-gradient: none;
+  --color-surface: #ffffff;
+  --color-surface-border: #d8dee9;
+  --color-accent: #a3be8c;
+  --color-accent-hover: #8fad7a;
+  --color-accent-soft: rgba(163, 190, 140, 0.18);
+  --color-nav-next: #a3be8c;
+  --color-nav-next-hover: #8fad7a;
+  --color-nav-next-muted: #7a8f6e;
+  --color-nav-next-muted-hover: #6b7f61;
+  --color-nav-bar-bg: rgba(129, 161, 193, 0.95);
+  --color-input-focus: #a3be8c;
+  --color-modal-bg: #ffffff;
+  --color-modal-border: #d8dee9;
+  --color-settings-segment-bg: #e8eef4;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--color-text-content);
+  background-color: var(--color-bg-page);
+  background-image: var(--color-bg-gradient);
+  min-height: 100vh;
+  transition: background-color 0.25s ease;
 }
 
 .card-select:hover {
@@ -256,16 +310,16 @@ body {
 }
 
 .card-select.selected {
-  border-color: #007AFF;
-  background: rgba(0, 122, 255, 0.06);
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
 }
 
 .btn-primary {
-  background: #007AFF;
+  background: var(--color-accent);
 }
 
 .btn-primary:hover {
-  background: #0056b3;
+  background: var(--color-accent-hover);
 }
 
 .step-enter {
@@ -306,8 +360,9 @@ body {
   max-width: 420px;
   padding: 1.75rem 2rem;
   border-radius: 1.25rem;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--color-modal-bg);
+  border: 1px solid var(--color-modal-border);
+  color: #111827;
   box-shadow: 0 20px 45px rgba(15, 23, 42, 0.25);
   animation: modalPop 260ms ease-out;
 }
@@ -336,14 +391,73 @@ body {
 }
 
 /* Weiter / Zusammenfassung: dezent ausgegraut bei unvollständigem Schritt (nicht Testmodus); Button bleibt klickbar → Validierung. */
+#btnNext {
+  background-color: var(--color-nav-next);
+  color: #fff;
+}
+
+#btnNext:hover {
+  background-color: var(--color-nav-next-hover);
+}
+
 #btnNext.wizard-nav-next--muted {
   opacity: 0.68;
-  background-color: #8eaecf !important;
+  background-color: var(--color-nav-next-muted) !important;
   color: rgba(255, 255, 255, 0.94) !important;
 }
 
 #btnNext.wizard-nav-next--muted:hover {
-  background-color: #7c9cbb !important;
+  background-color: var(--color-nav-next-muted-hover) !important;
+}
+
+#wizardNavBar {
+  background: var(--color-nav-bar-bg) !important;
+}
+
+#validationOk {
+  background: var(--color-accent);
+}
+
+#validationOk:hover {
+  background: var(--color-accent-hover);
+}
+
+.wizard-step .card-select {
+  background: var(--color-surface) !important;
+  border-color: var(--color-surface-border) !important;
+  color: #111827;
+}
+
+#inputName {
+  background: var(--color-surface) !important;
+  border-color: var(--color-surface-border) !important;
+  color: #111827;
+}
+
+#inputName:focus {
+  border-color: var(--color-input-focus) !important;
+}
+
+header h1,
+.wizard-step h2,
+.wizard-question-title,
+.wizard-step label,
+.settings-title,
+.settings-text,
+.modal-card,
+.modal-card p,
+#validationMessage {
+  color: var(--color-text-content);
+}
+
+.wizard-step .text-gray-500 {
+  color: var(--color-text-muted) !important;
+}
+
+.wizard-step .text-gray-600,
+.wizard-step .text-gray-700,
+.wizard-step .text-gray-800 {
+  color: var(--color-text-label) !important;
 }
 
 @keyframes modalPop {
@@ -570,7 +684,7 @@ body {
 .wizard-question-title {
   font-size: 1rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text-content);
   margin-bottom: 0.75rem;
 }
 
@@ -891,13 +1005,26 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   object-fit: contain;
 }
 
-.lang-switch {
+.lang-switch,
+.theme-switch {
   display: inline-flex;
   gap: 0.25rem;
   padding: 0.25rem;
   border-radius: 0.875rem;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: var(--color-settings-segment-bg);
+  border: 1px solid var(--color-surface-border);
+}
+
+.theme-switch--full {
+  display: flex;
+  width: 100%;
+}
+
+.theme-switch--full .theme-switch__btn {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8125rem;
 }
 
 .lang-switch--full {
@@ -912,13 +1039,14 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   font-size: 0.8125rem;
 }
 
-.lang-switch__btn {
+.lang-switch__btn,
+.theme-switch__btn {
   min-width: 2.25rem;
   padding: 0.4rem 0.65rem;
   border: none;
   border-radius: 0.625rem;
   background: transparent;
-  color: #4b5563;
+  color: #6b7280;
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -926,19 +1054,23 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.lang-switch__btn:hover {
-  color: #111827;
-  background: #f3f4f6;
+.lang-switch__btn:hover:not(.lang-switch__btn--active),
+.theme-switch__btn:hover:not(.theme-switch__btn--active) {
+  color: #374151;
+  background: rgba(255, 255, 255, 0.65);
 }
 
-.lang-switch__btn--active {
-  background: #007aff;
-  color: #fff;
+.lang-switch__btn--active,
+.theme-switch__btn--active {
+  background: var(--color-accent) !important;
+  color: #fff !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.14);
 }
 
-.lang-switch__btn--active:hover {
-  background: #0056b3;
-  color: #fff;
+.lang-switch__btn--active:hover,
+.theme-switch__btn--active:hover {
+  background: var(--color-accent-hover) !important;
+  color: #fff !important;
 }
 
 .settings-gear {
@@ -1066,7 +1198,6 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   font-weight: 600;
   font-size: 1.125rem;
   letter-spacing: -0.02em;
-  color: #111827;
 }
 
 .settings-section {
@@ -1083,7 +1214,7 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
   display: block;
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-text-muted);
 }
 
 .settings-divider {
@@ -1127,14 +1258,14 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 }
 
 .settings-btn--primary {
-  background: #007aff;
+  background: var(--color-accent);
   color: #fff;
-  border-color: #007aff;
+  border-color: var(--color-accent);
 }
 
 .settings-btn--primary:hover {
-  background: #0056b3;
-  border-color: #0056b3;
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
 }
 
 .settings-btn--danger {
@@ -1149,15 +1280,16 @@ body.wizard-wheel-debug .wizard-wheel-start::after {
 }
 
 .settings-btn--ghost {
-  background: transparent;
-  color: #4b5563;
-  border-color: #e5e7eb;
-  font-weight: 500;
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+  font-weight: 600;
 }
 
 .settings-btn--ghost:hover {
-  background: #f9fafb;
-  color: #111827;
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: #fff;
 }
 
 .settings-actions button:disabled,
