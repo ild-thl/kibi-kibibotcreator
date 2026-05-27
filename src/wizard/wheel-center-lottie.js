@@ -301,6 +301,13 @@
     return window.location && window.location.protocol === 'file:';
   }
 
+  function wheelThemeBase() {
+    if (window.WizardTheme && typeof window.WizardTheme.wheelBaseUrl === 'function') {
+      return window.WizardTheme.wheelBaseUrl();
+    }
+    return './assets/wizard-wheel/light/';
+  }
+
   /** Minimale Absicherung eingebetteter SVG-Texte (lokale Assets). */
   function sanitizeSvgText(text) {
     if (!text || typeof text !== 'string') return '';
@@ -469,7 +476,6 @@
   function transitionIntroSkipFrames(url) {
     if (!url || typeof url !== 'string') return 0;
     if (url.indexOf(BASE + 'transitions/') !== 0) return 0;
-    if (url.indexOf('on-load.json') !== -1) return 0;
     return 3;
   }
 
@@ -519,30 +525,8 @@
 
   /** Lädt bekannte Transition-JSONs im Hintergrund (erster Sprung wirkt sofort). */
   function prefetchWheelAnimationData() {
-    if (!window.fetch) return;
-    var urls = [
-      BASE + 'transitions/on-load.json',
-      BASE + 'transitions/from-step-00-to-step-01.json',
-      BASE + 'transitions/to-step-01.json',
-      BASE + 'transitions/to-step-02.json',
-      BASE + 'transitions/to-step-03.json',
-      BASE + 'transitions/to-step-04.json',
-      BASE + 'transitions/to-step-05.json',
-      BASE + 'transitions/to-step-06.json',
-      BASE + 'transitions/to-step-07.json',
-      BASE + 'transitions/to-step-08.json'
-    ];
-    urls.forEach(function (url) {
-      if (animationDataCache[url]) return;
-      fetch(url)
-        .then(function (r) {
-          return r.ok ? r.json() : null;
-        })
-        .then(function (j) {
-          if (j) animationDataCache[url] = j;
-        })
-        .catch(function () {});
-    });
+    /* Kein aggressives Prefetching mehr: gelöschte/ausgetauschte Assets sollen nicht blind angefragt werden. */
+    return;
   }
 
   function removeHoldFramesFromWrap(wrap) {
@@ -1249,109 +1233,36 @@
   }
 
   /**
-   * Schritt 0: statische Grafik (on-load.svg) oder Endlosschleife (on-load.json).
-   * Läuft erneut, sobald der Nutzer wieder auf die Startseite wechselt.
+   * Schritt 0: zeigt die aktuelle Theme-Startgrafik im Wheel-Zentrum.
+   * Keine on-load Animationen/Fallback-Dateien mehr.
    */
   function ensureStartStepLoop(state) {
     if (!state || state.currentStep !== 0) return;
     if (isStepEightComplete(state)) return;
-    if (isFileProtocol()) return;
     var wrap = getActiveWheelAvatar();
     if (!wrap) return;
     if (wrap.querySelector('.wheel-center-lottie--start')) return;
 
     var img = wrap.querySelector('img');
-    var svgUrl = BASE + 'transitions/on-load.svg';
-    var jsonUrl = BASE + 'transitions/on-load.json';
+    var svgUrl = wheelThemeBase() + 'startgrafik.svg';
+    if (img) img.style.display = 'none';
 
-    function mountStartJson() {
-      if (wrap.querySelector('.wheel-center-lottie--start')) return;
-      if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') {
-        if (img) img.style.display = 'block';
-        return;
-      }
-      if (img) img.style.display = 'none';
-      var root = document.createElement('div');
-      root.className = 'wheel-center-lottie wheel-center-lottie--start';
-      wrap.appendChild(root);
-      var anim;
-      try {
-        anim = loadWheelLottie(root, jsonUrl, true);
-      } catch (e) {
-        root.remove();
-        if (img) img.style.display = 'block';
-        return;
-      }
-      instances.push(anim);
-      var cacheIt = function () {
-        cacheAnimationFromInstance(jsonUrl, anim);
-        rememberResolvedWheelMedia(0, jsonUrl);
-        rememberLastWheelMediaForStep(0, state, jsonUrl);
-      };
-      try {
-        anim.addEventListener('DOMLoaded', cacheIt);
-      } catch (e) {}
-      try {
-        if (anim.isLoaded === true) cacheIt();
-      } catch (e2) {}
+    var root = document.createElement('div');
+    root.className = 'wheel-center-lottie wheel-center-lottie--start wheel-center-lottie--static';
 
-      var fail = function () {
-        try {
-          anim.destroy();
-        } catch (err) {}
-        instances = instances.filter(function (x) {
-          return x !== anim;
-        });
-        root.remove();
-        if (img) img.style.display = 'block';
-      };
+    var startImg = document.createElement('img');
+    startImg.alt = '';
+    startImg.setAttribute('aria-hidden', 'true');
+    startImg.src = svgUrl;
+    startImg.onerror = function () {
+      root.remove();
+      if (img) img.style.display = 'block';
+    };
 
-      try {
-        anim.addEventListener('data_failed', fail);
-        anim.addEventListener('config_error', fail);
-        anim.addEventListener('error', fail);
-      } catch (e) {}
-      setTimeout(function () {
-        try {
-          if (anim && anim.isLoaded === false) fail();
-        } catch (err) {
-          fail();
-        }
-      }, 900);
-    }
-
-    if (window.fetch) {
-      fetch(svgUrl)
-        .then(function (r) {
-          return r.ok ? r.text() : Promise.reject();
-        })
-        .then(function (text) {
-          if (wrap.querySelector('.wheel-center-lottie--start')) return;
-          if (img) img.style.display = 'none';
-          var root = document.createElement('div');
-          root.className = 'wheel-center-lottie wheel-center-lottie--start wheel-center-lottie--static';
-          root.innerHTML = sanitizeSvgText(text);
-          var svg = root.querySelector('svg');
-          if (!svg) {
-            root.remove();
-            if (img) img.style.display = 'block';
-            mountStartJson();
-            return;
-          }
-          try {
-            svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-          } catch (eA) {}
-          wrap.appendChild(root);
-          rememberWheelSvgFromRoot(0, root);
-          rememberResolvedWheelMedia(0, svgUrl);
-          rememberLastWheelMediaForStep(0, state, svgUrl);
-        })
-        .catch(function () {
-          mountStartJson();
-        });
-      return;
-    }
-    mountStartJson();
+    root.appendChild(startImg);
+    wrap.appendChild(root);
+    rememberResolvedWheelMedia(0, svgUrl);
+    rememberLastWheelMediaForStep(0, state, svgUrl);
   }
 
   function refreshWheelCenterForState(state) {

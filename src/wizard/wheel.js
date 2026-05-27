@@ -1,4 +1,7 @@
 ;(function () {
+  var TRANSPARENT_SVG =
+    "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+
   function wheelBase() {
     if (window.WizardTheme && typeof window.WizardTheme.wheelBaseUrl === 'function') {
       return window.WizardTheme.wheelBaseUrl();
@@ -62,18 +65,8 @@
   }
 
   function stepOverlayAssetUrl(state) {
-    var cs = state.currentStep;
-    if (cs === 0) return wheelBase() + 'start.svg';
-    if (cs === 9) {
-      var eightOk = window.WizardValidation && window.WizardValidation.isStepValid(state, 8);
-      return wheelBase() + (eightOk ? 'schritt_8_2.svg' : 'schritt_8_1.svg');
-    }
-    if (cs >= 1 && cs <= 8) {
-      var ok = window.WizardValidation && window.WizardValidation.isStepValid(state, cs);
-      var suffix = ok ? '2' : '1';
-      return wheelBase() + 'schritt_' + cs + '_' + suffix + '.svg';
-    }
-    return wheelBase() + 'start.svg';
+    /* Kein schritt_x_x Overlay mehr: Step-Layer bleibt transparent. */
+    return TRANSPARENT_SVG;
   }
 
   /** Aktualisiert Fortschritts- und Schritt-Overlay in allen Wheel-Instanzen (jeder Section eine Kopie). */

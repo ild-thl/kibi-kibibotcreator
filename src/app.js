@@ -411,6 +411,16 @@
 
   function onThemeChange() {
     updateWizardWheelGraphics();
+    if (
+      state.currentStep === 0 &&
+      window.WizardWheelCenter &&
+      typeof window.WizardWheelCenter.clearLottieLayers === 'function' &&
+      typeof window.WizardWheelCenter.ensureStartStepLoop === 'function'
+    ) {
+      window.WizardWheelCenter.clearLottieLayers();
+      window.WizardWheelCenter.ensureStartStepLoop(state);
+      return;
+    }
     if (window.WizardWheelCenter && typeof window.WizardWheelCenter.refreshWheelCenterForState === 'function') {
       window.WizardWheelCenter.refreshWheelCenterForState(state);
     }
