@@ -102,6 +102,7 @@
   },
   "nav": {
     "back": "Back",
+    "start": "Create avatar",
     "next": "Next",
     "summary": "Summary",
     "survey": "Continue to survey",

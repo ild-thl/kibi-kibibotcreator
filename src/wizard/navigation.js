@@ -41,11 +41,15 @@
     }
 
     var navBarEl = document.getElementById('wizardNavBar');
+    var startSpacerEl = document.getElementById('btnStartSpacer');
+    var startBtnEl = document.getElementById('btnStart');
     var backBtnEl = document.getElementById('btnBack');
     var nextBtnEl = document.getElementById('btnNext');
     var saveBtnEl = document.getElementById('btnSave');
     var settingsBtnEl = document.getElementById('btnSettings');
-    if (navBarEl) navBarEl.classList.toggle('hidden', state.currentStep === 0);
+    if (navBarEl) navBarEl.classList.remove('hidden');
+    if (startSpacerEl) startSpacerEl.classList.toggle('hidden', state.currentStep !== 0);
+    if (startBtnEl) startBtnEl.classList.toggle('hidden', state.currentStep !== 0);
     if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
     if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === totalSteps);
     if (nextBtnEl) {

@@ -393,12 +393,14 @@ body {
 }
 
 /* Weiter / Zusammenfassung: dezent ausgegraut bei unvollständigem Schritt (nicht Testmodus); Button bleibt klickbar → Validierung. */
-#btnNext {
+#btnNext,
+#btnStart {
   background-color: var(--color-nav-next);
   color: #fff;
 }
 
-#btnNext:hover {
+#btnNext:hover,
+#btnStart:hover {
   background-color: var(--color-nav-next-hover);
 }
 

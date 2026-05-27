@@ -280,6 +280,10 @@
     }
   }
 
+  function startWizard() {
+    goToStep(getFirstIncompleteStep());
+  }
+
   function back() {
     if (window.WizardNavigation && window.WizardNavigation.back) {
       window.WizardNavigation.back(state, {
@@ -478,6 +482,7 @@
     }
 
     const nextBtn = document.getElementById('btnNext');
+    const startBtn = document.getElementById('btnStart');
     const backBtn = document.getElementById('btnBack');
     const saveBtn = document.getElementById('btnSave');
     const settingsBtn = document.getElementById('btnSettings');
@@ -490,6 +495,7 @@
     const validationModal = document.getElementById('validationModal');
 
     if (nextBtn) nextBtn.addEventListener('click', next);
+    if (startBtn) startBtn.addEventListener('click', startWizard);
     if (backBtn) backBtn.addEventListener('click', back);
     if (saveBtn) saveBtn.addEventListener('click', save);
     if (settingsBtn) settingsBtn.addEventListener('click', showSettingsModal);
