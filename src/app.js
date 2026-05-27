@@ -464,24 +464,16 @@
     var wizardContent = document.getElementById('wizardContent');
     if (wizardContent) {
       wizardContent.addEventListener('click', function (e) {
-        var hotspot = e.target.closest('.wizard-wheel-start, .wizard-wheel-jump');
+        var hotspot = e.target.closest('.wizard-wheel-jump');
         if (!hotspot) return;
-        if (
-          hotspot.classList.contains('wizard-wheel-jump') &&
-          hotspot.classList.contains('wizard-wheel-hotspot--blocked')
-        ) {
+        if (hotspot.classList.contains('wizard-wheel-hotspot--blocked')) {
           e.preventDefault();
           e.stopPropagation();
           return;
         }
         e.preventDefault();
         var stepNum = Number(hotspot.getAttribute('data-step') || '0');
-        if (stepNum === 0) {
-          if (state.currentStep === 0) goToStep(getFirstIncompleteStep());
-          else goToStep(0);
-        } else {
-          goToStep(stepNum);
-        }
+        if (stepNum >= 1 && stepNum <= 8) goToStep(stepNum);
       });
     }
 

@@ -9,16 +9,19 @@
     return './assets/wizard-wheel/light/';
   }
   var VIEWBOX = 625;
-  var START_COORD = { x: 313.6, y: 86.1 };
+  /**
+   * Mittelpunkte der 8 Schritt-Kreise (r≈59.9) aus `alle_antw_off.svg` / `antw_*.svg`,
+   * im Uhrzeigersinn ab „oben“ (Schritt 1 oben → … → Schritt 8 oben-links).
+   */
   var STEP_COORDS = {
-    1: { x: 459.5, y: 140.3 },
-    2: { x: 535.6, y: 273.7 },
-    3: { x: 508.4, y: 425.4 },
-    4: { x: 391.6, y: 524.4 },
-    5: { x: 237.5, y: 525.6 },
-    6: { x: 118.5, y: 425.6 },
-    7: { x: 91.2, y: 272.7 },
-    8: { x: 170.9, y: 137.6 }
+    1: { x: 399.7, y: 95.8 },
+    2: { x: 528.5, y: 227.2 },
+    3: { x: 524.3, y: 401.1 },
+    4: { x: 399.7, y: 525.8 },
+    5: { x: 223.2, y: 524.3 },
+    6: { x: 95.5, y: 400 },
+    7: { x: 95.2, y: 228 },
+    8: { x: 222.7, y: 96.3 }
   };
 
   function asPercent(v) {
@@ -27,12 +30,9 @@
 
   function ensureWheelHotspots() {
     document.querySelectorAll('.wizard-wheel').forEach(function (wheel) {
-      var startBtn = wheel.querySelector('.wizard-wheel-start');
-      if (startBtn) {
-        startBtn.setAttribute('data-step', '0');
-        startBtn.style.left = asPercent(START_COORD.x);
-        startBtn.style.top = asPercent(START_COORD.y);
-      }
+      wheel.querySelectorAll('.wizard-wheel-start').forEach(function (el) {
+        el.remove();
+      });
       for (var step = 1; step <= 8; step++) {
         if (wheel.querySelector('.wizard-wheel-jump[data-step="' + step + '"]')) continue;
         var btn = document.createElement('button');
@@ -91,7 +91,7 @@
     document.querySelectorAll('.wizard-wheel-step').forEach(function (img) {
       if (img.getAttribute('src') !== step) img.setAttribute('src', step);
     });
-    document.querySelectorAll('.wizard-wheel-jump').forEach(function (btn) {
+    document.querySelectorAll('.wizard-wheel-jump[data-step]').forEach(function (btn) {
       var n = Number(btn.getAttribute('data-step') || '0');
       var allowed =
         window.WizardValidation && typeof window.WizardValidation.isWheelJumpAllowed === 'function'
