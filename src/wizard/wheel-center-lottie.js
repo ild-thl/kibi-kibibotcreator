@@ -293,6 +293,17 @@
     });
   }
 
+  /** Wheel-Zentrum: Lottie/Hold entfernen, Avatar-<img> wieder sichtbar; bei gesetztem Typ Vorschau laden. */
+  function restoreWheelCenterAvatar(state) {
+    clearLottieLayers();
+    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      img.style.display = 'block';
+    });
+    if (state && state.avatarType) {
+      applyWheelCenterAvatarImage(state);
+    }
+  }
+
   function shouldSkipWheelAnimations(state) {
     if (!state) return true;
     if (state.currentStep === 9) return true;
@@ -1119,14 +1130,7 @@
     if (previousUiStep === null) {
       previousUiStep = cur;
       if (cur === 8) {
-        clearLottieLayers();
-        if (isStepEightComplete(state)) {
-          applyWheelCenterAvatarImage(state);
-        } else {
-          document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
-            img.style.display = 'block';
-          });
-        }
+        restoreWheelCenterAvatar(state);
       } else if (isStepEightComplete(state)) {
         clearLottieLayers();
         applyWheelCenterAvatarImage(state);
@@ -1146,14 +1150,7 @@
       return;
     }
     if (cur === 8) {
-      clearLottieLayers();
-      if (isStepEightComplete(state)) {
-        applyWheelCenterAvatarImage(state);
-      } else {
-        document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
-          img.style.display = 'block';
-        });
-      }
+      restoreWheelCenterAvatar(state);
       return;
     }
     if (isStepEightComplete(state)) {
@@ -1206,14 +1203,7 @@
     if (!state || !meta) return;
     if (state.currentStep === 0) return;
     if (state.currentStep === 8) {
-      clearLottieLayers();
-      if (isStepEightComplete(state)) {
-        applyWheelCenterAvatarImage(state);
-      } else {
-        document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
-          img.style.display = 'block';
-        });
-      }
+      restoreWheelCenterAvatar(state);
       return;
     }
     if (isStepEightComplete(state)) {

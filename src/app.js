@@ -104,6 +104,9 @@
         }
       });
     }
+    if (state.avatarType && state.avatarInitialized) {
+      updateAvatarPreview();
+    }
   }
 
   function updateWizardWheelGraphics() {

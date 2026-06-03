@@ -1056,6 +1056,11 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   transform-origin: center;
 }
 
+.wizard-wheel-avatar img[data-avatar-type="owl"] {
+  transform: scale(0.78) translateY(-2%);
+  transform-origin: center;
+}
+
 /* Fallback-Erkennung über URL (falls data-avatar-type noch nicht gesetzt ist). */
 .wizard-wheel-avatar img[src*="/avataaars/"] {
   transform: scale(0.72) translateY(-4%);
@@ -1064,6 +1069,11 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
 .wizard-wheel-avatar img[src*="/bottts/"] {
   transform: scale(0.86) translateY(0);
+  transform-origin: center;
+}
+
+.wizard-wheel-avatar img[src*="/avatar-types/owl-"] {
+  transform: scale(0.78) translateY(-2%);
   transform-origin: center;
 }
 
