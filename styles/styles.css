@@ -938,8 +938,11 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   background-image: var(--wheel-inner-bg);
   background-position: center;
   background-repeat: no-repeat;
-  /* Neues innenkreis.svg hat mehr Rand: bewusst etwas größer rendern. */
-  background-size: 132% 132%;
+  /*
+   * innenkreis.svg: Kreis ~49 % des ViewBox – auf ~50 % Wheel-Durchmesser skalieren
+   * (einheitlich Schritt 0–8; 132 % war auf den Schritten 1–8 zu klein).
+   */
+  background-size: 236% 236%;
 }
 
 .avatar-lottie-root {
@@ -960,17 +963,60 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 /* Optionale statische SVGs statt Lottie (gleicher Dateiname, Endung .svg). */
-.wheel-center-lottie--static svg {
+.wheel-center-lottie--static:not(.wheel-center-lottie--start) svg {
   width: 100%;
   height: 100%;
   display: block;
 }
 
-.wheel-center-lottie--static img {
+.wheel-center-lottie--static:not(.wheel-center-lottie--start) img {
   width: 100%;
   height: 100%;
   display: block;
   object-fit: contain;
+}
+
+/* Schritt 0: Startgrafik etwas kleiner als innenkreis (nicht von Regel oben überschrieben). */
+.wizard-wheel-avatar .wheel-center-lottie--start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wizard-wheel-avatar .wheel-center-lottie--start svg,
+.wizard-wheel-avatar .wheel-center-lottie--start .wheel-center-start-fallback {
+  width: 58% !important;
+  height: 58% !important;
+  max-width: 58%;
+  max-height: 58%;
+  margin: auto;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Schritte 1–8: Animation bündig mit innenkreis (volle Avatar-Fläche). */
+.wizard-wheel-avatar .wheel-center-lottie:not(.wheel-center-lottie--start) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wizard-wheel-avatar .wheel-center-lottie:not(.wheel-center-lottie--start) svg {
+  width: 103% !important;
+  height: 103% !important;
+  flex-shrink: 0;
+}
+
+.wizard-wheel-avatar .wheel-center-hold-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wizard-wheel-avatar .wheel-center-hold-frame svg {
+  width: 103% !important;
+  height: 103% !important;
 }
 
 /* Eingefrorener Zwischenframe vom vorherigen Schritt bis die neue Lottie steht (kein Platzhalterfoto). */

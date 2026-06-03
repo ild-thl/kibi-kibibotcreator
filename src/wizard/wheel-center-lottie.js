@@ -70,6 +70,8 @@
   var completedStepSelectionWheelCache = {};
   var completedStepWheelSvgClone = {};
   var wheelAnimDebugEnabled = false;
+  /** Zuschneiden von startgrafik.svg: Roboter + Zahnrad (ohne leeren 625×625-ViewBox). */
+  var START_CENTER_VIEWBOX = '215 235 195 165';
 
   function pad2(n) {
     return n < 10 ? '0' + n : String(n);
@@ -1232,16 +1234,34 @@
     previousUiStep = null;
   }
 
+  function mountStartCenterFallback(wrap, root, url, img) {
+    root.innerHTML = '';
+    var startImg = document.createElement('img');
+    startImg.alt = '';
+    startImg.setAttribute('aria-hidden', 'true');
+    startImg.src = url;
+    startImg.className = 'wheel-center-start-fallback';
+    root.appendChild(startImg);
+    if (!root.parentNode) wrap.appendChild(root);
+    startImg.onerror = function () {
+      root.remove();
+      if (img) img.style.display = 'block';
+    };
+  }
+
   /**
-   * Schritt 0: zeigt die aktuelle Theme-Startgrafik im Wheel-Zentrum.
-   * Keine on-load Animationen/Fallback-Dateien mehr.
+   * Schritt 0: Startgrafik als zugeschnittenes Inline-SVG im Wheel-Zentrum.
    */
   function ensureStartStepLoop(state) {
     if (!state || state.currentStep !== 0) return;
     if (isStepEightComplete(state)) return;
     var wrap = getActiveWheelAvatar();
     if (!wrap) return;
-    if (wrap.querySelector('.wheel-center-lottie--start')) return;
+
+    var existing = wrap.querySelector('.wheel-center-lottie--start');
+    if (existing && existing.getAttribute('data-start-mounted') === '2') return;
+
+    if (existing) existing.remove();
 
     var img = wrap.querySelector('img');
     var svgUrl = wheelThemeBase() + 'startgrafik.svg';
@@ -1249,20 +1269,35 @@
 
     var root = document.createElement('div');
     root.className = 'wheel-center-lottie wheel-center-lottie--start wheel-center-lottie--static';
+    root.setAttribute('data-start-mounted', '2');
 
-    var startImg = document.createElement('img');
-    startImg.alt = '';
-    startImg.setAttribute('aria-hidden', 'true');
-    startImg.src = svgUrl;
-    startImg.onerror = function () {
-      root.remove();
-      if (img) img.style.display = 'block';
-    };
+    if (!window.fetch) {
+      mountStartCenterFallback(wrap, root, svgUrl, img);
+      rememberResolvedWheelMedia(0, svgUrl);
+      rememberLastWheelMediaForStep(0, state, svgUrl);
+      return;
+    }
 
-    root.appendChild(startImg);
-    wrap.appendChild(root);
-    rememberResolvedWheelMedia(0, svgUrl);
-    rememberLastWheelMediaForStep(0, state, svgUrl);
+    fetch(svgUrl)
+      .then(function (r) {
+        if (!r.ok) throw new Error('svg');
+        return r.text();
+      })
+      .then(function (text) {
+        root.innerHTML = sanitizeSvgText(text);
+        var svg = root.querySelector('svg');
+        if (!svg) throw new Error('svg');
+        svg.setAttribute('viewBox', START_CENTER_VIEWBOX);
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        wrap.appendChild(root);
+        rememberResolvedWheelMedia(0, svgUrl);
+        rememberLastWheelMediaForStep(0, state, svgUrl);
+      })
+      .catch(function () {
+        mountStartCenterFallback(wrap, root, svgUrl, img);
+        rememberResolvedWheelMedia(0, svgUrl);
+        rememberLastWheelMediaForStep(0, state, svgUrl);
+      });
   }
 
   function refreshWheelCenterForState(state) {
