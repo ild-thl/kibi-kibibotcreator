@@ -921,9 +921,9 @@
       );
       contextual.push(BASE + 'transitions/from-' + lastResolvedWheelMedia.base + '-to-step-' + pad2(toStep) + '.json');
     }
-    /* Nur 0→1 hat aktuell eine eigene Datei; sonst zuerst to-step sparen (kein 404 auf fehlendes from-…). */
+    /* 0→1: nur from-step-00-to-step-01.json (kein generisches to-step-01 mehr). */
     if (fromStep === 0 && toStep === 1) {
-      return contextual.concat([specific, generic]);
+      return contextual.concat([specific]);
     }
     return contextual.concat([specific, generic]);
   }

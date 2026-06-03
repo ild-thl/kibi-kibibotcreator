@@ -113,9 +113,10 @@ Animation logic is implemented in `src/wizard/wheel-center-lottie.js`.
 
 ### When Animations Run
 
-1. **Step 0 (start)**: plays `transitions/on-load.json` in a loop.
-2. **Step transitions**: whenever `currentStep` changes.
-3. **Selection changes**: on `.card-select` interactions, including avatar options in step 8.
+1. **Step 0 (start)**: static `startgrafik.svg` in the wheel center (see `ensureStartStepLoop`).
+2. **Step 0 → 1**: plays `transitions/from-step-00-to-step-01.json` once when entering step 1.
+3. **Other step transitions**: whenever `currentStep` changes.
+4. **Selection changes**: on `.card-select` interactions, including avatar options in step 8.
 
 Animations are skipped when:
 
@@ -129,9 +130,7 @@ For multi-select deselection, the wheel updates to the remaining state using res
 ```text
 assets/wheel-animations/
 ├─ transitions/
-│  ├─ on-load.json
 │  ├─ from-step-00-to-step-01.json
-│  ├─ to-step-01.json
 │  └─ ...
 ├─ step-01/
 │  ├─ sel-usage-lernraum.json
