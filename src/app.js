@@ -434,6 +434,9 @@
     if (window.WizardI18n && window.WizardI18n.applyI18n) {
       window.WizardI18n.applyI18n(document);
     }
+    if (window.WizardWelcomeLottie && typeof window.WizardWelcomeLottie.refresh === 'function') {
+      window.WizardWelcomeLottie.refresh();
+    }
     if (window.NameSuggestions && window.NameSuggestions.applyRandomNameSuggestions) {
       window.NameSuggestions.applyRandomNameSuggestions('#step3');
     }
@@ -463,6 +466,9 @@
     }
     if (window.WizardWheelCenter && typeof window.WizardWheelCenter.ensureStartStepLoop === 'function') {
       window.WizardWheelCenter.ensureStartStepLoop(state);
+    }
+    if (window.WizardWelcomeLottie && typeof window.WizardWelcomeLottie.mount === 'function') {
+      window.WizardWelcomeLottie.mount();
     }
 
     var wizardContent = document.getElementById('wizardContent');

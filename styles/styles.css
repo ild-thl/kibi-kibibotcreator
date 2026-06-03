@@ -571,6 +571,25 @@ header h1,
   #step2 .wizard-step-grid {
     row-gap: 0.9rem;
   }
+
+  #step0 .wizard-col-main--step0 {
+    min-height: auto;
+  }
+
+  #step0 .step0-welcome-graphic .step0-welcome-lottie {
+    width: 100%;
+  }
+
+  #wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStartSpacer {
+    flex: 0 0 0;
+    max-width: 0;
+    display: none;
+  }
+
+  #wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStart {
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
 }
 
 /* Schritt 5: Weniger "chaotisch" => mt-* aus den Blockcontainern entfernen.
@@ -692,18 +711,67 @@ header h1,
   margin-bottom: 0.75rem;
 }
 
-/* Startseite: Willkommensgrafik rechts unter dem Fließtext (Grid Zeile 2, Spalte „Inhalt“) */
-#step0 .step0-welcome-graphic {
-  margin: 0;
-  margin-top: 0.25rem;
-  max-width: 100%;
+/* Startseite: Text oben, Chat-Lottie unten rechts im weißen Panel (wie Mockup) */
+#step0 .wizard-step-grid {
+  align-items: stretch;
+  min-height: 26rem;
 }
 
-#step0 .step0-welcome-graphic img {
-  display: block;
+#step0 .wizard-col-main--step0 {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem;
+  min-height: 26rem;
+  padding-bottom: 0.5rem;
+}
+
+#step0 .step0-intro {
+  flex: 0 0 auto;
+}
+
+#step0 .step0-welcome-graphic {
+  margin: 0;
+  margin-top: auto;
   width: 100%;
-  height: auto;
-  max-width: min(54rem, 100%);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+#step0 .step0-welcome-graphic .step0-welcome-lottie {
+  display: block;
+  width: min(100%, 36rem);
+  max-width: 100%;
+  max-height: calc(100dvh - 18.5rem);
+  margin: 0;
+  margin-left: auto;
+}
+
+#step0 .step0-welcome-graphic .step0-welcome-lottie svg {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Start-Button: bündig mit rechter Panel-Spalte (40 % Wheel + Gap, 60 % Button) */
+#wizardNavBar > div:has(#btnStart:not(.hidden)) {
+  justify-content: flex-start;
+  column-gap: 2.5rem;
+}
+
+#wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStartSpacer {
+  flex: 0 0 40%;
+  max-width: 40%;
+}
+
+#wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStart {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: calc(60% - 2.5rem);
 }
 
 /* Schritt 3: Namenseingabe darf nicht über das rechte Panel hinausragen. */

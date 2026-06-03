@@ -30,11 +30,21 @@
       <section id="step0" class="wizard-step">
         <h2 class="text-lg font-medium text-gray-800 mb-4" data-i18n="steps.0.title">Willkommen</h2>
         <div class="wizard-step-grid">
-          <div class="wizard-col-main">
-            <p class="wizard-question-title" data-i18n="steps.0.lead">Erstelle deinen persönlichen Avatar und passe deinen Chatbot an deine Bedürfnisse und dein Lernverhalten an.</p>
-            <p class="text-sm text-gray-500" data-i18n="steps.0.hint">
-              Auf den nächsten Seiten stellst du deinen Avatar Schritt für Schritt ein.
-            </p>
+          <div class="wizard-col-main wizard-col-main--step0">
+            <div class="step0-intro">
+              <p class="wizard-question-title" data-i18n="steps.0.lead">Erstelle deinen persönlichen Avatar und passe deinen Chatbot an deine Bedürfnisse und dein Lernverhalten an.</p>
+              <p class="text-sm text-gray-500" data-i18n="steps.0.hint">
+                Auf den nächsten Seiten stellst du deinen Avatar Schritt für Schritt ein.
+              </p>
+            </div>
+            <figure class="step0-welcome-graphic">
+              <div
+                class="step0-welcome-lottie"
+                data-i18n-aria="steps.0.welcomeGraphicAlt"
+                role="img"
+                aria-label="Illustration: persönlicher Avatar und angepasster Chatbot"
+              ></div>
+            </figure>
           </div>
 
           <div class="wizard-col-wheel">
@@ -48,20 +58,6 @@
             </div>
           </div>
 
-          <div class="wizard-col-side">
-            <figure class="step0-welcome-graphic">
-              <img
-                data-asset="startWelcome"
-                src="./assets/i18n/de/start-willkommen-grafik.svg"
-                data-i18n-alt="steps.0.welcomeGraphicAlt"
-                alt="Illustration: persönlicher Avatar und angepasster Chatbot"
-                width="1102"
-                height="592"
-                loading="lazy"
-                decoding="async"
-              />
-            </figure>
-          </div>
         </div>
       </section>
 
@@ -499,6 +495,7 @@
   <script src="./src/wizard/selection.js"></script>
   <script src="./src/wizard/navigation.js"></script>
   <script src="./src/wizard/wheel-center-lottie.js"></script>
+  <script src="./src/wizard/welcome-lottie.js"></script>
   <script src="./src/wizard/avatar.js"></script>
   <script src="./src/app.js"></script>
 </body>
