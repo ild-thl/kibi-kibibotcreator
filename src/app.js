@@ -415,6 +415,9 @@
 
   function onThemeChange() {
     updateWizardWheelGraphics();
+    if (window.WizardWelcomeLottie && typeof window.WizardWelcomeLottie.refresh === 'function') {
+      window.WizardWelcomeLottie.refresh();
+    }
     if (
       state.currentStep === 0 &&
       window.WizardWheelCenter &&

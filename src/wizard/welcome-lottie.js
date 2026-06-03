@@ -40,6 +40,17 @@
     mount();
   }
 
+  var resizeTimer;
+  function onResize() {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      if (!document.querySelector('#step0:not(.hidden)')) return;
+      refresh();
+    }, 150);
+  }
+
+  window.addEventListener('resize', onResize);
+
   window.WizardWelcomeLottie = {
     mount: mount,
     refresh: refresh,

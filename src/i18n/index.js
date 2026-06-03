@@ -139,8 +139,45 @@
     });
   }
 
+  /** light → hellmodus, dark → dunkelmodus (Dateinamen in assets/i18n/{locale}/). */
+  function themeModusSegment() {
+    var theme =
+      window.WizardTheme && typeof window.WizardTheme.getTheme === 'function'
+        ? window.WizardTheme.getTheme()
+        : 'light';
+    return theme === 'dark' ? 'dunkel' : 'hell';
+  }
+
+  /** Abgestimmt auf CSS-Breakpoints (1024 / 520). */
+  function viewportVariant() {
+    var w = typeof window.innerWidth === 'number' ? window.innerWidth : 1280;
+    if (w <= 520) return 'mobil';
+    if (w <= 1024) return 'tablet';
+    return 'desktop';
+  }
+
+  /**
+   * Locale-Assets mit Theme + Viewport (z. B. start_chat_hellmodus_tablet.json).
+   * Andere keys: weiterhin fester Dateiname aus locales/*.json → assets.<key>.
+   */
+  function resolveAssetFilename(assetKey) {
+    var entry = get(messages, 'assets.' + assetKey);
+    if (entry && typeof entry === 'object' && entry.template) {
+      return String(entry.template)
+        .replace(/\{themeModus\}/g, themeModusSegment())
+        .replace(/\{viewport\}/g, viewportVariant());
+    }
+    if (assetKey === 'startWelcome' || entry === 'themeViewport') {
+      return (
+        'start_chat_' + themeModusSegment() + 'modus_' + viewportVariant() + '.json'
+      );
+    }
+    if (typeof entry === 'string' && entry) return entry;
+    return null;
+  }
+
   function assetUrl(assetKey) {
-    var file = get(messages, 'assets.' + assetKey);
+    var file = resolveAssetFilename(assetKey);
     if (!file) return '';
     return './assets/i18n/' + locale + '/' + file;
   }
@@ -264,6 +301,9 @@
     optionLabelsJoined: optionLabelsJoined,
     migrateState: migrateState,
     assetUrl: assetUrl,
+    resolveAssetFilename: resolveAssetFilename,
+    viewportVariant: viewportVariant,
+    themeModusSegment: themeModusSegment,
     applyI18n: applyI18n,
     applyNameSuggestionButtons: applyNameSuggestionButtons,
     updateLangSwitchUi: updateLangSwitchUi,
