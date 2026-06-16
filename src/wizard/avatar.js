@@ -49,6 +49,26 @@
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) { img.style.display = 'block'; });
   }
 
+  function isNoAvatarType(state) {
+    return !!(state && state.avatarType === 'none');
+  }
+
+  function hideAvatarImages() {
+    var main = document.getElementById('avatarPreview');
+    document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      img.onerror = null;
+      img.removeAttribute('data-avatar-type');
+      img.src = TRANSPARENT_IMG;
+      img.style.display = 'none';
+    });
+    if (main) main.style.display = 'none';
+    var sumImg = document.getElementById('summaryAvatar');
+    if (sumImg) {
+      sumImg.src = TRANSPARENT_IMG;
+      sumImg.style.display = 'none';
+    }
+  }
+
   /** Setzt `state.avatarClothing` für Mensch aus Schritt 2 (Ton). */
   function syncHumanClothingFromTone(state) {
     if (!state || state.avatarType !== 'human') return null;
@@ -60,7 +80,7 @@
   }
 
   function buildAvatarUrl(state) {
-    if (!state || !state.avatarType) return TRANSPARENT_IMG;
+    if (!state || !state.avatarType || isNoAvatarType(state)) return TRANSPARENT_IMG;
     const avatarType = state.avatarType;
     const humorMood = state.personality_humor === 'ernst' ? 'serious' : 'happy';
     if (avatarType !== 'human') {
@@ -126,7 +146,7 @@
   }
 
   function renderAvatarStep(state, deps) {
-    var allowedAvatarTypes = { human: true, robot: true, owl: true };
+    var allowedAvatarTypes = { human: true, robot: true, owl: true, none: true };
     if (state.avatarType && !allowedAvatarTypes[state.avatarType]) {
       state.avatarType = null;
     }
@@ -170,19 +190,30 @@
   function updateAvatarPreview(state, avatarUrl) {
     if (!state.avatarInitialized) return;
     clearAvatarLottie();
+    if (isNoAvatarType(state)) {
+      hideAvatarImages();
+      return;
+    }
     const url = avatarUrl || buildAvatarUrl(state);
     var avatarType = state.avatarType || '';
     const main = document.getElementById('avatarPreview');
     if (main) {
+      main.style.display = '';
       main.onerror = function () { this.onerror = null; this.src = TRANSPARENT_IMG; };
       main.setAttribute('data-avatar-type', avatarType);
       main.src = url;
     }
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      img.style.display = 'block';
       img.onerror = function () { this.onerror = null; this.src = TRANSPARENT_IMG; };
       img.setAttribute('data-avatar-type', avatarType);
       img.src = url;
     });
+    var sumImg = document.getElementById('summaryAvatar');
+    if (sumImg) {
+      sumImg.style.display = '';
+      sumImg.src = url;
+    }
   }
 
   window.WizardAvatar = {
@@ -190,6 +221,8 @@
     renderAvatarStep: renderAvatarStep,
     updateAvatarPreview: updateAvatarPreview,
     clearAvatarLottie: clearAvatarLottie,
-    syncHumanClothingFromTone: syncHumanClothingFromTone
+    syncHumanClothingFromTone: syncHumanClothingFromTone,
+    isNoAvatarType: isNoAvatarType,
+    hideAvatarImages: hideAvatarImages
   };
 })();

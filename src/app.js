@@ -312,7 +312,18 @@
     document.getElementById('summaryFeedback').textContent = vm.feedback;
     document.getElementById('summaryPrivacy').textContent = vm.privacy;
     const sumImg = document.getElementById('summaryAvatar');
-    if (sumImg) sumImg.src = buildAvatarUrl();
+    const sumNoneText = document.getElementById('summaryAvatarNoneText');
+    if (sumImg) {
+      if (state.avatarType === 'none') {
+        sumImg.src = TRANSPARENT_IMG;
+        sumImg.style.display = 'none';
+        if (sumNoneText) sumNoneText.classList.remove('hidden');
+      } else {
+        sumImg.style.display = '';
+        sumImg.src = buildAvatarUrl();
+        if (sumNoneText) sumNoneText.classList.add('hidden');
+      }
+    }
   }
 
   function save() {
@@ -375,12 +386,19 @@
 
     // Avatar-Vorschauen zurück auf Platzhalter
     const main = document.getElementById('avatarPreview');
-    if (main) main.src = TRANSPARENT_IMG;
+    if (main) {
+      main.style.display = '';
+      main.src = TRANSPARENT_IMG;
+    }
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
+      img.style.display = 'block';
       img.src = TRANSPARENT_IMG;
     });
     const sumImg = document.getElementById('summaryAvatar');
-    if (sumImg) sumImg.src = TRANSPARENT_IMG;
+    if (sumImg) {
+      sumImg.style.display = '';
+      sumImg.src = TRANSPARENT_IMG;
+    }
 
     updateUI();
     restoreSelections();

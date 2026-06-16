@@ -38,7 +38,7 @@
       role: state.role,
       name: state.name,
       avatarurl: avatarUrl,
-      avatartype: state.avatarType || 'human',
+      avatartype: state.avatarType || '',
       avatarskincolor: state.avatarSkinColor,
       avatartop: state.avatarTop,
       avatarhaircolor: state.avatarHairColor,
@@ -72,7 +72,7 @@
     params.set('role', state.role);
     params.set('name', state.name);
     params.set('avatarurl', avatarUrl);
-    params.set('avatartype', state.avatarType || 'human');
+    params.set('avatartype', state.avatarType || '');
     params.set('avatarskincolor', state.avatarSkinColor);
     params.set('avatartop', state.avatarTop);
     params.set('avatarhaircolor', state.avatarHairColor);

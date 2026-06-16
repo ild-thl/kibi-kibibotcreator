@@ -75,7 +75,8 @@
       "title": "Your personalised avatar is ready",
       "subtitle": "You can now use or export your avatar!",
       "boxTitle": "Summary",
-      "avatarAlt": "Avatar"
+      "avatarAlt": "Avatar",
+      "noAvatar": "No avatar image"
     }
   },
   "summary": {
@@ -134,7 +135,7 @@
     "hairStyle": { "short": "Short", "long": "Long", "curly": "Curly" },
     "hairColor": { "black": "Black", "brown": "Brown", "blond": "Blond" },
     "beard": { "none": "No beard", "full": "Full beard", "mustache": "Moustache" },
-    "type": { "human": "Human", "robot": "Robot", "owl": "Owl" }
+    "type": { "human": "Human", "robot": "Robot", "owl": "Owl", "none": "No avatar image" }
   },
   "options": {
     "usage_context": {

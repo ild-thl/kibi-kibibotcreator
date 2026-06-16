@@ -75,7 +75,8 @@
       "title": "Dein personalisierter Avatar ist bereit",
       "subtitle": "Du kannst Deinen Avatar jetzt nutzen oder exportieren!",
       "boxTitle": "Zusammenfassung",
-      "avatarAlt": "Avatar"
+      "avatarAlt": "Avatar",
+      "noAvatar": "Kein Avatar-Bild"
     }
   },
   "summary": {
@@ -134,7 +135,7 @@
     "hairStyle": { "short": "Kurz", "long": "Lang", "curly": "Lockig" },
     "hairColor": { "black": "Schwarz", "brown": "Braun", "blond": "Blond" },
     "beard": { "none": "Kein Bart", "full": "Vollbart", "mustache": "Schnurrbart" },
-    "type": { "human": "Mensch", "robot": "Roboter", "owl": "Eule" }
+    "type": { "human": "Mensch", "robot": "Roboter", "owl": "Eule", "none": "Kein Avatar-Bild" }
   },
   "options": {
     "usage_context": {

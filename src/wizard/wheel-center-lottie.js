@@ -279,6 +279,12 @@
   }
 
   function applyWheelCenterAvatarImage(state) {
+    if (state && state.avatarType === 'none') {
+      if (window.WizardAvatar && typeof window.WizardAvatar.hideAvatarImages === 'function') {
+        window.WizardAvatar.hideAvatarImages();
+      }
+      return;
+    }
     var url = '';
     var avatarType = state && state.avatarType ? state.avatarType : 'human';
     try {
@@ -299,6 +305,10 @@
     document.querySelectorAll('.wizard-wheel-avatar img').forEach(function (img) {
       img.style.display = 'block';
     });
+    if (state && state.avatarType === 'none') {
+      applyWheelCenterAvatarImage(state);
+      return;
+    }
     if (state && state.avatarType) {
       applyWheelCenterAvatarImage(state);
     }

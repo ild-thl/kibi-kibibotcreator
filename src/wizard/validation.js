@@ -1,5 +1,6 @@
 ;(function () {
   function isAvatarStepValid(state) {
+    if (state.avatarType === 'none') return true;
     if (state.avatarType !== 'human') {
       return !!state.avatarType;
     }
