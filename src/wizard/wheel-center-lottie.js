@@ -64,7 +64,7 @@
   /** Schritt → zuletzt erfolgreich angezeigte Media-URL + Auswahl-Fingerprint (Wiederkehr auf denselben Schritt). */
   var lastWheelMediaByStep = {};
   /**
-   * Abgeschlossene Schritte: zuletzt gezeigte Step-Auswahl (nur sel unter step-NN/), unabhängig von Fingerprint.
+   * Abgeschlossene Schritte: zuletzt gezeigte Step-Auswahl (nur sel unter step-NN/) inkl. Fingerprint.
    * SVG-Klon überlebt clearLottieLayers (im Gegensatz zu lastWheelSvgByStep).
    */
   var completedStepSelectionWheelCache = {};
@@ -394,16 +394,36 @@
     return String(step) + '|' + base;
   }
 
-  function rememberLastWheelMediaForStep(stepNum, state, url) {
-    if (stepNum == null || !state || !url) return;
-    lastWheelMediaByStep[stepNum] = { url: url, fp: stepWheelFingerprint(stepNum, state) };
-  }
-
   /** Nur echte Auswahl-Medien unter assets/.../step-NN/… (keine transitions/). */
   function isStepFolderSelectionUrl(stepNum, url) {
     if (!url || typeof url !== 'string') return false;
     var seg = '/step-' + pad2(stepNum) + '/';
     return url.indexOf(seg) !== -1 && url.indexOf('/sel-') !== -1;
+  }
+
+  /** Nur Step-Auswahl (oder Schritt-0-Start) cachen – keine Übergangs-JSONs. */
+  function isWheelStepMediaCacheableUrl(stepNum, url) {
+    if (!url || typeof url !== 'string') return false;
+    if (stepNum === 0) return true;
+    if (url.indexOf('/transitions/') !== -1) return false;
+    return isStepFolderSelectionUrl(stepNum, url);
+  }
+
+  function rememberLastWheelMediaForStep(stepNum, state, url) {
+    if (stepNum == null || !state || !url) return;
+    if (!isWheelStepMediaCacheableUrl(stepNum, url)) return;
+    lastWheelMediaByStep[stepNum] = { url: url, fp: stepWheelFingerprint(stepNum, state) };
+  }
+
+  function dropCompletedStepWheelCacheIfStale(stepNum, state) {
+    if (stepNum == null || !state) return;
+    var cached = completedStepSelectionWheelCache[stepNum];
+    if (!cached) return;
+    var fp = stepWheelFingerprint(stepNum, state);
+    if (!cached.fp || cached.fp !== fp) {
+      delete completedStepSelectionWheelCache[stepNum];
+      delete completedStepWheelSvgClone[stepNum];
+    }
   }
 
   /**
@@ -415,7 +435,7 @@
     if (!isStepFolderSelectionUrl(stepNum, url)) return;
     if (!window.WizardValidation || typeof window.WizardValidation.isStepValid !== 'function') return;
     if (!window.WizardValidation.isStepValid(state, stepNum)) return;
-    completedStepSelectionWheelCache[stepNum] = { url: url };
+    completedStepSelectionWheelCache[stepNum] = { url: url, fp: stepWheelFingerprint(stepNum, state) };
     try {
       var svg = rootEl.querySelector('svg');
       if (svg) completedStepWheelSvgClone[stepNum] = svg.cloneNode(true);
@@ -748,12 +768,15 @@
     if (!wrap) return;
     abortPendingInWrap(wrap);
     var curStep = state && state.currentStep;
+    var completedHoldCache = completedStepSelectionWheelCache[curStep];
     var useCompletedHold =
       curStep != null &&
       window.WizardValidation &&
       typeof window.WizardValidation.isStepValid === 'function' &&
       window.WizardValidation.isStepValid(state, curStep) &&
-      completedStepWheelSvgClone[curStep];
+      completedStepWheelSvgClone[curStep] &&
+      completedHoldCache &&
+      completedHoldCache.fp === stepWheelFingerprint(curStep, state);
     if (useCompletedHold) {
       removeHoldFramesFromWrap(wrap);
       var ch = document.createElement('div');
@@ -915,12 +938,35 @@
     }, candidateLoadTimeoutMs(url));
   }
 
-  function transitionCandidates(fromStep, toStep) {
+  function transitionCandidates(fromStep, toStep, state) {
     var specific = BASE + 'transitions/from-step-' + pad2(fromStep) + '-to-step-' + pad2(toStep) + '.json';
     var generic = BASE + 'transitions/to-step-' + pad2(toStep) + '.json';
     var contextual = [];
-    if (fromStep !== 0 && lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
-      contextual.push(
+    var seen = {};
+    function pushContext(u) {
+      if (!u || seen[u]) return;
+      seen[u] = true;
+      contextual.push(u);
+    }
+    /*
+     * 1 -> 2: Transition aus aktuellem Step-1-State ableiten (robuster als die zuletzt
+     * aufgelöste Step-1-Media-Basis, die bei Fallbacks auf einen falschen Base-Namen zeigen kann).
+     */
+    if (fromStep === 1 && toStep === 2 && state) {
+      var canonBase12 = canonicalSelBase(state, 1);
+      if (canonBase12) {
+        pushContext(
+          BASE + 'transitions/from-step-' + pad2(fromStep) + '-sel-' + canonBase12 + '-to-step-' + pad2(toStep) + '.json'
+        );
+      }
+      var insertionBase12 = canonicalSelBaseHelpInsertionVariant(state, 1);
+      if (insertionBase12 && insertionBase12 !== canonBase12) {
+        pushContext(
+          BASE + 'transitions/from-step-' + pad2(fromStep) + '-sel-' + insertionBase12 + '-to-step-' + pad2(toStep) + '.json'
+        );
+      }
+    } else if (fromStep !== 0 && lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
+      pushContext(
         BASE +
           'transitions/from-step-' +
           pad2(fromStep) +
@@ -930,7 +976,7 @@
           pad2(toStep) +
           '.json'
       );
-      contextual.push(BASE + 'transitions/from-' + lastResolvedWheelMedia.base + '-to-step-' + pad2(toStep) + '.json');
+      pushContext(BASE + 'transitions/from-' + lastResolvedWheelMedia.base + '-to-step-' + pad2(toStep) + '.json');
     }
     /* 0→1: nur from-step-00-to-step-01.json (kein generisches to-step-01 mehr). */
     if (fromStep === 0 && toStep === 1) {
@@ -1159,19 +1205,22 @@
       return;
     }
     if (shouldSkipWheelAnimations(state)) return;
+    dropCompletedStepWheelCacheIfStale(cur, state);
     var prefUrls = [];
+    var fpNow = stepWheelFingerprint(cur, state);
     var stepComplete =
       window.WizardValidation &&
       typeof window.WizardValidation.isStepValid === 'function' &&
       window.WizardValidation.isStepValid(state, cur);
-    var selDone = stepComplete && completedStepSelectionWheelCache[cur] && completedStepSelectionWheelCache[cur].url;
+    var completedCache = completedStepSelectionWheelCache[cur];
+    var selDone =
+      stepComplete && completedCache && completedCache.url && completedCache.fp === fpNow;
     if (selDone) {
-      prefUrls.push(completedStepSelectionWheelCache[cur].url);
-      wheelAnimDebug('wheel_completed_step_url_pref', { step: cur, url: completedStepSelectionWheelCache[cur].url });
+      prefUrls.push(completedCache.url);
+      wheelAnimDebug('wheel_completed_step_url_pref', { step: cur, url: completedCache.url });
     } else {
-      var fpNow = stepWheelFingerprint(cur, state);
       var cached = lastWheelMediaByStep[cur];
-      if (cached && cached.url && cached.fp === fpNow) {
+      if (cached && cached.url && cached.fp === fpNow && isWheelStepMediaCacheableUrl(cur, cached.url)) {
         prefUrls.push(cached.url);
         wheelAnimDebug('wheel_media_cache_hit', { step: cur, fp: fpNow, url: cached.url });
       } else if (cached && cached.url) {
@@ -1184,7 +1233,7 @@
       }
     }
     var restoreUrls = restoreStepWheelCandidates(cur, state);
-    var transUrls = transitionCandidates(from, cur);
+    var transUrls = transitionCandidates(from, cur, state);
     var urls;
     /*
      * Rückwärts auf einen bereits gültigen Schritt: nur Step-Auswahl (pref + restore).
@@ -1212,6 +1261,7 @@
       return;
     }
     if (shouldSkipWheelAnimations(state)) return;
+    dropCompletedStepWheelCacheIfStale(state.currentStep, state);
     /* Bei Abwahl: meta.value ist das entfernte Item — selectionCandidates wäre falsch und liefert ohnehin []. */
     var urls =
       meta.isMulti && meta.added === false
