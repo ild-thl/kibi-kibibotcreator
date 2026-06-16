@@ -1,7 +1,16 @@
 ;(function () {
-  function label(field, key) {
-    if (window.WizardI18n && window.WizardI18n.optionLabel) {
-      return window.WizardI18n.optionLabel(field, key);
+  function label(field, key, state) {
+    if (window.WizardI18n) {
+      if (
+        state &&
+        window.WizardI18n.optionLabelForState &&
+        (field === 'personality_humor' || field === 'personality_tone' || field === 'personality_style')
+      ) {
+        return window.WizardI18n.optionLabelForState(field, key, state);
+      }
+      if (window.WizardI18n.optionLabel) {
+        return window.WizardI18n.optionLabel(field, key);
+      }
     }
     return key || '';
   }
@@ -94,16 +103,16 @@
       personalityParts.push(t('summary.personalityGreeting', { value: label('personality_greeting', state.personality_greeting) }));
     }
     if (state.personality_humor) {
-      personalityParts.push(t('summary.personalityHumor', { value: label('personality_humor', state.personality_humor) }));
+      personalityParts.push(t('summary.personalityHumor', { value: label('personality_humor', state.personality_humor, state) }));
     }
     if (state.personality_answer) {
-      personalityParts.push(t('summary.personalityAnswer', { value: label('personality_answer', state.personality_answer) }));
+      personalityParts.push(t('summary.personalityAnswer', { value: label('personality_answer', state.personality_answer, state) }));
     }
     if (state.personality_tone) {
-      personalityParts.push(t('summary.personalityTone', { value: label('personality_tone', state.personality_tone) }));
+      personalityParts.push(t('summary.personalityTone', { value: label('personality_tone', state.personality_tone, state) }));
     }
     if (state.personality_style) {
-      personalityParts.push(t('summary.personalityStyle', { value: label('personality_style', state.personality_style) }));
+      personalityParts.push(t('summary.personalityStyle', { value: label('personality_style', state.personality_style, state) }));
     }
 
     var interactionParts = [];

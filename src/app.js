@@ -440,6 +440,9 @@
     if (window.WizardI18n && window.WizardI18n.applyI18n) {
       window.WizardI18n.applyI18n(document);
     }
+    if (window.WizardSelection && typeof window.WizardSelection.syncStep2GreetingLabels === 'function') {
+      window.WizardSelection.syncStep2GreetingLabels(state);
+    }
     if (window.WizardWelcomeLottie && typeof window.WizardWelcomeLottie.refresh === 'function') {
       window.WizardWelcomeLottie.refresh();
     }

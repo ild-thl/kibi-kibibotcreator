@@ -176,6 +176,24 @@
       "persönlich": "Personal",
       "sachlich": "Factual"
     },
+    "greetingVariant": {
+      "duzen": {
+        "personality_tone": {
+          "professionell": "More formal"
+        }
+      },
+      "siezen": {
+        "personality_humor": {
+          "humorvoll": "Subtly humorous"
+        },
+        "personality_tone": {
+          "locker": "Less formal"
+        },
+        "personality_style": {
+          "persönlich": "Subtly personal"
+        }
+      }
+    },
     "interaction_workflow": {
       "schritt-für-schritt-erklären": "Explain step by step",
       "zuerst-fragen-stellen-und-dann-antworten": "Ask questions first, then answer",

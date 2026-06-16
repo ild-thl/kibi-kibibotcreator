@@ -13,6 +13,18 @@
     return '';
   }
 
+  /** Schritt-2: Button-Texte je nach Anrede (Duzen/Siezen), data-option bleibt unverändert. */
+  function syncStep2GreetingLabels(state) {
+    if (!state || !window.WizardI18n || typeof window.WizardI18n.optionLabel !== 'function') return;
+    var greeting = state.personality_greeting || '';
+    document.querySelectorAll('#step2 .card-select[data-field][data-option]').forEach(function (btn) {
+      var field = btn.dataset.field;
+      var option = readOption(btn);
+      if (!field || !option) return;
+      btn.textContent = window.WizardI18n.optionLabel(field, option, greeting);
+    });
+  }
+
   function cardSelector(field, optionKey) {
     var esc = escAttr(optionKey);
     return (
@@ -82,6 +94,10 @@
             if (state.avatarInitialized && typeof updateAvatarPreview === 'function') {
               updateAvatarPreview();
             }
+          }
+
+          if (field === 'personality_greeting') {
+            syncStep2GreetingLabels(state);
           }
 
           if (field === 'avatarType') {
@@ -180,11 +196,13 @@
         selectCard('privacy', val);
       });
     }
+    syncStep2GreetingLabels(state);
   }
 
   window.WizardSelection = {
     bindCardSelects: bindCardSelects,
     restoreSelections: restoreSelections,
+    syncStep2GreetingLabels: syncStep2GreetingLabels,
     readOption: readOption
   };
 })();

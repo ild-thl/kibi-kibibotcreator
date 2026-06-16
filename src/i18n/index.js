@@ -105,9 +105,18 @@
     return interpolate(val, vars);
   }
 
-  function optionLabel(field, optionKey) {
+  function optionLabel(field, optionKey, greeting) {
     if (!field || optionKey == null || optionKey === '') return '';
+    if (greeting === 'duzen' || greeting === 'siezen') {
+      var variant = get(messages, 'options.greetingVariant.' + greeting + '.' + field + '.' + optionKey);
+      if (typeof variant === 'string' && variant) return variant;
+    }
     return t('options.' + field + '.' + optionKey) || String(optionKey);
+  }
+
+  function optionLabelForState(field, optionKey, state) {
+    var greeting = state && state.personality_greeting;
+    return optionLabel(field, optionKey, greeting);
   }
 
   function optionLabelsJoined(field, keys) {
@@ -298,6 +307,7 @@
     setLocale: setLocale,
     t: t,
     optionLabel: optionLabel,
+    optionLabelForState: optionLabelForState,
     optionLabelsJoined: optionLabelsJoined,
     migrateState: migrateState,
     assetUrl: assetUrl,

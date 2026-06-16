@@ -176,6 +176,24 @@
       "persönlich": "Persönlich",
       "sachlich": "Sachlich"
     },
+    "greetingVariant": {
+      "duzen": {
+        "personality_tone": {
+          "professionell": "Etwas formeller"
+        }
+      },
+      "siezen": {
+        "personality_humor": {
+          "humorvoll": "Dezent humorvoll"
+        },
+        "personality_tone": {
+          "locker": "Weniger formell"
+        },
+        "personality_style": {
+          "persönlich": "Dezent persönlich"
+        }
+      }
+    },
     "interaction_workflow": {
       "schritt-für-schritt-erklären": "Schritt für Schritt erklären",
       "zuerst-fragen-stellen-und-dann-antworten": "Zuerst fragen stellen und dann antworten",
