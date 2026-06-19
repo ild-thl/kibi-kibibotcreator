@@ -757,6 +757,29 @@ header h1,
   height: auto !important;
 }
 
+/* Step-0: Karten-Wrapper neutral auf Desktop (Layout unverändert) */
+.step0-card {
+  display: contents;
+}
+
+.step0-card-title {
+  display: none;
+}
+
+#step0 .step0-lead {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-content);
+  margin: 0 0 0.75rem;
+}
+
+#step0 .step0-hint {
+  font-size: 0.875rem;
+  line-height: 1.35;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 /* Start-Button: bündig mit rechter Panel-Spalte (40 % Wheel + Gap, 60 % Button) */
 #wizardNavBar > div:has(#btnStart:not(.hidden)) {
   justify-content: flex-start;
@@ -1562,6 +1585,178 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 @media (max-width: 520px) {
+  /* ── Startseite (Mobile, 390×844-Spec) ── */
+  body:has(#step0:not(.hidden)) > div.w-screen,
+  body.wizard-on-step0 > div.w-screen {
+    padding: 32px 24px 0 !important;
+  }
+
+  body:has(#step0:not(.hidden)) > div.w-screen > header,
+  body.wizard-on-step0 > div.w-screen > header {
+    margin-bottom: 0 !important;
+    padding-right: 2rem;
+    justify-content: flex-start;
+  }
+
+  body:has(#step0:not(.hidden)) > div.w-screen > header h1,
+  body.wizard-on-step0 > div.w-screen > header h1 {
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #547399;
+    text-align: left;
+    letter-spacing: 0;
+  }
+
+  body:has(#step0:not(.hidden)) #btnSettings.settings-gear,
+  body.wizard-on-step0 #btnSettings.settings-gear {
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #547399;
+  }
+
+  body:has(#step0:not(.hidden)) #btnSettings.settings-gear:hover,
+  body.wizard-on-step0 #btnSettings.settings-gear:hover {
+    color: #3d5570;
+  }
+
+  #step0:not(.hidden) {
+    padding-top: 0 !important;
+    padding-bottom: 6.5rem;
+    min-height: auto;
+  }
+
+  #step0:not(.hidden)::before {
+    display: none;
+  }
+
+  #step0:not(.hidden) > h2.step0-desktop-title {
+    display: none;
+  }
+
+  #step0:not(.hidden) > .wizard-step-grid.step0-grid {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: auto;
+  }
+
+  #step0:not(.hidden) .wizard-col-wheel.step0-hero-wheel {
+    order: 1;
+    width: 100%;
+    margin-top: 32px;
+    margin-bottom: 26px;
+    justify-content: center;
+  }
+
+  #step0:not(.hidden) .wizard-col-wheel.step0-hero-wheel .wizard-wheel {
+    width: 260px;
+    height: 260px;
+    margin: 0 auto;
+    --wheel-hotspot-size: 3.25rem;
+  }
+
+  #step0:not(.hidden) .wizard-col-main--step0 {
+    order: 2;
+    width: 100%;
+    max-width: 342px;
+    min-height: auto;
+    padding: 0;
+    gap: 0;
+  }
+
+  #step0:not(.hidden) .step0-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 28px 20px 48px;
+  }
+
+  #step0:not(.hidden) .step0-card-title {
+    display: block;
+    margin: 0 0 20px;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #333333;
+  }
+
+  #step0:not(.hidden) .step0-lead,
+  #step0:not(.hidden) .step0-hint {
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400 !important;
+    line-height: 18px;
+    color: #333333 !important;
+  }
+
+  #step0:not(.hidden) .step0-hint {
+    margin-top: 24px;
+    color: #666666 !important;
+  }
+
+  #step0:not(.hidden) .step0-welcome-graphic {
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+
+  #step0:not(.hidden) .step0-welcome-graphic .step0-welcome-lottie {
+    width: min(100%, 220px);
+    max-height: none;
+    margin-left: auto;
+  }
+
+  body:has(#step0:not(.hidden)) #wizardNavBar,
+  body.wizard-on-step0 #wizardNavBar {
+    background: transparent !important;
+    backdrop-filter: none;
+    padding-top: 16px !important;
+    padding-bottom: calc(38px + env(safe-area-inset-bottom, 0px)) !important;
+    box-shadow: none;
+  }
+
+  body:has(#step0:not(.hidden)) #wizardNavBar > div,
+  body.wizard-on-step0 #wizardNavBar > div {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    justify-content: center;
+    column-gap: 0;
+  }
+
+  body:has(#step0:not(.hidden)) #wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStartSpacer,
+  body.wizard-on-step0 #wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStartSpacer {
+    display: none;
+  }
+
+  body:has(#step0:not(.hidden)) #btnStart,
+  body.wizard-on-step0 #btnStart {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 342px;
+    height: 48px;
+    padding: 0 1rem;
+    border-radius: 24px;
+    background-color: #a3be8c !important;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 48px;
+  }
+
+  body:has(#step0:not(.hidden)) #btnStart:hover,
+  body.wizard-on-step0 #btnStart:hover {
+    background-color: #8fad7a !important;
+  }
+
   #step0:not(.hidden) > h2,
   #step1:not(.hidden) > h2,
   #step2:not(.hidden) > h2,

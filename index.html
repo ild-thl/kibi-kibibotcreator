@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles/styles.css">
   <script src="./src/config.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
@@ -28,26 +28,9 @@
     <main id="wizardContent" class="step-enter">
       <!-- Startseite: Schritt 0 -->
       <section id="step0" class="wizard-step">
-        <h2 class="text-lg font-medium text-gray-800 mb-4" data-i18n="steps.0.title">Willkommen</h2>
-        <div class="wizard-step-grid">
-          <div class="wizard-col-main wizard-col-main--step0">
-            <div class="step0-intro">
-              <p class="wizard-question-title" data-i18n="steps.0.lead">Erstelle deinen persönlichen Avatar und passe deinen Chatbot an deine Bedürfnisse und dein Lernverhalten an.</p>
-              <p class="text-sm text-gray-500" data-i18n="steps.0.hint">
-                Auf den nächsten Seiten stellst du deinen Avatar Schritt für Schritt ein.
-              </p>
-            </div>
-            <figure class="step0-welcome-graphic">
-              <div
-                class="step0-welcome-lottie"
-                data-i18n-aria="steps.0.welcomeGraphicAlt"
-                role="img"
-                aria-label="Illustration: persönlicher Avatar und angepasster Chatbot"
-              ></div>
-            </figure>
-          </div>
-
-          <div class="wizard-col-wheel">
+        <h2 class="step0-desktop-title text-lg font-medium text-gray-800 mb-4" data-i18n="steps.0.title">Willkommen!</h2>
+        <div class="wizard-step-grid step0-grid">
+          <div class="wizard-col-wheel step0-hero-wheel">
             <div class="wizard-wheel">
               <img class="wizard-wheel-layer wizard-wheel-bg" src="./assets/wizard-wheel/light/hg.svg" alt="" aria-hidden="true" />
               <img class="wizard-wheel-layer wizard-wheel-progress" src="./assets/wizard-wheel/light/alle_antw_off.svg" alt="" aria-hidden="true" />
@@ -55,6 +38,26 @@
               <div class="wizard-wheel-avatar">
                 <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E" data-i18n-alt="wheel.avatarPreviewAlt" alt="Avatar Vorschau" />
               </div>
+            </div>
+          </div>
+
+          <div class="wizard-col-main wizard-col-main--step0">
+            <div class="step0-card">
+              <h3 class="step0-card-title" data-i18n="steps.0.title">Willkommen!</h3>
+              <div class="step0-intro">
+                <p class="step0-lead" data-i18n="steps.0.lead">Erstelle deinen persönlichen Avatar und passe deinen Chatbot an deine Bedürfnisse und dein Lernverhalten an.</p>
+                <p class="step0-hint" data-i18n="steps.0.hint">
+                  Auf den nächsten Seiten stellst du deinen Avatar Schritt für Schritt ein.
+                </p>
+              </div>
+              <figure class="step0-welcome-graphic">
+                <div
+                  class="step0-welcome-lottie"
+                  data-i18n-aria="steps.0.welcomeGraphicAlt"
+                  role="img"
+                  aria-label="Illustration: persönlicher Avatar und angepasster Chatbot"
+                ></div>
+              </figure>
             </div>
           </div>
 

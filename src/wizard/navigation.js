@@ -48,6 +48,7 @@
     var saveBtnEl = document.getElementById('btnSave');
     var settingsBtnEl = document.getElementById('btnSettings');
     if (navBarEl) navBarEl.classList.remove('hidden');
+    document.body.classList.toggle('wizard-on-step0', state.currentStep === 0);
     if (startSpacerEl) startSpacerEl.classList.toggle('hidden', state.currentStep !== 0);
     if (startBtnEl) startBtnEl.classList.toggle('hidden', state.currentStep !== 0);
     if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
