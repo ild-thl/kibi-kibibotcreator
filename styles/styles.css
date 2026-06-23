@@ -442,6 +442,16 @@ body {
   border-color: var(--color-input-focus) !important;
 }
 
+.page-title {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  color: #111827;
+}
+
 header h1,
 .wizard-step h2,
 .wizard-question-title,
@@ -1609,9 +1619,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     justify-content: flex-start;
   }
 
-  body:has(#step0:not(.hidden)) > div.w-screen > header h1,
-  body.wizard-on-step0 > div.w-screen > header h1 {
-    font-family: 'Open Sans', 'Inter', sans-serif;
+  body:has(#step0:not(.hidden)) > div.w-screen > header .page-title,
+  body.wizard-on-step0 > div.w-screen > header .page-title {
+    font-family: 'Open Sans', sans-serif;
     font-size: 18px;
     font-weight: 700;
     line-height: 1.3;
