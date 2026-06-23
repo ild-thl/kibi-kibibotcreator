@@ -1599,7 +1599,13 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   body:has(#step0:not(.hidden)) > div.w-screen > header,
   body.wizard-on-step0 > div.w-screen > header {
     margin-bottom: 0 !important;
+    width: 100%;
+    max-width: 342px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
     padding-right: 2rem;
+    box-sizing: border-box;
     justify-content: flex-start;
   }
 
