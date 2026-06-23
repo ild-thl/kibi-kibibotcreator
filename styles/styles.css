@@ -1751,7 +1751,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   #step0:not(.hidden) .step0-hint {
-    margin-top: 24px;
+    margin-top: 8px;
     color: #666666 !important;
   }
 
