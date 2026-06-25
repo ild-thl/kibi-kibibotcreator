@@ -7,6 +7,9 @@
   --wheel-inner-bg: url("../assets/wizard-wheel/light/innenkreis.svg");
   --wizard-wheel-size: 480px;
   --wheel-hotspot-size: 6.25rem;
+  /* Innenkreis: innenkreis.svg-Kreis ≈ 49,4 % der ViewBox → ~50 % Wheel-Durchmesser */
+  --wizard-wheel-inner-ratio: 50%;
+  --wizard-wheel-inner-bg-size: 202%;
 }
 
 :root,
@@ -1020,8 +1023,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
-  width: 42%;
-  height: 42%;
+  width: var(--wizard-wheel-inner-ratio);
+  height: var(--wizard-wheel-inner-ratio);
   border-radius: 999px;
   overflow: hidden;
   display: flex;
@@ -1040,11 +1043,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   background-image: var(--wheel-inner-bg);
   background-position: center;
   background-repeat: no-repeat;
-  /*
-   * innenkreis.svg: Kreis ~49 % des ViewBox – auf ~50 % Wheel-Durchmesser skalieren
-   * (einheitlich Schritt 0–8; 132 % war auf den Schritten 1–8 zu klein).
-   */
-  background-size: 236% 236%;
+  background-size: var(--wizard-wheel-inner-bg-size) var(--wizard-wheel-inner-bg-size);
 }
 
 .avatar-lottie-root {
@@ -1087,10 +1086,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
 .wizard-wheel-avatar .wheel-center-lottie--start svg,
 .wizard-wheel-avatar .wheel-center-lottie--start .wheel-center-start-fallback {
-  width: 58% !important;
-  height: 58% !important;
-  max-width: 58%;
-  max-height: 58%;
+  width: 65% !important;
+  height: 65% !important;
+  max-width: 65%;
+  max-height: 65%;
   margin: auto;
   display: block;
   object-fit: contain;
