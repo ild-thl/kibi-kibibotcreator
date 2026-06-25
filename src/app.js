@@ -202,6 +202,7 @@
         updateAvatarPreview: updateAvatarPreview,
         updateNameInputState: updateNameInputState,
         updateWizardWheel: updateWizardWheelGraphics,
+        syncNextButtonMuted: syncNextButtonMuted,
         onWheelSelection: function (s, meta) {
           if (window.WizardWheelCenter && window.WizardWheelCenter.notifySelection) {
             window.WizardWheelCenter.notifySelection(s, meta);
@@ -219,7 +220,28 @@
     }
   }
 
+  /** Schritt 1: Auswahl aus dem DOM übernehmen (falls Klicks den State nicht gesetzt haben). */
+  function syncCurrentStepSelectionsFromDom() {
+    if (state.currentStep !== 1) return;
+    var section = document.getElementById('step1');
+    if (!section || section.classList.contains('hidden')) return;
+    var readOption =
+      window.WizardSelection && window.WizardSelection.readOption
+        ? window.WizardSelection.readOption
+        : null;
+    if (!readOption) return;
+    var usageBtn = section.querySelector('.card-select[data-field="usage_context"].selected');
+    state.usage_context = usageBtn ? readOption(usageBtn) : '';
+    state.help_context = Array.prototype.map.call(
+      section.querySelectorAll('.card-select[data-field="help_context"].selected'),
+      readOption
+    );
+  }
+
   function isCurrentStepValid() {
+    if (state.currentStep === 1) {
+      syncCurrentStepSelectionsFromDom();
+    }
     if (state.currentStep === 3) {
       const input = document.getElementById('inputName');
       if (input) state.name = input.value.trim();
@@ -231,6 +253,8 @@
   }
 
   function showValidationMessage(message) {
+    hideSettingsModal();
+    document.body.classList.add('validation-modal-open');
     var msg = message || (
       window.WizardI18n && window.WizardI18n.t
         ? window.WizardI18n.t('validation.default')
@@ -249,6 +273,7 @@
   }
 
   function hideValidationMessage() {
+    document.body.classList.remove('validation-modal-open');
     if (window.WizardUiUtils && window.WizardUiUtils.hideById) {
       window.WizardUiUtils.hideById('validationModal');
       return;
@@ -529,6 +554,8 @@
 
     if (nextBtn) nextBtn.addEventListener('click', next);
     if (startBtn) startBtn.addEventListener('click', startWizard);
+    const startBtnInline = document.getElementById('btnStartInline');
+    if (startBtnInline) startBtnInline.addEventListener('click', startWizard);
     if (backBtn) backBtn.addEventListener('click', back);
     if (saveBtn) saveBtn.addEventListener('click', save);
     if (settingsBtn) settingsBtn.addEventListener('click', showSettingsModal);
@@ -565,11 +592,26 @@
     }
 
     if (validationOk) {
-      validationOk.addEventListener('click', hideValidationMessage);
+      validationOk.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        hideValidationMessage();
+      });
     }
     if (validationModal) {
+      var validationCard = validationModal.querySelector('.modal-card');
+      if (validationCard) {
+        validationCard.addEventListener('click', function (e) {
+          e.stopPropagation();
+        });
+      }
       validationModal.addEventListener('click', function (e) {
-        if (e.target === validationModal) hideValidationMessage();
+        if (
+          e.target === validationModal ||
+          (e.target.classList && e.target.classList.contains('modal-backdrop'))
+        ) {
+          hideValidationMessage();
+        }
       });
     }
 
@@ -578,6 +620,14 @@
         hideValidationMessage();
         hideSettingsModal();
       }
+    });
+
+    var layoutResizeTimer;
+    window.addEventListener('resize', function () {
+      if (layoutResizeTimer) clearTimeout(layoutResizeTimer);
+      layoutResizeTimer = setTimeout(function () {
+        updateUI();
+      }, 150);
     });
   }
 

@@ -38,10 +38,13 @@
     var updateAvatarPreview = deps && deps.updateAvatarPreview;
     var updateNameInputState = deps && deps.updateNameInputState;
     var updateWizardWheel = deps && deps.updateWizardWheel;
+    var syncNextButtonMuted = deps && deps.syncNextButtonMuted;
     var onWheelSelection = deps && deps.onWheelSelection;
 
     document.querySelectorAll('.card-select').forEach(function (btn) {
       if (btn.classList.contains('avatar-opt')) return;
+      if (btn.dataset.selectBound === 'true') return;
+      btn.dataset.selectBound = 'true';
       btn.addEventListener('click', function () {
         const field = this.dataset.field;
         const isMulti = this.dataset.multi === 'true';
@@ -134,6 +137,7 @@
         }
 
         if (typeof updateWizardWheel === 'function') updateWizardWheel();
+        if (typeof syncNextButtonMuted === 'function') syncNextButtonMuted();
       });
     });
   }

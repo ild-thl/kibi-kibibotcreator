@@ -52,6 +52,14 @@ const server = http.createServer((req, res) => {
     }
 
     if (!fs.existsSync(target) || fs.statSync(target).isDirectory()) {
+      // Nur "route"-Pfad ohne Dateiendung auf index.html umbiegen.
+      // Für fehlende Assets (*.svg, *.json, ...) immer 404 liefern.
+      const requestedExt = path.extname(filePath || '').toLowerCase();
+      if (requestedExt) {
+        res.writeHead(404);
+        res.end('Not found');
+        return;
+      }
       // Fallback: index.html (SPA-like), sonst 404
       const idx = path.join(rootDir, 'index.html');
       if (fs.existsSync(idx)) {

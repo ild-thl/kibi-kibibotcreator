@@ -369,13 +369,58 @@ body {
   animation: modalPop 260ms ease-out;
 }
 
-/* Über #wizardNavBar (60): kompletter Viewport inkl. Zurück/Weiter ausgrauen. */
+/* Über #wizardNavBar (60): Validierung blockiert Footer-Klicks. */
 #validationModal.modal-overlay {
-  z-index: 70;
+  z-index: 100;
 }
 
-/* Footer muss immer über den Step-Inhalten liegen */
-#wizardNavBar {
+body.validation-modal-open #wizardNavBar {
+  pointer-events: none;
+}
+
+body.validation-modal-open #settingsModal {
+  display: none !important;
+}
+
+#validationModal.modal-overlay:not(.hidden) {
+  pointer-events: auto;
+}
+
+#validationModal.modal-overlay:not(.hidden) .modal-backdrop {
+  z-index: 0;
+  pointer-events: auto;
+}
+
+#validationModal.modal-overlay:not(.hidden) .modal-card {
+  z-index: 1;
+  position: relative;
+  pointer-events: auto;
+}
+
+#validationModal.modal-overlay:not(.hidden) #validationOk {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Ab Schritt 1: Footer im Dokumentfluss (alle Viewports), keine Überlagerung der Optionen */
+body.wizard-nav-visible #wizardNavBar,
+#wizardNavBar.wizard-nav-in-flow {
+  position: static !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100%;
+  margin-top: 1rem;
+  box-shadow: none;
+  z-index: auto;
+}
+
+body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
+  padding-bottom: 2rem;
+}
+
+/* Footer muss über Step-Inhalten liegen, nur wenn er fixiert ist (Startseite Desktop) */
+#wizardNavBar.fixed {
   z-index: 60;
 }
 
@@ -621,7 +666,6 @@ header h1,
 }
 
 /* Ein einzelner weißer Panel-Hintergrund pro Step (inkl. Überschrift) */
-#step0:not(.hidden),
 #step1:not(.hidden),
 #step2:not(.hidden),
 #step3:not(.hidden),
@@ -633,6 +677,11 @@ header h1,
   position: relative;
   /* Weiße Panel-Box soll bis kurz über die fixe Navigation reichen */
   min-height: calc(100dvh - 16rem);
+  padding-bottom: 0.75rem;
+}
+
+#step0:not(.hidden) {
+  position: relative;
   padding-bottom: 0.75rem;
 }
 
@@ -784,6 +833,10 @@ header h1,
   display: none;
 }
 
+.step0-start-action {
+  display: none;
+}
+
 #step0 .step0-lead {
   font-size: 1rem;
   font-weight: 600;
@@ -909,7 +962,6 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 /* Schritt-Überschrift soll über den Fragen rechts stehen */
-#step0:not(.hidden),
 #step1:not(.hidden),
 #step2:not(.hidden),
 #step3:not(.hidden),
@@ -921,6 +973,15 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   display: grid;
   grid-template-columns: 0.4fr 0.6fr;
   grid-template-rows: auto 1fr;
+}
+
+@media (min-width: 1025px) {
+  #step0:not(.hidden) {
+    display: grid;
+    grid-template-columns: 0.4fr 0.6fr;
+    grid-template-rows: auto 1fr;
+    min-height: calc(100dvh - 16rem);
+  }
 }
 
 #step0:not(.hidden) > h2,
@@ -1475,10 +1536,25 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     padding-bottom: 5.5rem !important;
   }
 
+  /* Fixer Footer: genug Scroll-Reserve, damit untere Optionen nicht verdeckt werden */
+  body.wizard-nav-visible > div.w-screen {
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
+    padding-bottom: 1.25rem;
+  }
+
   /* Auf schmalen Screens normale Struktur: Überschrift wieder oberhalb */
   #step0:not(.hidden) {
-    display: block;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
     padding-top: 1rem;
+    padding-bottom: 0;
   }
   #step1:not(.hidden),
   #step2:not(.hidden),
@@ -1677,8 +1753,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   #step0:not(.hidden) {
     padding-top: 0 !important;
-    padding-bottom: 6.5rem;
-    min-height: auto;
+    padding-bottom: calc(38px + env(safe-area-inset-bottom, 0px)) !important;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   #step0:not(.hidden)::before {
@@ -1716,9 +1794,12 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     order: 2;
     width: 100%;
     max-width: 342px;
-    min-height: auto;
+    min-height: 0 !important;
     padding: 0;
     gap: 0;
+    justify-content: flex-start;
+    grid-column: auto;
+    grid-row: auto;
   }
 
   #step0:not(.hidden) .step0-card {
@@ -1766,46 +1847,46 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     margin-left: auto;
   }
 
-  body:has(#step0:not(.hidden)) #wizardNavBar,
-  body.wizard-on-step0 #wizardNavBar {
-    background: transparent !important;
-    backdrop-filter: none;
-    padding-top: 16px !important;
-    padding-bottom: calc(38px + env(safe-area-inset-bottom, 0px)) !important;
-    box-shadow: none;
-  }
-
-  body:has(#step0:not(.hidden)) #wizardNavBar > div,
-  body.wizard-on-step0 #wizardNavBar > div {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+  #step0:not(.hidden) > .step0-start-action {
+    display: flex;
     justify-content: center;
-    column-gap: 0;
-  }
-
-  body:has(#step0:not(.hidden)) #wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStartSpacer,
-  body.wizard-on-step0 #wizardNavBar > div:has(#btnStart:not(.hidden)) #btnStartSpacer {
-    display: none;
-  }
-
-  body:has(#step0:not(.hidden)) #btnStart,
-  body.wizard-on-step0 #btnStart {
-    flex: 0 0 auto;
     width: 100%;
     max-width: 342px;
+    margin-top: 16px;
+    margin-bottom: 0;
+    padding: 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  #step0:not(.hidden) .step0-start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 342px;
+    max-width: 100%;
+    min-width: 0;
     height: 48px;
-    padding: 0 1rem;
+    padding: 0 16px;
+    border: none;
     border-radius: 24px;
-    background-color: #a3be8c !important;
+    background-color: #a3be8c;
+    color: #ffffff;
     font-family: 'Open Sans', 'Inter', sans-serif;
     font-size: 18px;
     font-weight: 600;
-    line-height: 48px;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    box-sizing: border-box;
   }
 
-  body:has(#step0:not(.hidden)) #btnStart:hover,
-  body.wizard-on-step0 #btnStart:hover {
-    background-color: #8fad7a !important;
+  #step0:not(.hidden) .step0-start-btn:hover {
+    background-color: #8fad7a;
+  }
+
+  #step0:not(.hidden) .step0-start-btn.hidden {
+    display: none;
   }
 
   #step0:not(.hidden) > h2,
@@ -1830,10 +1911,6 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step6:not(.hidden),
   #step7:not(.hidden),
   #step8:not(.hidden) {
-    padding-top: 0.9rem;
-  }
-
-  #step0:not(.hidden) {
     padding-top: 0.9rem;
   }
 
@@ -1891,6 +1968,25 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step3 .name-options .card-select[data-suggestion=""] {
     width: 100%;
     white-space: normal;
+  }
+
+  /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */
+  html {
+    overflow-x: hidden;
+  }
+
+  body.wizard-on-step0 > div.w-screen,
+  body:has(#step0:not(.hidden)) > div.w-screen {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 32px 24px 0 !important;
+    box-sizing: border-box;
+  }
+
+  body.wizard-on-step0 #step0:not(.hidden) > .wizard-step-grid.step0-grid {
+    min-height: 0;
+    overflow: visible;
+    flex-shrink: 0;
   }
 }
 

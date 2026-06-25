@@ -43,14 +43,26 @@
     var navBarEl = document.getElementById('wizardNavBar');
     var startSpacerEl = document.getElementById('btnStartSpacer');
     var startBtnEl = document.getElementById('btnStart');
+    var startBtnInlineEl = document.getElementById('btnStartInline');
     var backBtnEl = document.getElementById('btnBack');
     var nextBtnEl = document.getElementById('btnNext');
     var saveBtnEl = document.getElementById('btnSave');
     var settingsBtnEl = document.getElementById('btnSettings');
-    if (navBarEl) navBarEl.classList.remove('hidden');
+    var mobileStep0Start = state.currentStep === 0 && window.matchMedia('(max-width: 520px)').matches;
+    var navInFlow = state.currentStep > 0 && !mobileStep0Start;
+    if (navBarEl) {
+      navBarEl.classList.toggle('hidden', mobileStep0Start);
+      navBarEl.classList.toggle('wizard-nav-in-flow', navInFlow);
+      navBarEl.classList.toggle('fixed', !navInFlow && !mobileStep0Start);
+      navBarEl.classList.toggle('bottom-0', !navInFlow && !mobileStep0Start);
+      navBarEl.classList.toggle('left-0', !navInFlow && !mobileStep0Start);
+      navBarEl.classList.toggle('right-0', !navInFlow && !mobileStep0Start);
+    }
     document.body.classList.toggle('wizard-on-step0', state.currentStep === 0);
-    if (startSpacerEl) startSpacerEl.classList.toggle('hidden', state.currentStep !== 0);
-    if (startBtnEl) startBtnEl.classList.toggle('hidden', state.currentStep !== 0);
+    document.body.classList.toggle('wizard-nav-visible', navInFlow);
+    if (startSpacerEl) startSpacerEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
+    if (startBtnEl) startBtnEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
+    if (startBtnInlineEl) startBtnInlineEl.classList.toggle('hidden', state.currentStep !== 0 || !mobileStep0Start);
     if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
     if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === totalSteps);
     if (nextBtnEl) {

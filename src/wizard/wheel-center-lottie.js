@@ -337,6 +337,12 @@
     return text.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
   }
 
+  function isLikelySvgDocument(text) {
+    if (!text || typeof text !== 'string') return false;
+    var trimmed = text.trim().toLowerCase();
+    return trimmed.indexOf('<svg') === 0 || trimmed.indexOf('<?xml') === 0;
+  }
+
   /**
    * Vor jeder *.json-URL wird dieselbe Basis-URL mit *.svg eingefügt (wenn noch nicht in der Liste).
    * Liegt eine passende SVG-Datei vor, wird sie statt der Lottie-Animation angezeigt.
@@ -680,6 +686,11 @@
       })
       .then(function (text) {
         if (settled) return;
+        if (!isLikelySvgDocument(text)) {
+          markMediaMissing(url);
+          wheelAnimDebug('svg_invalid_payload', { url: url, index: index });
+          throw new Error('invalid_svg_payload');
+        }
         root.innerHTML = sanitizeSvgText(text);
         if (settled) return;
         markMediaAvailable(url);
@@ -1334,6 +1345,7 @@
         return r.text();
       })
       .then(function (text) {
+        if (!isLikelySvgDocument(text)) throw new Error('svg');
         root.innerHTML = sanitizeSvgText(text);
         var svg = root.querySelector('svg');
         if (!svg) throw new Error('svg');
