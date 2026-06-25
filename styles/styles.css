@@ -5,6 +5,8 @@
   --color-text-muted: #4b5563;
   --color-text-label: #374151;
   --wheel-inner-bg: url("../assets/wizard-wheel/light/innenkreis.svg");
+  --wizard-wheel-size: 480px;
+  --wheel-hotspot-size: 6.25rem;
 }
 
 :root,
@@ -877,12 +879,10 @@ header h1,
 
 .wizard-wheel {
   position: relative;
-  width: 420px;
-  height: 420px;
+  width: var(--wizard-wheel-size);
+  height: var(--wizard-wheel-size);
   margin: 0 auto;
   aspect-ratio: 1;
-  /* Einheitliche Größe der Ring-Klickflächen (Schritt 1–8). */
-  --wheel-hotspot-size: 5.5rem;
 }
 
 /* Gestapelte SVGs: HG unten, Fortschritt, Schritt-Overlay; Avatar darüber (siehe .wizard-wheel-avatar). */
@@ -1643,7 +1643,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   .wizard-wheel {
-    width: min(420px, 100%);
+    width: min(var(--wizard-wheel-size), 100%);
     height: auto;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -1684,6 +1684,11 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 @media (max-width: 520px) {
+  :root {
+    --wizard-wheel-size: 300px;
+    --wheel-hotspot-size: 3.75rem;
+  }
+
   /* ── Startseite (Mobile, 390×844-Spec) ── */
   body:has(#step0:not(.hidden)) > div.w-screen,
   body.wizard-on-step0 > div.w-screen {
@@ -1784,10 +1789,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   #step0:not(.hidden) .wizard-col-wheel.step0-hero-wheel .wizard-wheel {
-    width: 260px;
-    height: 260px;
+    width: var(--wizard-wheel-size);
+    height: var(--wizard-wheel-size);
     margin: 0 auto;
-    --wheel-hotspot-size: 3.25rem;
   }
 
   #step0:not(.hidden) .wizard-col-main--step0 {
@@ -2026,10 +2030,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step6:not(.hidden) .wizard-col-wheel .wizard-wheel,
   #step7:not(.hidden) .wizard-col-wheel .wizard-wheel,
   #step8:not(.hidden) .wizard-col-wheel .wizard-wheel {
-    width: 260px;
-    height: 260px;
+    width: var(--wizard-wheel-size);
+    height: var(--wizard-wheel-size);
     margin: 0 auto;
-    --wheel-hotspot-size: 3.25rem;
   }
 
   #step1:not(.hidden) > h2,
