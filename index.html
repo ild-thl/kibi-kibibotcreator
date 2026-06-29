@@ -444,7 +444,10 @@
 
     <!-- Navigation -->
     <footer id="wizardNavBar" class="fixed bottom-0 left-0 right-0 backdrop-blur py-4 px-6 safe-area-pb hidden">
-      <div class="w-screen mx-auto flex gap-3 px-16">
+      <div id="wizardNavStepGap" class="wizard-nav-step-gap hidden" aria-hidden="true">
+        <p id="wizardStepIndicator" class="wizard-step-indicator"></p>
+      </div>
+      <div class="wizard-nav-actions w-screen mx-auto flex gap-3 px-16">
         <div id="btnStartSpacer" class="flex-1 hidden" aria-hidden="true"></div>
         <button type="button" id="btnStart" class="flex-1 py-3.5 rounded-2xl font-semibold transition-colors hidden" data-i18n="nav.start">Start</button>
         <button type="button" id="btnBack" class="flex-1 py-3.5 rounded-2xl border-2 border-gray-200 bg-white font-medium text-gray-700 hover:bg-gray-50 transition-colors hidden" data-i18n="nav.back">Zurück</button>

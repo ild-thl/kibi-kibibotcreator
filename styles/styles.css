@@ -468,6 +468,21 @@ body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
   background: var(--color-nav-bar-bg) !important;
 }
 
+.wizard-nav-step-gap {
+  display: none;
+}
+
+.wizard-step-indicator {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13pt;
+  font-weight: 600;
+  line-height: 1;
+  color: #547399;
+  text-align: center;
+}
+
 #validationOk {
   background: var(--color-accent);
 }
@@ -1690,6 +1705,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-card-title-height: 69px;
     --wizard-mobile-heading-to-wheel: 38px;
     --wizard-mobile-page-title-height: calc(18px * 1.3 * 2);
+    --wizard-mobile-wheel-to-card-step0: 8px;
+    --wizard-mobile-wheel-to-card: 8px;
+    --wizard-mobile-card-to-nav: 29px;
+    --wizard-mobile-card-to-nav-step0: 16px;
   }
 
   /* ── Startseite (Mobile, 390×844-Spec) ── */
@@ -1783,7 +1802,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     order: 1;
     width: 100%;
     margin-top: calc(var(--wizard-mobile-heading-to-wheel) - var(--wizard-mobile-page-title-height));
-    margin-bottom: 8px;
+    margin-bottom: var(--wizard-mobile-wheel-to-card-step0);
     justify-content: center;
   }
 
@@ -1858,7 +1877,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     justify-content: center;
     width: 100%;
     max-width: 342px;
-    margin-top: 29px;
+    margin-top: var(--wizard-mobile-card-to-nav-step0);
     margin-bottom: 0;
     padding: 0;
     box-sizing: border-box;
@@ -2015,7 +2034,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     width: 100%;
     max-width: 342px;
     margin-top: calc(var(--wizard-mobile-heading-to-wheel) - var(--wizard-mobile-page-title-height));
-    margin-bottom: 8px;
+    margin-bottom: var(--wizard-mobile-wheel-to-card);
     display: flex;
     justify-content: center;
   }
@@ -2119,12 +2138,14 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   body.wizard-nav-visible #wizardNavBar {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     width: 100%;
     max-width: 342px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 29px;
+    margin-top: 0;
     margin-bottom: 0;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
@@ -2134,7 +2155,18 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     backdrop-filter: none;
   }
 
-  body.wizard-nav-visible #wizardNavBar > div {
+  body.wizard-nav-visible .wizard-nav-step-gap:not(.hidden) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 342px;
+    height: var(--wizard-mobile-card-to-nav);
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  body.wizard-nav-visible #wizardNavBar > .wizard-nav-actions {
     width: 100% !important;
     max-width: 342px;
     padding-left: 0 !important;

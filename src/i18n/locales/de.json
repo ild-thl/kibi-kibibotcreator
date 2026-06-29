@@ -109,7 +109,8 @@
     "next": "Weiter",
     "summary": "Zusammenfassung",
     "survey": "Weiter zur Umfrage",
-    "stepStart": "Start"
+    "stepStart": "Start",
+    "stepOf": "Schritt {{current}} von {{total}}"
   },
   "validation": {
     "default": "Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.",

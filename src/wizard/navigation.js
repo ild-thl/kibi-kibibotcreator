@@ -60,6 +60,25 @@
     }
     document.body.classList.toggle('wizard-on-step0', state.currentStep === 0);
     document.body.classList.toggle('wizard-nav-visible', navInFlow);
+
+    var stepGapEl = document.getElementById('wizardNavStepGap');
+    var stepIndicatorEl = document.getElementById('wizardStepIndicator');
+    var showMobileNavGap = navInFlow && mobileStep0Start === false && window.matchMedia('(max-width: 520px)').matches;
+    var showStepIndicator = showMobileNavGap && state.currentStep >= 1 && state.currentStep <= 8;
+    if (stepGapEl) {
+      stepGapEl.classList.toggle('hidden', !showMobileNavGap);
+      stepGapEl.setAttribute('aria-hidden', showStepIndicator ? 'false' : 'true');
+    }
+    if (stepIndicatorEl) {
+      if (showStepIndicator) {
+        stepIndicatorEl.textContent = window.WizardI18n && window.WizardI18n.t
+          ? window.WizardI18n.t('nav.stepOf', { current: state.currentStep, total: 8 })
+          : 'Schritt ' + state.currentStep + ' von 8';
+      } else {
+        stepIndicatorEl.textContent = '';
+      }
+    }
+
     if (startSpacerEl) startSpacerEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
     if (startBtnEl) startBtnEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
     if (startBtnInlineEl) startBtnInlineEl.classList.toggle('hidden', state.currentStep !== 0 || !mobileStep0Start);
