@@ -38,7 +38,8 @@ function safePath(urlPath) {
 
 const server = http.createServer((req, res) => {
   try {
-    const urlPath = req.url || '/';
+    const rawUrl = req.url || '/';
+    const urlPath = rawUrl.split('?')[0].split('#')[0];
     const filePath = safePath(urlPath);
     if (!filePath) {
       res.writeHead(400);
@@ -47,7 +48,7 @@ const server = http.createServer((req, res) => {
     }
 
     let target = filePath;
-    if (req.url === '/' || req.url === '') {
+    if (urlPath === '/' || urlPath === '') {
       target = path.join(rootDir, 'index.html');
     }
 

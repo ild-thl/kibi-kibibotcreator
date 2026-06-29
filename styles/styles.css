@@ -476,7 +476,7 @@ body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
-  font-size: 13pt;
+  font-size: var(--wizard-mobile-font-step-indicator, 13px);
   font-weight: 600;
   line-height: 1;
   color: #547399;
@@ -1702,7 +1702,22 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-wheel-size: 245px;
     --wheel-hotspot-size: 3.0625rem;
     --wizard-mobile-card-height: 375px;
-    --wizard-mobile-card-title-height: 69px;
+    --wizard-mobile-card-pad-top: 28px;
+    --wizard-mobile-card-pad-x: 20px;
+    --wizard-mobile-card-heading-to-question: 20px;
+    --wizard-mobile-question-to-option: 18px;
+    --wizard-mobile-option-gap: 14px;
+    --wizard-mobile-section-gap: 20px;
+    --wizard-mobile-font-heading: 16px;
+    --wizard-mobile-font-body: 14px;
+    --wizard-mobile-font-step-indicator: 13px;
+    --wizard-mobile-line-height-heading: 20px;
+    --wizard-mobile-line-height-body: 18px;
+    --wizard-mobile-main-pad-bottom: 48px;
+    --wizard-mobile-card-title-height: calc(
+      var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
+        var(--wizard-mobile-card-heading-to-question)
+    );
     --wizard-mobile-heading-to-wheel: 38px;
     --wizard-mobile-page-title-height: calc(18px * 1.3 * 2);
     --wizard-mobile-wheel-to-card-step0: 8px;
@@ -2066,13 +2081,14 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     box-sizing: border-box;
     background: #ffffff;
     border-radius: 15px 15px 0 0;
-    padding: 28px 20px 20px;
-    margin: 0;
+    padding: var(--wizard-mobile-card-pad-top) var(--wizard-mobile-card-pad-x)
+      var(--wizard-mobile-card-heading-to-question);
+    margin: 0 !important;
     flex-shrink: 0;
     font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: 16px;
+    font-size: var(--wizard-mobile-font-heading);
     font-weight: 600;
-    line-height: 1.3;
+    line-height: var(--wizard-mobile-line-height-heading);
     color: #333333;
   }
 
@@ -2098,11 +2114,36 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     box-sizing: border-box;
     background: #ffffff;
     border-radius: 0 0 15px 15px;
-    padding: 0 20px 48px;
+    padding: 0 var(--wizard-mobile-card-pad-x);
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important;
     height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-card-title-height));
     min-height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-card-title-height));
-    overflow-y: auto;
+    overflow: hidden;
+  }
+
+  #step1:not(.hidden) .wizard-col-main::after,
+  #step2:not(.hidden) .wizard-col-main::after,
+  #step3:not(.hidden) .wizard-col-main::after,
+  #step4:not(.hidden) .wizard-col-main::after,
+  #step5:not(.hidden) .wizard-col-main::after,
+  #step6:not(.hidden) .wizard-col-main::after,
+  #step7:not(.hidden) .wizard-col-main::after,
+  #step8:not(.hidden) .wizard-col-main::after,
+  #step1:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step2:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step3:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step4:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step5:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step6:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step7:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step8:not(.hidden) .wizard-col-side:not(:empty)::after {
+    content: '';
+    display: block;
+    flex: 0 0 var(--wizard-mobile-main-pad-bottom);
+    min-height: var(--wizard-mobile-main-pad-bottom);
   }
 
   #step1:not(.hidden) .wizard-question-title,
@@ -2114,11 +2155,176 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step7:not(.hidden) .wizard-question-title,
   #step8:not(.hidden) .wizard-question-title {
     font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: var(--wizard-mobile-font-body);
     font-weight: 600;
-    line-height: 18px;
+    line-height: var(--wizard-mobile-line-height-body);
     color: #333333;
-    margin-bottom: 12px;
+    margin-top: 0 !important;
+    margin-bottom: var(--wizard-mobile-question-to-option) !important;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step2:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step3:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step4:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step5:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step6:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step7:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step8:not(.hidden) .wizard-col-main .grid.gap-3 + .wizard-question-title,
+  #step1:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title,
+  #step2:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title,
+  #step3:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title,
+  #step4:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title,
+  #step5:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title,
+  #step6:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title,
+  #step7:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title,
+  #step8:not(.hidden) .wizard-col-side .grid.gap-3 + .wizard-question-title {
+    margin-top: var(--wizard-mobile-section-gap) !important;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step2:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step3:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step4:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step5:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step6:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step7:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step8:not(.hidden) .wizard-col-main .grid.gap-3,
+  #step1:not(.hidden) .wizard-col-side .grid.gap-3,
+  #step2:not(.hidden) .wizard-col-side .grid.gap-3,
+  #step3:not(.hidden) .wizard-col-side .grid.gap-3,
+  #step4:not(.hidden) .wizard-col-side .grid.gap-3,
+  #step5:not(.hidden) .wizard-col-side .grid.gap-3,
+  #step6:not(.hidden) .wizard-col-side .grid.gap-3,
+  #step7:not(.hidden) .wizard-col-side .grid.gap-3,
+  #step8:not(.hidden) .wizard-col-side .grid.gap-3 {
+    gap: var(--wizard-mobile-option-gap) !important;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step2:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step3:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step4:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step5:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step6:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step7:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step8:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt),
+  #step1:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
+  #step2:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
+  #step3:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
+  #step4:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
+  #step5:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
+  #step6:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
+  #step7:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
+  #step8:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt) {
+    padding: 0 0 0 calc(18px + 10px) !important;
+    font-size: var(--wizard-mobile-font-body) !important;
+    font-weight: 500 !important;
+    line-height: var(--wizard-mobile-line-height-body) !important;
+    min-height: var(--wizard-mobile-line-height-body);
+    clip-path: none;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step2:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step3:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step4:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step5:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step6:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step7:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step8:not(.hidden) .wizard-col-main .card-select:not(.avatar-opt)::before,
+  #step1:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before,
+  #step2:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before,
+  #step3:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before,
+  #step4:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before,
+  #step5:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before,
+  #step6:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before,
+  #step7:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before,
+  #step8:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt)::before {
+    left: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step2:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step3:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step4:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step5:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step6:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step7:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step8:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step1:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step2:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step3:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step4:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step5:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step6:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step7:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
+  #step8:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before {
+    border-color: #547399;
+    background: #547399;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step2:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step3:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step4:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step5:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step6:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step7:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step8:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step1:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step2:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step3:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step4:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step5:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step6:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step7:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
+  #step8:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before {
+    border-color: #547399;
+    background: #547399;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step2:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step3:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step4:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step5:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step6:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step7:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step8:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
+  #step1:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
+  #step2:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
+  #step3:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
+  #step4:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
+  #step5:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
+  #step6:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
+  #step7:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
+  #step8:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before {
+    border-color: #547399;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step2:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step3:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step4:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step5:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step6:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step7:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step8:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after {
+    left: 5px;
+  }
+
+  #step1:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after,
+  #step2:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after,
+  #step3:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after,
+  #step4:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after,
+  #step5:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after,
+  #step6:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after,
+  #step7:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after,
+  #step8:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::after {
+    left: 9px;
   }
 
   #step1:not(.hidden) .wizard-col-main .text-sm.font-medium,
@@ -2130,9 +2336,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step7:not(.hidden) .wizard-col-main .text-sm.font-medium,
   #step8:not(.hidden) .wizard-col-main .text-sm.font-medium {
     font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: var(--wizard-mobile-font-body);
     font-weight: 600;
-    line-height: 18px;
+    line-height: var(--wizard-mobile-line-height-body);
     color: #333333 !important;
   }
 
