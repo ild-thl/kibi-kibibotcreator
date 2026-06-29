@@ -1805,6 +1805,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 375px;
+    min-height: 375px;
     box-sizing: border-box;
     background: #ffffff;
     border-radius: 15px;
@@ -1836,7 +1838,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   #step0:not(.hidden) .step0-welcome-graphic {
-    margin-top: 20px;
+    margin-top: auto;
     justify-content: flex-end;
   }
 
