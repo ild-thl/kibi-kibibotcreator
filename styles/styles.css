@@ -1843,7 +1843,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   #step0:not(.hidden) .step0-welcome-graphic .step0-welcome-lottie {
-    width: min(100%, 220px);
+    width: 260px;
+    max-width: 100%;
     max-height: none;
     margin-left: auto;
   }
