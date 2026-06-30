@@ -1740,6 +1740,14 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-step4-option-min-height: 22px;
     --wizard-mobile-step4-radio-offset: 2px;
     --wizard-mobile-step4-main-pad-bottom: 12px;
+    --wizard-mobile-step5-question-to-option: 8px;
+    --wizard-mobile-step5-section-gap: 16px;
+    --wizard-mobile-step5-option-row-gap: 17px;
+    --wizard-mobile-step5-option-col-gap: 8px;
+    --wizard-mobile-step5-option-line-height: 18px;
+    --wizard-mobile-step5-option-min-height: 22px;
+    --wizard-mobile-step5-radio-offset: 2px;
+    --wizard-mobile-step5-main-pad-bottom: 10px;
     --wizard-mobile-card-title-height: calc(
       var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
         var(--wizard-mobile-card-heading-to-question)
@@ -2814,6 +2822,117 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     top: calc(var(--wizard-mobile-step4-radio-offset) + 9px);
     left: 9px;
     transform: translate(-50%, -50%);
+  }
+
+  /* Step 5: Wissen & Kompetenz – Mobile-Spec */
+  #step5:not(.hidden) .wizard-col-main::after {
+    flex: 0 0 var(--wizard-mobile-step5-main-pad-bottom);
+    min-height: var(--wizard-mobile-step5-main-pad-bottom);
+  }
+
+  #step5:not(.hidden) .wizard-col-main {
+    overflow: hidden;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
+    margin-bottom: var(--wizard-mobile-step5-question-to-option) !important;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3 + .wizard-question-title {
+    margin-top: var(--wizard-mobile-step5-section-gap) !important;
+    margin-bottom: var(--wizard-mobile-step5-question-to-option) !important;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3 {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--wizard-mobile-step5-option-row-gap) var(--wizard-mobile-step5-option-col-gap) !important;
+    row-gap: var(--wizard-mobile-step5-option-row-gap) !important;
+    column-gap: var(--wizard-mobile-step5-option-col-gap) !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    align-items: start;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(1) .card-select:nth-child(1) {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(1) .card-select:nth-child(2) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(1) .card-select:nth-child(3) {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(2) .card-select:nth-child(1) {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(2) .card-select:nth-child(2) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(3) .card-select:nth-child(1) {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(3) .card-select:nth-child(2) {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(3) .card-select:nth-child(3) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  #step5:not(.hidden) .wizard-col-main .grid.gap-3 .card-select:not(.avatar-opt) {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow: visible;
+    text-align: left;
+    padding: 0 0 0 calc(18px + 8px) !important;
+    font-size: var(--wizard-mobile-font-body) !important;
+    font-weight: 500 !important;
+    line-height: var(--wizard-mobile-step5-option-line-height) !important;
+    min-height: var(--wizard-mobile-step5-option-min-height);
+    max-height: none;
+  }
+
+  #step5:not(.hidden) .wizard-col-main .grid.gap-3 .card-select[data-option="studiengangswissen"] {
+    white-space: pre-line;
+  }
+
+  #step5:not(.hidden) .wizard-col-main .grid.gap-3 .card-select:not(.avatar-opt)::before {
+    top: var(--wizard-mobile-step5-radio-offset);
+    transform: none;
+    left: 0;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+  }
+
+  #step5:not(.hidden) .wizard-col-main .grid.gap-3 .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after {
+    top: calc(var(--wizard-mobile-step5-radio-offset) + 9px);
+    left: 9px;
+    transform: translate(-50%, -50%);
+  }
+
+  #step5:not(.hidden) .wizard-col-main .grid.gap-3 .card-select[data-multi="true"].selected:not(.avatar-opt)::after {
+    top: calc(var(--wizard-mobile-step5-radio-offset) + 8px);
+    left: 9px;
+    transform: translate(-50%, -50%) rotate(45deg);
   }
 
   /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */
