@@ -1714,6 +1714,18 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-line-height-heading: 20px;
     --wizard-mobile-line-height-body: 18px;
     --wizard-mobile-main-pad-bottom: 48px;
+    --wizard-mobile-step2-question-to-label: 22px;
+    --wizard-mobile-step2-label-to-options: 11px;
+    --wizard-mobile-step2-section-gap: 14px;
+    --wizard-mobile-step2-label-font: 13px;
+    --wizard-mobile-step2-label-line-height: 13px;
+    --wizard-mobile-step2-option-line-height: 13px;
+    --wizard-mobile-step2-main-pad-bottom: 24px;
+    --wizard-mobile-step2-card-title-height: calc(
+      var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
+        var(--wizard-mobile-card-heading-to-question) + var(--wizard-mobile-line-height-body) +
+        var(--wizard-mobile-step2-question-to-label)
+    );
     --wizard-mobile-card-title-height: calc(
       var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
         var(--wizard-mobile-card-heading-to-question)
@@ -2328,7 +2340,6 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   #step1:not(.hidden) .wizard-col-main .text-sm.font-medium,
-  #step2:not(.hidden) .wizard-col-main .text-sm.font-medium,
   #step3:not(.hidden) .wizard-col-main .text-sm.font-medium,
   #step4:not(.hidden) .wizard-col-main .text-sm.font-medium,
   #step5:not(.hidden) .wizard-col-main .text-sm.font-medium,
@@ -2549,9 +2560,82 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     margin-bottom: 0 !important;
   }
 
-  /* Step 2: one column on very small phones to avoid horizontal pressure. */
-  #step2 .wizard-col-main .flex.flex-wrap.gap-2 {
-    grid-template-columns: 1fr !important;
+  /* Step 2: Persönlichkeit & Ton – Mobile-Spec */
+  #step2:not(.hidden) > h2.wizard-card-header--step2 {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: var(--wizard-mobile-step2-card-title-height);
+    padding: var(--wizard-mobile-card-pad-top) var(--wizard-mobile-card-pad-x)
+      var(--wizard-mobile-step2-question-to-label);
+  }
+
+  #step2:not(.hidden) > h2.wizard-card-header--step2 .wizard-card-heading {
+    display: block;
+    margin: 0;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: var(--wizard-mobile-font-heading);
+    font-weight: 600;
+    line-height: var(--wizard-mobile-line-height-heading);
+    color: #333333;
+  }
+
+  #step2:not(.hidden) > h2.wizard-card-header--step2 .wizard-card-lead {
+    display: block;
+    margin: var(--wizard-mobile-card-heading-to-question) 0 0;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: var(--wizard-mobile-font-body);
+    font-weight: 600;
+    line-height: var(--wizard-mobile-line-height-body);
+    color: #333333;
+  }
+
+  #step2:not(.hidden) .wizard-col-main {
+    height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-step2-card-title-height));
+    min-height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-step2-card-title-height));
+    overflow: hidden;
+  }
+
+  #step2:not(.hidden) .wizard-col-main::after {
+    flex: 0 0 var(--wizard-mobile-step2-main-pad-bottom);
+    min-height: var(--wizard-mobile-step2-main-pad-bottom);
+  }
+
+  #step2:not(.hidden) .wizard-col-main .space-y-4 {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wizard-mobile-step2-section-gap) !important;
+  }
+
+  #step2:not(.hidden) .wizard-col-main .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0 !important;
+  }
+
+  #step2:not(.hidden) .wizard-col-main .space-y-4 > div > .text-sm.font-medium {
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: var(--wizard-mobile-step2-label-font) !important;
+    font-weight: 400 !important;
+    line-height: var(--wizard-mobile-step2-label-line-height) !important;
+    color: #333333 !important;
+    margin-top: 0 !important;
+    margin-bottom: var(--wizard-mobile-step2-label-to-options) !important;
+  }
+
+  #step2:not(.hidden) .wizard-col-main .flex.flex-wrap.gap-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    column-gap: 8px;
+    row-gap: 0;
+    justify-content: stretch;
+    align-items: start;
+  }
+
+  #step2:not(.hidden) .wizard-col-main .flex.flex-wrap.gap-2 .card-select {
+    width: 100%;
+    white-space: normal;
+    font-size: var(--wizard-mobile-step2-label-font) !important;
+    line-height: var(--wizard-mobile-step2-option-line-height) !important;
+    min-height: var(--wizard-mobile-step2-option-line-height) !important;
   }
 
   /* Step 3: one column on very small phones for stable layout. */
