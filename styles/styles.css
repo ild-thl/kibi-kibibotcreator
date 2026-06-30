@@ -1733,6 +1733,13 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-step3-option-line-height: 18px;
     --wizard-mobile-step3-name-to-input: 6px;
     --wizard-mobile-step3-main-pad-bottom: 4px;
+    --wizard-mobile-step4-question-to-option: 10px;
+    --wizard-mobile-step4-section-gap: 25px;
+    --wizard-mobile-step4-option-row-gap: 17px;
+    --wizard-mobile-step4-option-line-height: 18px;
+    --wizard-mobile-step4-option-min-height: 22px;
+    --wizard-mobile-step4-radio-offset: 2px;
+    --wizard-mobile-step4-main-pad-bottom: 12px;
     --wizard-mobile-card-title-height: calc(
       var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
         var(--wizard-mobile-card-heading-to-question)
@@ -2749,6 +2756,64 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     line-height: var(--wizard-mobile-line-height-body);
     border-radius: 15px;
     border: 1px solid #d1d5db;
+  }
+
+  /* Step 4: Arbeitsweise & Interaktion – Mobile-Spec */
+  #step4:not(.hidden) .wizard-col-main::after {
+    flex: 0 0 var(--wizard-mobile-step4-main-pad-bottom);
+    min-height: var(--wizard-mobile-step4-main-pad-bottom);
+  }
+
+  #step4:not(.hidden) .wizard-col-main {
+    overflow: hidden;
+  }
+
+  #step4:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
+    margin-bottom: var(--wizard-mobile-step4-question-to-option) !important;
+  }
+
+  #step4:not(.hidden) .wizard-col-main > .grid.gap-3 + .wizard-question-title {
+    margin-top: var(--wizard-mobile-step4-section-gap) !important;
+    margin-bottom: var(--wizard-mobile-step4-question-to-option) !important;
+  }
+
+  #step4:not(.hidden) .wizard-col-main > .grid.gap-3 {
+    display: flex !important;
+    flex-direction: column;
+    gap: var(--wizard-mobile-step4-option-row-gap) !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  #step4:not(.hidden) .wizard-col-main .grid.gap-3 .card-select:not(.avatar-opt) {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow: visible;
+    text-align: left;
+    padding: 0 0 0 calc(18px + 8px) !important;
+    font-size: var(--wizard-mobile-font-body) !important;
+    font-weight: 500 !important;
+    line-height: var(--wizard-mobile-step4-option-line-height) !important;
+    min-height: var(--wizard-mobile-step4-option-min-height);
+    max-height: none;
+  }
+
+  #step4:not(.hidden) .wizard-col-main .grid.gap-3 .card-select:not(.avatar-opt)::before {
+    top: var(--wizard-mobile-step4-radio-offset);
+    transform: none;
+    left: 0;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+  }
+
+  #step4:not(.hidden) .wizard-col-main .grid.gap-3 .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after {
+    top: calc(var(--wizard-mobile-step4-radio-offset) + 9px);
+    left: 9px;
+    transform: translate(-50%, -50%);
   }
 
   /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */
