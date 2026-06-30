@@ -1726,6 +1726,13 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
         var(--wizard-mobile-card-heading-to-question) + var(--wizard-mobile-line-height-body) +
         var(--wizard-mobile-step2-question-to-label)
     );
+    --wizard-mobile-step3-question-to-option: 12px;
+    --wizard-mobile-step3-section-gap: 22px;
+    --wizard-mobile-step3-option-row-gap: 17px;
+    --wizard-mobile-step3-option-col-gap: 8px;
+    --wizard-mobile-step3-option-line-height: 18px;
+    --wizard-mobile-step3-name-to-input: 6px;
+    --wizard-mobile-step3-main-pad-bottom: 4px;
     --wizard-mobile-card-title-height: calc(
       var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
         var(--wizard-mobile-card-heading-to-question)
@@ -2638,15 +2645,110 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     min-height: var(--wizard-mobile-step2-option-line-height) !important;
   }
 
-  /* Step 3: one column on very small phones for stable layout. */
-  #step3 .role-options,
-  #step3 .name-options {
-    grid-template-columns: 1fr;
+  /* Step 3: Rolle & Name – Mobile-Spec */
+  #step3:not(.hidden) .wizard-col-main::after {
+    flex: 0 0 var(--wizard-mobile-step3-main-pad-bottom);
+    min-height: var(--wizard-mobile-step3-main-pad-bottom);
   }
 
-  #step3 .name-options .card-select[data-suggestion=""] {
+  #step3:not(.hidden) .wizard-col-main {
+    overflow: hidden;
+  }
+
+  #step3:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
+    margin-bottom: var(--wizard-mobile-step3-question-to-option) !important;
+  }
+
+  #step3:not(.hidden) .role-options + .wizard-question-title {
+    margin-top: var(--wizard-mobile-step3-section-gap) !important;
+    margin-bottom: var(--wizard-mobile-step3-question-to-option) !important;
+  }
+
+  #step3:not(.hidden) .role-options,
+  #step3:not(.hidden) .name-options {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: row;
+    column-gap: var(--wizard-mobile-step3-option-col-gap);
+    row-gap: var(--wizard-mobile-step3-option-row-gap);
+    justify-content: start;
+    align-items: center;
+    margin-bottom: 0 !important;
+  }
+
+  #step3:not(.hidden) .role-options .card-select:nth-child(1) { grid-row: 1; grid-column: 1; }
+  #step3:not(.hidden) .role-options .card-select:nth-child(2) { grid-row: 2; grid-column: 1; }
+  #step3:not(.hidden) .role-options .card-select:nth-child(3) { grid-row: 3; grid-column: 1; }
+  #step3:not(.hidden) .role-options .card-select:nth-child(4) { grid-row: 1; grid-column: 2; }
+  #step3:not(.hidden) .role-options .card-select:nth-child(5) { grid-row: 2; grid-column: 2; }
+  #step3:not(.hidden) .role-options .card-select:nth-child(6) { grid-row: 1; grid-column: 3; }
+  #step3:not(.hidden) .role-options .card-select:nth-child(7) { grid-row: 2; grid-column: 3; }
+
+  #step3:not(.hidden) .name-options .card-select:nth-child(1) { grid-row: 1; grid-column: 1; }
+  #step3:not(.hidden) .name-options .card-select:nth-child(2) { grid-row: 2; grid-column: 1; }
+  #step3:not(.hidden) .name-options .card-select:nth-child(3) { grid-row: 3; grid-column: 1; }
+  #step3:not(.hidden) .name-options .card-select:nth-child(4) { grid-row: 1; grid-column: 2; }
+  #step3:not(.hidden) .name-options .card-select:nth-child(5) { grid-row: 1; grid-column: 3; }
+
+  #step3:not(.hidden) .name-options {
+    margin-bottom: var(--wizard-mobile-step3-name-to-input) !important;
+  }
+
+  #step3:not(.hidden) .role-options .card-select:not(.avatar-opt),
+  #step3:not(.hidden) .name-options .card-select:not(.avatar-opt) {
+    display: flex;
+    align-items: center;
     width: 100%;
-    white-space: normal;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 0 0 calc(18px + 8px) !important;
+    font-size: var(--wizard-mobile-font-body) !important;
+    font-weight: 500 !important;
+    line-height: var(--wizard-mobile-step3-option-line-height) !important;
+    min-height: var(--wizard-mobile-step3-option-line-height) !important;
+    max-height: none;
+  }
+
+  #step3:not(.hidden) .role-options .card-select:not(.avatar-opt)::before,
+  #step3:not(.hidden) .name-options .card-select:not(.avatar-opt)::before {
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+  }
+
+  #step3:not(.hidden) .role-options .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
+  #step3:not(.hidden) .name-options .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after {
+    top: 50%;
+    left: 9px;
+    transform: translate(-50%, -50%);
+  }
+
+  #step3:not(.hidden) .name-options .card-select[data-suggestion=""] {
+    grid-row: 3 !important;
+    grid-column: 1 / -1 !important;
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  #step3:not(.hidden) #inputName {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 8px 16px;
+    height: 30px;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: var(--wizard-mobile-font-body);
+    font-weight: 400;
+    line-height: var(--wizard-mobile-line-height-body);
+    border-radius: 15px;
+    border: 1px solid #d1d5db;
   }
 
   /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */
