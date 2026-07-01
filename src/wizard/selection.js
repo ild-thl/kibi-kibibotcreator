@@ -81,29 +81,14 @@
           this.classList.add('selected');
           state[field] = optionValue;
 
-          if (field === 'personality_humor') {
-            if (optionValue === 'humorvoll') state.avatarMouth = 'smile';
-            else if (optionValue === 'ernst') state.avatarMouth = 'serious';
-            else state.avatarMouth = null;
-            if (state.avatarInitialized && typeof updateAvatarPreview === 'function') {
-              updateAvatarPreview();
-            }
-          }
-
-          if (field === 'personality_tone') {
-            if (window.WizardAvatar && typeof window.WizardAvatar.syncHumanClothingFromTone === 'function') {
-              window.WizardAvatar.syncHumanClothingFromTone(state);
-            }
-            if (state.avatarInitialized && typeof updateAvatarPreview === 'function') {
-              updateAvatarPreview();
-            }
-          }
-
           if (field === 'personality_greeting') {
             syncStep2GreetingLabels(state);
           }
 
           if (field === 'avatarType') {
+            if (previousValue !== optionValue) {
+              state.avatarVariant = null;
+            }
             state.avatarInitialized = true;
             if (state.currentStep === 8 && typeof renderAvatarStep === 'function') {
               renderAvatarStep();

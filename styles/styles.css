@@ -250,70 +250,54 @@ body {
 }
 
 /*
- * Schritt 8: .avatar-opt wird in globalen Regeln von :not(.avatar-opt) ausgeschlossen.
- * Gleiche Flat-Optik + Radio wie in den übrigen Schritten.
+ * Schritt 8: Bild-Auswahl (4 Varianten pro Typ, Mockup-Spec).
  */
-#step8 .wizard-col-main .card-select.avatar-opt {
-  position: relative;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  transform: none !important;
-  padding: 0.3rem 0.75rem 0.3rem 2.35rem !important;
-  border-radius: 0.5rem !important;
-  text-align: left;
+#step8 .avatar-variant-section {
+  margin-top: 1rem;
 }
 
-#step8 .wizard-col-main .card-select.avatar-opt::before {
-  content: "";
-  position: absolute;
-  left: 0.7rem;
-  top: 50%;
-  width: 1.25rem;
-  height: 1.25rem;
-  transform: translateY(-50%);
-  border: 2px solid #d1d5db;
+#step8 .avatar-variant-picker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+#step8 .avatar-variant-opt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 75px;
+  height: 75px;
+  padding: 0;
+  margin: 0;
+  border: 2px solid transparent;
   border-radius: 999px;
-  background: #ffffff;
-  transition: all 0.18s ease;
+  background: transparent;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
 }
 
-#step8 .wizard-col-main .card-select.avatar-opt.selected::before {
-  border-color: #3b82f6;
-  background: #3b82f6;
+#step8 .avatar-variant-opt img {
+  display: block;
+  width: 68.75px;
+  height: 68.75px;
+  object-fit: contain;
+  pointer-events: none;
 }
 
-#step8 .wizard-col-main .card-select.avatar-opt.selected::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: calc(0.7rem + 0.625rem - 0.25rem);
-  transform: translateY(-50%);
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 999px;
-  background: #ffffff;
+#step8 .avatar-variant-opt.selected {
+  border-color: #547399;
 }
 
-#step8 .wizard-col-main .card-select.avatar-opt:not(.selected)::after {
-  content: none;
-}
-
-#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):hover::before,
-#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):focus-visible::before {
-  border-color: #3b82f6;
-}
-
-#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):hover,
-#step8 .wizard-col-main .card-select.avatar-opt:not(.selected):focus-visible {
-  background: #f9fafb !important;
-  background-image: none !important;
-}
-
-#step8 .wizard-col-main .card-select.avatar-opt:hover,
-#step8 .wizard-col-main .card-select.avatar-opt:focus-visible {
-  transform: none !important;
-  box-shadow: none !important;
+#step8 .avatar-variant-opt:hover,
+#step8 .avatar-variant-opt:focus-visible {
+  border-color: #547399;
+  outline: none;
 }
 
 .card-select.selected {
@@ -1166,23 +1150,35 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   object-position: center;
 }
 
-/* Typ-spezifisches Feintuning im Kreis (Mensch/Roboter saubere Lage im Innenhintergrund). */
-.wizard-wheel-avatar img[data-avatar-type="human"] {
-  transform: scale(0.72) translateY(-4%);
-  transform-origin: center;
+/* Typ-spezifisches Feintuning im Kreis (SVG-Avatare aus assets/avatar-types). */
+.wizard-wheel-avatar img[data-avatar-type="human"],
+.wizard-wheel-avatar img[src*="/avatar-types/mensch_"] {
+  width: 72% !important;
+  height: 72% !important;
+  max-width: 72%;
+  max-height: 72%;
+  transform: none;
 }
 
-.wizard-wheel-avatar img[data-avatar-type="robot"] {
-  transform: scale(0.86) translateY(0);
-  transform-origin: center;
+.wizard-wheel-avatar img[data-avatar-type="robot"],
+.wizard-wheel-avatar img[src*="/avatar-types/roboter_"] {
+  width: 68% !important;
+  height: 68% !important;
+  max-width: 68%;
+  max-height: 68%;
+  transform: none;
 }
 
-.wizard-wheel-avatar img[data-avatar-type="owl"] {
-  transform: scale(0.78) translateY(-2%);
-  transform-origin: center;
+.wizard-wheel-avatar img[data-avatar-type="owl"],
+.wizard-wheel-avatar img[src*="/avatar-types/eule_"] {
+  width: 66% !important;
+  height: 66% !important;
+  max-width: 66%;
+  max-height: 66%;
+  transform: none;
 }
 
-/* Fallback-Erkennung über URL (falls data-avatar-type noch nicht gesetzt ist). */
+/* Legacy-Fallback (DiceBear / alte Owl-Dateien). */
 .wizard-wheel-avatar img[src*="/avataaars/"] {
   transform: scale(0.72) translateY(-4%);
   transform-origin: center;
@@ -1194,8 +1190,11 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 .wizard-wheel-avatar img[src*="/avatar-types/owl-"] {
-  transform: scale(0.78) translateY(-2%);
-  transform-origin: center;
+  width: 66% !important;
+  height: 66% !important;
+  max-width: 66%;
+  max-height: 66%;
+  transform: none;
 }
 
 .summary-layout {
@@ -3179,7 +3178,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     color: #333333 !important;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     column-gap: var(--wizard-mobile-step8-option-col-gap);
@@ -3189,29 +3188,29 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     align-items: start;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(1) {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select:nth-child(1) {
     grid-row: 1;
     grid-column: 1;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(2) {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select:nth-child(2) {
     grid-row: 1;
     grid-column: 2;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(3) {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select:nth-child(3) {
     grid-row: 1;
     grid-column: 3;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(4) {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select:nth-child(4) {
     grid-row: 2;
     grid-column: 1 / -1;
     overflow: visible;
     text-overflow: clip;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select {
     display: flex;
     align-items: center;
     width: 100%;
@@ -3231,7 +3230,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     max-height: none;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select::before {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select::before {
     top: 50%;
     transform: translateY(-50%);
     left: 0;
@@ -3241,12 +3240,12 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     border-radius: 999px;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select.selected::before {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select.selected::before {
     border-color: #547399;
     background: #547399;
   }
 
-  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select.selected::after {
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select.selected::after {
     top: 50%;
     left: 9px;
     transform: translate(-50%, -50%);
@@ -3254,6 +3253,41 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     height: 8px;
     border-radius: 999px;
     background: #ffffff;
+  }
+
+  /* Schritt 8: Bild-Auswahl (Mockup – 4 Varianten, 30px Abstand) */
+  #step8:not(.hidden) .avatar-variant-section:not(.hidden) {
+    margin-top: 18px;
+    width: 100%;
+  }
+
+  #step8:not(.hidden) .avatar-variant-picker {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: min(30px, calc((100% - 4 * 75px) / 3));
+    width: 100%;
+    max-width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+
+  #step8:not(.hidden) .avatar-variant-opt {
+    width: 75px;
+    height: 75px;
+    border-width: 2px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  #step8:not(.hidden) .avatar-variant-opt img {
+    width: 68.75px;
+    height: 68.75px;
+  }
+
+  #step8:not(.hidden) .avatar-variant-opt.selected {
+    border-color: #547399;
   }
 
   /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */

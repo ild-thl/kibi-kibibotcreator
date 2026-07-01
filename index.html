@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/styles.css?v=37">
+  <link rel="stylesheet" href="./styles/styles.css?v=39">
   <script src="./src/config.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
@@ -320,36 +320,15 @@
             <div class="space-y-4">
               <div>
                 <label class="block text-sm font-medium text-gray-600 mb-2" data-i18n="steps.8.typeLabel">Avatar-Typ</label>
-                <div class="flex flex-wrap gap-2">
+                <div class="flex flex-wrap gap-2 avatar-type-options">
                   <button type="button" class="card-select px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="avatarType" data-option="human" data-i18n="avatar.type.human"></button>
                   <button type="button" class="card-select px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="avatarType" data-option="robot" data-i18n="avatar.type.robot"></button>
                   <button type="button" class="card-select px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="avatarType" data-option="owl" data-i18n="avatar.type.owl"></button>
                   <button type="button" class="card-select px-6 py-3 rounded-2xl border-2 border-gray-200 bg-white text-left transition-all" data-field="avatarType" data-option="none" data-i18n="avatar.type.none"></button>
                 </div>
               </div>
-              <div class="avatar-human-only">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-2" data-i18n="steps.8.skinLabel">Hautfarbe</label>
-                <div id="avatarSkinColor" class="flex flex-wrap gap-2"></div>
-              </div>
-              </div>
-              <div class="avatar-human-only">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-2" data-i18n="steps.8.hairColorLabel">Haarfarbe</label>
-                <div id="avatarHairColor" class="flex flex-wrap gap-2"></div>
-              </div>
-              </div>
-              <div class="avatar-human-only">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-2" data-i18n="steps.8.hairStyleLabel">Frisur</label>
-                <div id="avatarFrisur" class="flex flex-wrap gap-2"></div>
-              </div>
-              </div>
-              <div class="avatar-human-only">
-              <div>
-                <label class="block text-sm font-medium text-gray-600 mb-2" data-i18n="steps.8.beardLabel">Bart</label>
-                <div id="avatarFacialHair" class="flex flex-wrap gap-2"></div>
-              </div>
+              <div id="avatarVariantSection" class="avatar-variant-section hidden">
+                <div id="avatarVariantPicker" class="avatar-variant-picker" role="radiogroup" data-i18n-aria="steps.8.variantAria"></div>
               </div>
             </div>
           </div>

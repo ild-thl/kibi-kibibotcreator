@@ -20,12 +20,7 @@
     nameChoice: 'name_choice',
     role: 'role',
     avatarType: 'avatar_type',
-    avatarSkinColor: 'skin',
-    avatarTop: 'hair_top',
-    avatarHairColor: 'hair_color',
-    avatarFacialHair: 'facial_hair',
-    avatarMouth: 'mouth',
-    avatarClothing: 'clothing'
+    avatarVariant: 'avatar_variant',
   };
 
   /**
@@ -40,15 +35,7 @@
     5: ['knowledge', 'knowledge_source', 'decision_mode'],
     6: ['feedback'],
     7: ['privacy'],
-    8: [
-      'avatarType',
-      'avatarSkinColor',
-      'avatarHairColor',
-      'avatarTop',
-      'avatarFacialHair',
-      'avatarClothing',
-      'avatarMouth'
-    ]
+    8: ['avatarType', 'avatarVariant']
   };
 
   var instances = [];

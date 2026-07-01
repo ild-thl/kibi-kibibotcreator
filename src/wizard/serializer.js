@@ -39,12 +39,7 @@
       name: state.name,
       avatarurl: avatarUrl,
       avatartype: state.avatarType || '',
-      avatarskincolor: state.avatarSkinColor,
-      avatartop: state.avatarTop,
-      avatarhaircolor: state.avatarHairColor,
-      avatarfacialhair: state.avatarFacialHair,
-      avatarmouth: state.avatarMouth,
-      avatarclothing: state.avatarClothing,
+      avatarvariant: state.avatarVariant || '',
       personalitygreeting: state.personality_greeting || '',
       personalityhumor: state.personality_humor || '',
       personalityanswer: state.personality_answer || '',
@@ -73,12 +68,7 @@
     params.set('name', state.name);
     params.set('avatarurl', avatarUrl);
     params.set('avatartype', state.avatarType || '');
-    params.set('avatarskincolor', state.avatarSkinColor);
-    params.set('avatartop', state.avatarTop);
-    params.set('avatarhaircolor', state.avatarHairColor);
-    params.set('avatarfacialhair', state.avatarFacialHair);
-    params.set('avatarmouth', state.avatarMouth);
-    params.set('avatarclothing', state.avatarClothing);
+    params.set('avatarvariant', state.avatarVariant || '');
     params.set('personalitygreeting', state.personality_greeting || '');
     params.set('personalityhumor', state.personality_humor || '');
     params.set('personalityanswer', state.personality_answer || '');

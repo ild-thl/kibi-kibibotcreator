@@ -68,10 +68,7 @@
       "title": "Visual design",
       "lookQuestion": "What should your avatar look like?",
       "typeLabel": "Avatar type",
-      "skinLabel": "Skin tone",
-      "hairColorLabel": "Hair colour",
-      "hairStyleLabel": "Hairstyle",
-      "beardLabel": "Facial hair"
+      "variantAria": "Choose avatar appearance"
     },
     "9": {
       "title": "Your personalised avatar is ready",
@@ -138,7 +135,13 @@
     "hairStyle": { "short": "Short", "long": "Long", "curly": "Curly" },
     "hairColor": { "black": "Black", "brown": "Brown", "blond": "Blond" },
     "beard": { "none": "No beard", "full": "Full beard", "mustache": "Moustache" },
-    "type": { "human": "Human", "robot": "Robot", "owl": "Owl", "none": "No avatar image" }
+    "type": { "human": "Human", "robot": "Robot", "owl": "Owl", "none": "No avatar image" },
+    "variant": {
+      "orange": "Orange",
+      "blau": "Blue",
+      "schwarz": "Black",
+      "schwarz_weiss": "Black & white"
+    }
   },
   "options": {
     "usage_context": {

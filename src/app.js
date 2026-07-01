@@ -31,12 +31,7 @@
     feedback: [],                // Mehrfachauswahl: Reaktion bei Fehlern/Problemen
     // Schritt 7 – Avatar-Optik (null = noch kein Typ gewählt, erst Klick in Schritt 8)
     avatarType: null,
-    avatarSkinColor: null,
-    avatarTop: null,
-    avatarHairColor: null,
-    avatarFacialHair: null,
-    avatarMouth: null,
-    avatarClothing: null,
+    avatarVariant: null,
     // Schritt 8 – Datenschutz
     privacy: [],                 // Mehrfachauswahl Datenschutzoptionen
     // Avatar wurde aktiv erzeugt (Nutzerinteraktion)
@@ -419,12 +414,7 @@
 
     // Avatar-Grundzustand wiederherstellen
     state.avatarType = null;
-    state.avatarSkinColor = null;
-    state.avatarTop = null;
-    state.avatarHairColor = null;
-    state.avatarFacialHair = null;
-    state.avatarMouth = null;
-    state.avatarClothing = null;
+    state.avatarVariant = null;
     state.avatarInitialized = false;
     state.currentStep = 0;
 
@@ -439,7 +429,7 @@
     }
 
     // UI-Selektionen leeren
-    document.querySelectorAll('.card-select.selected, .avatar-opt.selected').forEach(function (el) {
+    document.querySelectorAll('.card-select.selected, .avatar-variant-opt.selected').forEach(function (el) {
       el.classList.remove('selected');
     });
 

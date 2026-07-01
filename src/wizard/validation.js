@@ -1,17 +1,8 @@
 ;(function () {
   function isAvatarStepValid(state) {
+    if (!state || !state.avatarType) return false;
     if (state.avatarType === 'none') return true;
-    if (state.avatarType !== 'human') {
-      return !!state.avatarType;
-    }
-    return !!(
-      state.avatarSkinColor !== null &&
-      state.avatarTop !== null &&
-      state.avatarHairColor !== null &&
-      state.avatarFacialHair !== null &&
-      state.avatarMouth !== null &&
-      state.avatarClothing !== null
-    );
+    return !!state.avatarVariant;
   }
 
   function isStepValid(state, stepNum) {
