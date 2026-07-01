@@ -1770,6 +1770,21 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-step7-option-line-height: 18px;
     --wizard-mobile-step7-option-min-height: 18px;
     --wizard-mobile-step7-main-pad-bottom: 12px;
+    --wizard-mobile-step8-text-gap: 22px;
+    --wizard-mobile-step8-text-leading: calc(
+      var(--wizard-mobile-step8-option-line-height) - var(--wizard-mobile-font-body)
+    );
+    --wizard-mobile-step8-question-to-label: 25px;
+    --wizard-mobile-step8-label-to-options: 14px;
+    --wizard-mobile-step8-option-row-gap: calc(
+      var(--wizard-mobile-step8-text-gap) - var(--wizard-mobile-step8-text-leading) + 3px
+    );
+    --wizard-mobile-step8-option-col-gap: 8px;
+    --wizard-mobile-step8-label-font: 13px;
+    --wizard-mobile-step8-label-line-height: 13px;
+    --wizard-mobile-step8-option-line-height: 18px;
+    --wizard-mobile-step8-option-min-height: 18px;
+    --wizard-mobile-step8-main-pad-bottom: 12px;
     --wizard-mobile-card-title-height: calc(
       var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
         var(--wizard-mobile-card-heading-to-question)
@@ -3069,6 +3084,119 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     top: 50%;
     left: 9px;
     transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  /* Step 8: Visuelle Gestaltung – Mobile-Spec */
+  #step8:not(.hidden) .wizard-col-main::after {
+    flex: 0 0 var(--wizard-mobile-step8-main-pad-bottom);
+    min-height: var(--wizard-mobile-step8-main-pad-bottom);
+  }
+
+  #step8:not(.hidden) .wizard-col-main {
+    overflow: hidden;
+  }
+
+  #step8:not(.hidden) .wizard-col-main > .wizard-question-title {
+    margin-bottom: var(--wizard-mobile-step8-question-to-label) !important;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 {
+    display: flex;
+    flex-direction: column;
+    gap: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0 !important;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > label {
+    display: block;
+    margin-top: 0 !important;
+    margin-bottom: var(--wizard-mobile-step8-label-to-options) !important;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: var(--wizard-mobile-step8-label-font) !important;
+    font-weight: 400 !important;
+    line-height: var(--wizard-mobile-step8-label-line-height) !important;
+    color: #333333 !important;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--wizard-mobile-step8-option-col-gap);
+    row-gap: var(--wizard-mobile-step8-option-row-gap);
+    gap: var(--wizard-mobile-step8-option-row-gap) var(--wizard-mobile-step8-option-col-gap) !important;
+    margin-top: 0 !important;
+    align-items: start;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(1) {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(2) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(3) {
+    grid-row: 1;
+    grid-column: 3;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select:nth-child(4) {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    overflow: visible;
+    text-overflow: clip;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    padding: 0 0 0 calc(18px + 8px) !important;
+    font-size: var(--wizard-mobile-font-body) !important;
+    font-weight: 500 !important;
+    line-height: var(--wizard-mobile-step8-option-line-height) !important;
+    min-height: var(--wizard-mobile-step8-option-min-height) !important;
+    max-height: none;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select::before {
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    box-sizing: border-box;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select.selected::before {
+    border-color: #547399;
+    background: #547399;
+  }
+
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .flex.flex-wrap.gap-2 > .card-select.selected::after {
+    top: 50%;
+    left: 9px;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #ffffff;
   }
 
   /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */
