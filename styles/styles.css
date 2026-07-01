@@ -2429,7 +2429,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    padding-bottom: calc(25px + env(safe-area-inset-bottom, 0px)) !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
     background: transparent !important;
@@ -2450,24 +2450,29 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   body.wizard-nav-visible #wizardNavBar > .wizard-nav-actions {
     width: 100% !important;
     max-width: 342px;
+    margin-top: 20px;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    justify-content: center;
     gap: 12px;
   }
 
+  /* Mobile Schritte 1–8: einheitliche Button-Geometrie (Hell + Dunkel) */
   body.wizard-nav-visible #btnBack:not(.hidden),
   body.wizard-nav-visible #btnNext:not(.hidden),
   body.wizard-nav-visible #btnSave:not(.hidden) {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 1 1 0;
+    flex: 0 0 165px;
+    width: 165px;
+    max-width: 165px;
     min-width: 0;
     height: 48px;
     padding: 0 16px;
-    border-radius: 24px;
+    border-radius: 16px;
     font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 1;
     white-space: nowrap;
@@ -2518,32 +2523,11 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     background-color: #f9fafb;
   }
 
-  /* Dunkler Modus: Nav-Buttons Schritte 1–8 (Mobile-Spec) */
-  [data-theme="dark"] body.wizard-nav-visible #wizardNavBar {
-    padding-bottom: calc(25px + env(safe-area-inset-bottom, 0px)) !important;
-  }
-
-  [data-theme="dark"] body.wizard-nav-visible #wizardNavBar > .wizard-nav-actions {
-    margin-top: 20px;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden),
-  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden) {
-    flex: 0 0 165px;
-    width: 165px;
-    max-width: 165px;
-    height: 48px;
-    border-radius: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #ffffff !important;
-    border: none !important;
-  }
-
+  /* Dunkler Modus: Nav-Button-Farben Schritte 1–8 (Mobile) */
   [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden) {
     background-color: #abc1d5 !important;
+    color: #ffffff !important;
+    border: none !important;
   }
 
   [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden):hover {
@@ -2566,7 +2550,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     background-color: #7c9cbb !important;
   }
 
-  [data-theme="dark"] body.wizard-nav-visible > div.w-screen {
+  body.wizard-nav-visible > div.w-screen {
     padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
