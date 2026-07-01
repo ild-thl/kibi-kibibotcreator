@@ -96,7 +96,10 @@
   function renderAvatarStep() {
     if (window.WizardAvatar && window.WizardAvatar.renderAvatarStep) {
       window.WizardAvatar.renderAvatarStep(state, {
-        onAvatarChanged: function () { updateAvatarPreview(); },
+        onAvatarChanged: function () {
+          updateAvatarPreview();
+          syncNextButtonMuted();
+        },
         notifyWheelSelection: function (s, meta) {
           if (window.WizardWheelCenter && window.WizardWheelCenter.notifySelection) {
             window.WizardWheelCenter.notifySelection(s, meta);
@@ -107,6 +110,7 @@
     if (state.avatarType && state.avatarInitialized) {
       updateAvatarPreview();
     }
+    syncNextButtonMuted();
   }
 
   function updateWizardWheelGraphics() {
@@ -120,11 +124,38 @@
   function syncNextButtonMuted() {
     var btn = document.getElementById('btnNext');
     if (!btn) return;
-    if (state.testMode || state.currentStep === 0 || state.currentStep === TOTAL_STEPS) {
-      btn.classList.remove('wizard-nav-next--muted');
-      return;
+
+    function applyNextButtonTone() {
+      var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      var navActive =
+        document.body.classList.contains('wizard-nav-visible') &&
+        !btn.classList.contains('hidden');
+
+      if (state.testMode || state.currentStep === 0 || state.currentStep === TOTAL_STEPS || !navActive) {
+        btn.classList.remove('wizard-nav-next--muted');
+        btn.style.removeProperty('background-color');
+        btn.style.removeProperty('color');
+        btn.style.removeProperty('opacity');
+        return;
+      }
+
+      var shouldMute = !isCurrentStepValid();
+      btn.classList.toggle('wizard-nav-next--muted', shouldMute);
+
+      var bg = dark
+        ? (shouldMute ? '#8eaecf' : '#547399')
+        : (shouldMute ? '#8eaecf' : '#a3be8c');
+
+      btn.style.setProperty('background-color', bg, 'important');
+      btn.style.setProperty('color', '#ffffff', 'important');
+      btn.style.setProperty('opacity', '1', 'important');
     }
-    btn.classList.toggle('wizard-nav-next--muted', !isCurrentStepValid());
+
+    applyNextButtonTone();
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(applyNextButtonTone);
+    }
+    setTimeout(applyNextButtonTone, 0);
   }
 
   function updateAvatarPreview() {
@@ -189,7 +220,8 @@
       window.WizardNavigation.updateUI(state, TOTAL_STEPS, {
         updateSettingsActions: updateSettingsActions,
         renderAvatarStep: renderAvatarStep,
-        syncWheelCenterAnimation: syncWheelCenterAnimation
+        syncWheelCenterAnimation: syncWheelCenterAnimation,
+        syncNextButtonMuted: syncNextButtonMuted
       });
     }
     syncNextButtonMuted();
@@ -218,6 +250,7 @@
         updateNameInputState: updateNameInputState
       });
     }
+    syncNextButtonMuted();
   }
 
   /** Schritt 1: Auswahl aus dem DOM übernehmen (falls Klicks den State nicht gesetzt haben). */
@@ -291,7 +324,8 @@
         updateUI: updateUI,
         restoreSelections: restoreSelections,
         renderAvatarStep: renderAvatarStep,
-        updateSummary: updateSummary
+        updateSummary: updateSummary,
+        syncNextButtonMuted: syncNextButtonMuted
       });
     }
   }
@@ -303,7 +337,8 @@
         showValidationMessage: showValidationMessage,
         updateUI: updateUI,
         restoreSelections: restoreSelections,
-        updateSummary: updateSummary
+        updateSummary: updateSummary,
+        syncNextButtonMuted: syncNextButtonMuted
       });
     }
   }
@@ -317,7 +352,8 @@
       window.WizardNavigation.back(state, {
         updateUI: updateUI,
         restoreSelections: restoreSelections,
-        renderAvatarStep: renderAvatarStep
+        renderAvatarStep: renderAvatarStep,
+        syncNextButtonMuted: syncNextButtonMuted
       });
     }
   }
@@ -494,6 +530,7 @@
     }
     updateUI();
     restoreSelections();
+    syncNextButtonMuted();
     if (state.currentStep === TOTAL_STEPS) updateSummary();
     if (state.currentStep === 8) renderAvatarStep();
   }
@@ -585,6 +622,7 @@
         if (this.disabled) return;
         state.name = this.value.trim();
         updateWizardWheelGraphics();
+        syncNextButtonMuted();
       });
       inputName.addEventListener('keydown', function (e) {
         if (e.key === 'Enter') { e.preventDefault(); next(); }

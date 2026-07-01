@@ -104,6 +104,9 @@
     if (window.WizardWheel && typeof window.WizardWheel.updateWizardWheel === 'function') {
       window.WizardWheel.updateWizardWheel(state);
     }
+    if (deps && typeof deps.syncNextButtonMuted === 'function') {
+      deps.syncNextButtonMuted();
+    }
   }
 
   function goToStep(state, targetStep, totalSteps, deps) {
@@ -115,6 +118,7 @@
       state.currentStep = targetStep;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
+      if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
       if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
       if (state.currentStep === totalSteps && deps && typeof deps.updateSummary === 'function') deps.updateSummary();
       return;
@@ -134,6 +138,7 @@
       state.currentStep++;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
+      if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
       if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
       if (state.currentStep === totalSteps && deps && typeof deps.updateSummary === 'function') deps.updateSummary();
     }
@@ -156,6 +161,7 @@
       state.currentStep++;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
+      if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
       if (state.currentStep === totalSteps && deps && typeof deps.updateSummary === 'function') deps.updateSummary();
     }
   }
@@ -165,6 +171,7 @@
       state.currentStep--;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
+      if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
       if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
     }
   }

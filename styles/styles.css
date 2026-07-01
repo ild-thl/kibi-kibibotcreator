@@ -42,10 +42,10 @@
   --color-accent: #a3be8c;
   --color-accent-hover: #8fad7a;
   --color-accent-soft: rgba(163, 190, 140, 0.18);
-  --color-nav-next: #a3be8c;
-  --color-nav-next-hover: #8fad7a;
-  --color-nav-next-muted: #7a8f6e;
-  --color-nav-next-muted-hover: #6b7f61;
+  --color-nav-next: #547399;
+  --color-nav-next-hover: #3d5570;
+  --color-nav-next-muted: #8eaecf;
+  --color-nav-next-muted-hover: #7c9cbb;
   --color-nav-bar-bg: rgba(129, 161, 193, 0.95);
   --color-input-focus: #a3be8c;
   --color-modal-bg: #ffffff;
@@ -458,6 +458,11 @@ body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
   opacity: 0.68;
   background-color: var(--color-nav-next-muted) !important;
   color: rgba(255, 255, 255, 0.94) !important;
+}
+
+[data-theme="dark"] #btnNext.wizard-nav-next--muted {
+  opacity: 1 !important;
+  color: #ffffff !important;
 }
 
 #btnNext.wizard-nav-next--muted:hover {
@@ -2467,6 +2472,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     line-height: 1;
     white-space: nowrap;
     box-sizing: border-box;
+    transition: none !important;
   }
 
   body.wizard-nav-visible #btnBack.hidden,
@@ -2475,16 +2481,31 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     display: none !important;
   }
 
-  body.wizard-nav-visible #btnNext,
-  body.wizard-nav-visible #btnSave {
+  [data-theme="light"] body.wizard-nav-visible #btnNext,
+  [data-theme="light"] body.wizard-nav-visible #btnSave {
     border: none;
     background-color: #a3be8c !important;
     color: #ffffff !important;
   }
 
-  body.wizard-nav-visible #btnNext:hover,
-  body.wizard-nav-visible #btnSave:hover {
+  [data-theme="light"] body.wizard-nav-visible #btnNext:hover,
+  [data-theme="light"] body.wizard-nav-visible #btnSave:hover {
     background-color: #8fad7a;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted) {
+    background-color: #a3be8c !important;
+  }
+
+  /* Mobile Schritte 1–8: einheitliche Ausgrau-Farbe bei unvollständigem Schritt */
+  body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted {
+    opacity: 1 !important;
+    background-color: #8eaecf !important;
+    color: #ffffff !important;
+  }
+
+  body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted:hover {
+    background-color: #7c9cbb !important;
   }
 
   body.wizard-nav-visible #btnBack {
@@ -2495,6 +2516,58 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   body.wizard-nav-visible #btnBack:hover {
     background-color: #f9fafb;
+  }
+
+  /* Dunkler Modus: Nav-Buttons Schritte 1–8 (Mobile-Spec) */
+  [data-theme="dark"] body.wizard-nav-visible #wizardNavBar {
+    padding-bottom: calc(25px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #wizardNavBar > .wizard-nav-actions {
+    margin-top: 20px;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden),
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden) {
+    flex: 0 0 165px;
+    width: 165px;
+    max-width: 165px;
+    height: 48px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden) {
+    background-color: #abc1d5 !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden):hover {
+    background-color: #9ab3c9 !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted) {
+    background-color: #547399 !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted):hover {
+    background-color: #3d5570 !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted {
+    background-color: #8eaecf !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted:hover {
+    background-color: #7c9cbb !important;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible > div.w-screen {
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
   #step9:not(.hidden) {
