@@ -220,6 +220,13 @@
       });
     }
     syncNextButtonMuted();
+    if (
+      state.currentStep !== TOTAL_STEPS &&
+      window.WizardSummaryLottie &&
+      typeof window.WizardSummaryLottie.destroy === 'function'
+    ) {
+      window.WizardSummaryLottie.destroy();
+    }
   }
 
   function bindCardSelects() {
@@ -367,18 +374,8 @@
     document.getElementById('summaryKnowledge').textContent = vm.knowledge;
     document.getElementById('summaryFeedback').textContent = vm.feedback;
     document.getElementById('summaryPrivacy').textContent = vm.privacy;
-    const sumImg = document.getElementById('summaryAvatar');
-    const sumNoneText = document.getElementById('summaryAvatarNoneText');
-    if (sumImg) {
-      if (state.avatarType === 'none') {
-        sumImg.src = TRANSPARENT_IMG;
-        sumImg.style.display = 'none';
-        if (sumNoneText) sumNoneText.classList.remove('hidden');
-      } else {
-        sumImg.style.display = '';
-        sumImg.src = buildAvatarUrl();
-        if (sumNoneText) sumNoneText.classList.add('hidden');
-      }
+    if (window.WizardSummaryLottie && typeof window.WizardSummaryLottie.refresh === 'function') {
+      window.WizardSummaryLottie.refresh(state);
     }
   }
 
@@ -445,10 +442,8 @@
       img.style.display = 'block';
       img.src = TRANSPARENT_IMG;
     });
-    const sumImg = document.getElementById('summaryAvatar');
-    if (sumImg) {
-      sumImg.style.display = '';
-      sumImg.src = TRANSPARENT_IMG;
+    if (window.WizardSummaryLottie && typeof window.WizardSummaryLottie.destroy === 'function') {
+      window.WizardSummaryLottie.destroy();
     }
 
     updateUI();
@@ -503,6 +498,9 @@
     if (window.WizardWheelCenter && typeof window.WizardWheelCenter.refreshWheelCenterForState === 'function') {
       window.WizardWheelCenter.refreshWheelCenterForState(state);
     }
+    if (state.currentStep === TOTAL_STEPS && window.WizardSummaryLottie && typeof window.WizardSummaryLottie.refresh === 'function') {
+      window.WizardSummaryLottie.refresh(state);
+    }
   }
 
   function onLocaleChange() {
@@ -514,6 +512,9 @@
     }
     if (window.WizardWelcomeLottie && typeof window.WizardWelcomeLottie.refresh === 'function') {
       window.WizardWelcomeLottie.refresh();
+    }
+    if (state.currentStep === TOTAL_STEPS && window.WizardSummaryLottie && typeof window.WizardSummaryLottie.refresh === 'function') {
+      window.WizardSummaryLottie.refresh(state);
     }
     if (window.NameSuggestions && window.NameSuggestions.applyRandomNameSuggestions) {
       window.NameSuggestions.applyRandomNameSuggestions('#step3');

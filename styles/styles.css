@@ -1234,6 +1234,19 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.summary-chat-lottie {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.summary-chat-lottie svg {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .summary-avatar-image {
@@ -2621,6 +2634,16 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     max-width: 260px;
     height: 260px;
     margin-top: 16px;
+  }
+
+  #step9:not(.hidden) .summary-chat-lottie {
+    width: 100%;
+    height: 100%;
+  }
+
+  #step9:not(.hidden) .summary-chat-lottie svg {
+    width: 100% !important;
+    height: 100% !important;
   }
 
   /* 1024px-Regeln explizit zurücksetzen */

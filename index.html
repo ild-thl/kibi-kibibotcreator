@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/styles.css?v=39">
+  <link rel="stylesheet" href="./styles/styles.css?v=40">
   <script src="./src/config.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
@@ -384,7 +384,7 @@
             <h2 class="summary-title" data-i18n="steps.9.title">Dein personalisierter Avatar ist bereit</h2>
             <p class="summary-subtitle" data-i18n="steps.9.subtitle">Du kannst Deinen Avatar jetzt nutzen oder exportieren!</p>
             <div class="summary-avatar-frame">
-              <img id="summaryAvatar" src="" data-i18n-alt="steps.9.avatarAlt" alt="Avatar" class="summary-avatar-image" />
+              <div id="summaryChatLottie" class="summary-chat-lottie hidden" aria-hidden="true"></div>
               <p id="summaryAvatarNoneText" class="hidden" data-i18n="steps.9.noAvatar">Kein Avatar-Bild</p>
             </div>
           </div>
@@ -494,6 +494,7 @@
   <script src="./src/wizard/navigation.js"></script>
   <script src="./src/wizard/wheel-center-lottie.js"></script>
   <script src="./src/wizard/welcome-lottie.js"></script>
+  <script src="./src/wizard/summary-lottie.js"></script>
   <script src="./src/wizard/avatar.js"></script>
   <script src="./src/app.js"></script>
 </body>

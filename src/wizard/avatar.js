@@ -52,11 +52,6 @@
       img.style.display = 'none';
     });
     if (main) main.style.display = 'none';
-    var sumImg = document.getElementById('summaryAvatar');
-    if (sumImg) {
-      sumImg.src = TRANSPARENT_IMG;
-      sumImg.style.display = 'none';
-    }
   }
 
   function variantLabel(variant) {
@@ -174,11 +169,6 @@
       img.setAttribute('data-avatar-type', avatarType);
       img.src = url;
     });
-    var sumImg = document.getElementById('summaryAvatar');
-    if (sumImg) {
-      sumImg.style.display = '';
-      sumImg.src = url;
-    }
   }
 
   window.WizardAvatar = {
