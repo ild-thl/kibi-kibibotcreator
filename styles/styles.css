@@ -1420,6 +1420,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   color: #6ca16d;
 }
 
+.summary-mobile {
+  display: none;
+}
+
 .settings-modal {
   position: fixed;
   inset: 0;
@@ -2644,6 +2648,110 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step9:not(.hidden) .summary-chat-lottie svg {
     width: 100% !important;
     height: 100% !important;
+  }
+
+  #step9:not(.hidden) .summary-desktop {
+    display: none !important;
+  }
+
+  #step9:not(.hidden) .summary-mobile {
+    display: block;
+  }
+
+  #step9:not(.hidden) .summary-bubble {
+    padding: 20px 20px 16px;
+  }
+
+  #step9:not(.hidden) .summary-box-title {
+    margin: 0 0 12px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  #step9:not(.hidden) .summary-mobile-ready__title {
+    margin: 0 0 4px;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    color: #333333;
+  }
+
+  #step9:not(.hidden) .summary-mobile-ready__hint {
+    margin: 0 0 20px;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #666666;
+  }
+
+  #step9:not(.hidden) .summary-mobile-page {
+    display: none;
+  }
+
+  #step9:not(.hidden) .summary-mobile-page--active {
+    display: block;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 10px;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section:last-child {
+    margin-bottom: 0;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section + .summary-mobile-section {
+    margin-top: 10px;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section__icon {
+    flex: 0 0 45px;
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section__title {
+    margin: 0 0 4px;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #333333;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #step9:not(.hidden) .summary-mobile-section__item {
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #333333;
+  }
+
+  #step9:not(.hidden) .summary-page-indicator {
+    margin: 20px 0 0;
+    text-align: center;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    color: #999999;
   }
 
   /* 1024px-Regeln explizit zurücksetzen */

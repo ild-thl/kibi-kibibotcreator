@@ -139,9 +139,86 @@
     };
   }
 
+  function buildSummaryMobilePages(state) {
+    var tFn = window.WizardI18n && window.WizardI18n.t ? window.WizardI18n.t.bind(window.WizardI18n) : function (k) { return k; };
+
+    function pushLabel(list, field, key) {
+      if (!key) return;
+      list.push(label(field, key, state));
+    }
+
+    function pushLabels(list, field, keys) {
+      if (!Array.isArray(keys)) return;
+      keys.forEach(function (key) {
+        pushLabel(list, field, key);
+      });
+    }
+
+    var usagePurposeItems = [];
+    pushLabel(usagePurposeItems, 'usage_context', state.usage_context);
+    pushLabels(usagePurposeItems, 'help_context', state.help_context);
+
+    var personalityItems = [];
+    pushLabel(personalityItems, 'personality_greeting', state.personality_greeting);
+    pushLabel(personalityItems, 'personality_humor', state.personality_humor);
+    pushLabel(personalityItems, 'personality_answer', state.personality_answer);
+    pushLabel(personalityItems, 'personality_tone', state.personality_tone);
+    pushLabel(personalityItems, 'personality_style', state.personality_style);
+
+    var roleNameItems = [];
+    pushLabel(roleNameItems, 'role', state.role);
+    if (state.name) roleNameItems.push(state.name);
+
+    var interactionItems = [];
+    pushLabel(interactionItems, 'interaction_workflow', state.interaction_workflow);
+    pushLabel(interactionItems, 'interaction_examples', state.interaction_examples);
+
+    var knowledgeItems = [];
+    pushLabels(knowledgeItems, 'knowledge', state.knowledge);
+    pushLabels(knowledgeItems, 'knowledge_source', state.knowledge_source);
+    pushLabel(knowledgeItems, 'decision_mode', state.decision_mode);
+
+    var feedbackItems = [];
+    pushLabels(feedbackItems, 'feedback', state.feedback);
+
+    var privacyItems = [];
+    pushLabels(privacyItems, 'privacy', state.privacy);
+
+    function section(icon, titleKey, items) {
+      return {
+        icon: icon,
+        title: tFn(titleKey),
+        items: items.length ? items : [empty()]
+      };
+    }
+
+    return [
+      {
+        sections: [
+          section('einsatz-zweck', 'summary.mobile.usagePurpose', usagePurposeItems),
+          section('personality', 'summary.mobile.personalityTone', personalityItems)
+        ]
+      },
+      {
+        sections: [
+          section('role-name', 'summary.mobile.roleName', roleNameItems),
+          section('interaction', 'summary.mobile.interaction', interactionItems)
+        ]
+      },
+      {
+        sections: [
+          section('knowledge', 'summary.mobile.knowledge', knowledgeItems),
+          section('feedback', 'summary.mobile.feedback', feedbackItems),
+          section('privacy', 'summary.mobile.privacy', privacyItems)
+        ]
+      }
+    ];
+  }
+
   window.WizardSerializer = {
     buildExportPayload: buildExportPayload,
     buildSaveParams: buildSaveParams,
-    buildSummaryViewModel: buildSummaryViewModel
+    buildSummaryViewModel: buildSummaryViewModel,
+    buildSummaryMobilePages: buildSummaryMobilePages
   };
 })();

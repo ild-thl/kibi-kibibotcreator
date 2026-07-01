@@ -36,6 +36,7 @@
     privacy: [],                 // Mehrfachauswahl Datenschutzoptionen
     // Avatar wurde aktiv erzeugt (Nutzerinteraktion)
     avatarInitialized: false,
+    summaryPage: 1,
     currentStep: 0
   };
 
@@ -216,7 +217,8 @@
         updateSettingsActions: updateSettingsActions,
         renderAvatarStep: renderAvatarStep,
         syncWheelCenterAnimation: syncWheelCenterAnimation,
-        syncNextButtonMuted: syncNextButtonMuted
+        syncNextButtonMuted: syncNextButtonMuted,
+        updateSummaryNavButtons: updateSummaryNavButtons
       });
     }
     syncNextButtonMuted();
@@ -327,6 +329,7 @@
         restoreSelections: restoreSelections,
         renderAvatarStep: renderAvatarStep,
         updateSummary: updateSummary,
+        updateSummaryNavButtons: updateSummaryNavButtons,
         syncNextButtonMuted: syncNextButtonMuted
       });
     }
@@ -340,6 +343,7 @@
         updateUI: updateUI,
         restoreSelections: restoreSelections,
         updateSummary: updateSummary,
+        updateSummaryNavButtons: updateSummaryNavButtons,
         syncNextButtonMuted: syncNextButtonMuted
       });
     }
@@ -351,12 +355,34 @@
 
   function back() {
     if (window.WizardNavigation && window.WizardNavigation.back) {
-      window.WizardNavigation.back(state, {
+      window.WizardNavigation.back(state, TOTAL_STEPS, {
         updateUI: updateUI,
         restoreSelections: restoreSelections,
         renderAvatarStep: renderAvatarStep,
-        syncNextButtonMuted: syncNextButtonMuted
+        syncNextButtonMuted: syncNextButtonMuted,
+        updateSummaryNavButtons: updateSummaryNavButtons
       });
+    }
+  }
+
+  function updateSummaryNavButtons() {
+    var mobile =
+      window.WizardSummaryMobile &&
+      typeof window.WizardSummaryMobile.isMobileSummaryLayout === 'function' &&
+      window.WizardSummaryMobile.isMobileSummaryLayout();
+    var nextBtn = document.getElementById('btnNext');
+    var saveBtn = document.getElementById('btnSave');
+    if (!nextBtn || !saveBtn || state.currentStep !== TOTAL_STEPS || !mobile) return;
+
+    var pageCount =
+      window.WizardSummaryMobile && window.WizardSummaryMobile.SUMMARY_PAGE_COUNT
+        ? window.WizardSummaryMobile.SUMMARY_PAGE_COUNT
+        : 3;
+    var onLastPage = state.summaryPage >= pageCount;
+    nextBtn.classList.toggle('hidden', onLastPage);
+    saveBtn.classList.toggle('hidden', !onLastPage);
+    if (!onLastPage && window.WizardI18n && window.WizardI18n.t) {
+      nextBtn.textContent = window.WizardI18n.t('nav.next');
     }
   }
 
@@ -374,9 +400,13 @@
     document.getElementById('summaryKnowledge').textContent = vm.knowledge;
     document.getElementById('summaryFeedback').textContent = vm.feedback;
     document.getElementById('summaryPrivacy').textContent = vm.privacy;
+    if (window.WizardSummaryMobile && typeof window.WizardSummaryMobile.render === 'function') {
+      window.WizardSummaryMobile.render(state, state.summaryPage);
+    }
     if (window.WizardSummaryLottie && typeof window.WizardSummaryLottie.refresh === 'function') {
       window.WizardSummaryLottie.refresh(state);
     }
+    updateSummaryNavButtons();
   }
 
   function save() {
@@ -413,6 +443,7 @@
     state.avatarType = null;
     state.avatarVariant = null;
     state.avatarInitialized = false;
+    state.summaryPage = 1;
     state.currentStep = 0;
 
     if (window.WizardWheelCenter && window.WizardWheelCenter.resetNavigationTracking) {

@@ -74,6 +74,8 @@
       "title": "Dein personalisierter Avatar ist bereit",
       "subtitle": "Du kannst Deinen Avatar jetzt nutzen oder exportieren!",
       "boxTitle": "Zusammenfassung",
+      "mobileReady": "Dein Avatar ist bereit!",
+      "mobileHint": "Überprüfe deine Einstellungen und erstelle deinen Avatar.",
       "avatarAlt": "Avatar",
       "noAvatar": "Kein Avatar-Bild"
     }
@@ -98,7 +100,16 @@
     "knowledgeAbout": "Über dich: {{value}}",
     "knowledgeSource": "Wissensbasis: {{value}}",
     "decision": "Entscheidungen: {{value}}",
-    "empty": "–"
+    "empty": "–",
+    "mobile": {
+      "usagePurpose": "Einsatz & Zweck",
+      "personalityTone": "Persönlichkeit & Ton",
+      "roleName": "Rolle & Name",
+      "interaction": "Interaktion",
+      "knowledge": "Wissen & Kompetenz",
+      "feedback": "Lernen & Feedback",
+      "privacy": "Datenschutz"
+    }
   },
   "nav": {
     "back": "Zurück",
@@ -107,7 +118,8 @@
     "summary": "Zusammenfassung",
     "survey": "Weiter zur Umfrage",
     "stepStart": "Start",
-    "stepOf": "Schritt {{current}} von {{total}}"
+    "stepOf": "Schritt {{current}} von {{total}}",
+    "pageOf": "Seite {{current}} von {{total}}"
   },
   "validation": {
     "default": "Bitte triff zuerst eine Auswahl bzw. gib einen Wert ein, bevor du fortfährst.",

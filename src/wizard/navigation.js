@@ -1,4 +1,13 @@
 ;(function () {
+  function isMobileSummary(state, totalSteps) {
+    return (
+      state.currentStep === totalSteps &&
+      window.WizardSummaryMobile &&
+      typeof window.WizardSummaryMobile.isMobileSummaryLayout === 'function' &&
+      window.WizardSummaryMobile.isMobileSummaryLayout()
+    );
+  }
+
   function getFirstIncompleteStep(state, totalSteps, deps) {
     var originalStep = state.currentStep;
     var isCurrentStepValid = deps && deps.isCurrentStepValid;
@@ -96,6 +105,10 @@
     if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== totalSteps);
     if (settingsBtnEl) settingsBtnEl.classList.remove('hidden');
 
+    if (deps && typeof deps.updateSummaryNavButtons === 'function' && state.currentStep === totalSteps) {
+      deps.updateSummaryNavButtons();
+    }
+
     if (deps && typeof deps.updateSettingsActions === 'function') deps.updateSettingsActions();
     var wizardContent = document.getElementById('wizardContent');
     if (wizardContent) wizardContent.classList.add('step-enter');
@@ -120,7 +133,10 @@
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
       if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
       if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
-      if (state.currentStep === totalSteps && deps && typeof deps.updateSummary === 'function') deps.updateSummary();
+      if (state.currentStep === totalSteps && deps && typeof deps.updateSummary === 'function') {
+        state.summaryPage = 1;
+        deps.updateSummary();
+      }
       return;
     }
 
@@ -140,7 +156,10 @@
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
       if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
       if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
-      if (state.currentStep === totalSteps && deps && typeof deps.updateSummary === 'function') deps.updateSummary();
+      if (state.currentStep === totalSteps && deps && typeof deps.updateSummary === 'function') {
+        state.summaryPage = 1;
+        deps.updateSummary();
+      }
     }
   }
 
@@ -157,8 +176,26 @@
     }
     var input = document.getElementById('inputName');
     if (state.currentStep === 2 && input) state.name = input.value.trim();
+
+    if (isMobileSummary(state, totalSteps)) {
+      var pageCount =
+        window.WizardSummaryMobile && window.WizardSummaryMobile.SUMMARY_PAGE_COUNT
+          ? window.WizardSummaryMobile.SUMMARY_PAGE_COUNT
+          : 3;
+      if (state.summaryPage < pageCount) {
+        state.summaryPage++;
+        if (window.WizardSummaryMobile && typeof window.WizardSummaryMobile.setPage === 'function') {
+          window.WizardSummaryMobile.setPage(state.summaryPage);
+        }
+        if (deps && typeof deps.updateSummaryNavButtons === 'function') deps.updateSummaryNavButtons();
+        if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
+        return;
+      }
+    }
+
     if (state.currentStep < totalSteps) {
       state.currentStep++;
+      if (state.currentStep === totalSteps) state.summaryPage = 1;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
       if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
@@ -166,7 +203,19 @@
     }
   }
 
-  function back(state, deps) {
+  function back(state, totalSteps, deps) {
+    if (isMobileSummary(state, totalSteps)) {
+      if (state.summaryPage > 1) {
+        state.summaryPage--;
+        if (window.WizardSummaryMobile && typeof window.WizardSummaryMobile.setPage === 'function') {
+          window.WizardSummaryMobile.setPage(state.summaryPage);
+        }
+        if (deps && typeof deps.updateSummaryNavButtons === 'function') deps.updateSummaryNavButtons();
+        if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
+        return;
+      }
+    }
+
     if (state.currentStep > 0) {
       state.currentStep--;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();

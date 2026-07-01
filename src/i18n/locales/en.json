@@ -74,6 +74,8 @@
       "title": "Your personalised avatar is ready",
       "subtitle": "You can now use or export your avatar!",
       "boxTitle": "Summary",
+      "mobileReady": "Your avatar is ready!",
+      "mobileHint": "Review your settings and create your avatar.",
       "avatarAlt": "Avatar",
       "noAvatar": "No avatar image"
     }
@@ -98,7 +100,16 @@
     "knowledgeAbout": "About you: {{value}}",
     "knowledgeSource": "Knowledge base: {{value}}",
     "decision": "Decisions: {{value}}",
-    "empty": "–"
+    "empty": "–",
+    "mobile": {
+      "usagePurpose": "Use & purpose",
+      "personalityTone": "Personality & tone",
+      "roleName": "Role & name",
+      "interaction": "Interaction",
+      "knowledge": "Knowledge & competence",
+      "feedback": "Learning & feedback",
+      "privacy": "Privacy"
+    }
   },
   "nav": {
     "back": "Back",
@@ -107,7 +118,8 @@
     "summary": "Summary",
     "survey": "Continue to survey",
     "stepStart": "Start",
-    "stepOf": "Step {{current}} of {{total}}"
+    "stepOf": "Step {{current}} of {{total}}",
+    "pageOf": "Page {{current}} of {{total}}"
   },
   "validation": {
     "default": "Please make a selection or enter a value before continuing.",
