@@ -330,6 +330,32 @@
     return trimmed.indexOf('<svg') === 0 || trimmed.indexOf('<?xml') === 0;
   }
 
+  function getWheelLocale() {
+    if (window.WizardI18n && typeof window.WizardI18n.getLocale === 'function') {
+      var loc = window.WizardI18n.getLocale();
+      if (loc === 'en' || loc === 'de') return loc;
+    }
+    return 'de';
+  }
+
+  function isStep02WheelUrl(url) {
+    return typeof url === 'string' && url.indexOf('/step-02/') !== -1;
+  }
+
+  /** Schritt 2: sprachspezifische SVGs als `sel-….de.svg` / `sel-….en.svg`. */
+  function pushStep02LocalizedSvgCandidates(push, baseWithoutExt) {
+    var loc = getWheelLocale();
+    var other = loc === 'de' ? 'en' : 'de';
+    push(baseWithoutExt + '.' + loc + '.svg');
+    push(baseWithoutExt + '.' + other + '.svg');
+  }
+
+  function hasLocalizedWheelSvgSuffix(url) {
+    if (!url || typeof url !== 'string') return false;
+    var lower = url.toLowerCase();
+    return lower.slice(-7) === '.de.svg' || lower.slice(-7) === '.en.svg';
+  }
+
   /**
    * Vor jeder *.json-URL wird dieselbe Basis-URL mit *.svg eingefügt (wenn noch nicht in der Liste).
    * Liegt eine passende SVG-Datei vor, wird sie statt der Lottie-Animation angezeigt.
@@ -348,6 +374,10 @@
       if (typeof u === 'string' && u.length > 5 && u.slice(-5).toLowerCase() === '.json') {
         var isStepSelJson =
           u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1 && u.slice(-5).toLowerCase() === '.json';
+        if (isStepSelJson && isStep02WheelUrl(u)) {
+          pushStep02LocalizedSvgCandidates(push, u.slice(0, -5));
+          continue;
+        }
         var isTransitionLike =
           u.indexOf('/sel-from-') !== -1 || u.indexOf('/transitions/') !== -1 || isStepSelJson;
         if (isTransitionLike) {
@@ -357,6 +387,13 @@
           continue;
         }
         push(u.slice(0, -5) + '.svg');
+        continue;
+      }
+      if (typeof u === 'string' && u.length > 4 && u.slice(-4).toLowerCase() === '.svg') {
+        if (isStep02WheelUrl(u) && !hasLocalizedWheelSvgSuffix(u)) {
+          pushStep02LocalizedSvgCandidates(push, u.slice(0, -4));
+          continue;
+        }
       }
       push(u);
     }
@@ -1357,6 +1394,27 @@
     }
   }
 
+  function invalidateStep02WheelCache() {
+    var stepKey = 2;
+    if (completedStepSelectionWheelCache[stepKey]) delete completedStepSelectionWheelCache[stepKey];
+    if (completedStepWheelSvgClone[stepKey]) delete completedStepWheelSvgClone[stepKey];
+    if (lastWheelMediaByStep[stepKey]) delete lastWheelMediaByStep[stepKey];
+    if (lastWheelSvgByStep[stepKey]) delete lastWheelSvgByStep[stepKey];
+    if (lastResolvedWheelMedia && lastResolvedWheelMedia.step === stepKey) lastResolvedWheelMedia = null;
+  }
+
+  /** Schritt 2: Wheel-Grafik nach Sprachwechsel neu laden (locale-spezifische SVGs). */
+  function refreshWheelMediaForLocale(state) {
+    if (!state || state.currentStep !== 2) return;
+    if (isStepEightComplete(state)) return;
+    if (shouldSkipWheelAnimations(state)) return;
+    if (isFileProtocol()) return;
+    invalidateStep02WheelCache();
+    dropCompletedStepWheelCacheIfStale(2, state);
+    var restoreUrls = restoreStepWheelCandidates(2, state);
+    playCandidateUrls(state, restoreUrls, null);
+  }
+
   initWheelAnimDebugFromUrl();
 
   window.WizardWheelCenter = {
@@ -1365,6 +1423,7 @@
     resetNavigationTracking: resetNavigationTracking,
     resetWheelMediaMemory: resetWheelMediaMemory,
     refreshWheelCenterForState: refreshWheelCenterForState,
+    refreshWheelMediaForLocale: refreshWheelMediaForLocale,
     ensureStartStepLoop: ensureStartStepLoop,
     /** @deprecated Alias – nutze ensureStartStepLoop */
     playPageLoadIntro: ensureStartStepLoop,

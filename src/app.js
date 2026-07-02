@@ -612,6 +612,13 @@
     syncNextButtonMuted();
     if (state.currentStep === TOTAL_STEPS) updateSummary();
     if (state.currentStep === 8) renderAvatarStep();
+    if (
+      state.currentStep === 2 &&
+      window.WizardWheelCenter &&
+      typeof window.WizardWheelCenter.refreshWheelMediaForLocale === 'function'
+    ) {
+      window.WizardWheelCenter.refreshWheelMediaForLocale(state);
+    }
   }
 
   function init() {
