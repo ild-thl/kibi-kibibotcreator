@@ -1023,7 +1023,7 @@ header h1,
     height: 64px;
     padding: 0 24px;
     border: none;
-    border-radius: 32px;
+    border-radius: 20px;
     background-color: #a3be8c;
     color: #ffffff;
     font-family: 'Open Sans', 'Inter', sans-serif;
@@ -1235,7 +1235,7 @@ header h1,
     padding-left: calc(450px + 40px) !important;
     padding-right: 0 !important;
     justify-content: flex-end;
-    gap: 16px;
+    gap: 12px;
     box-sizing: border-box;
   }
 
@@ -1243,27 +1243,108 @@ header h1,
   body.wizard-nav-visible #btnNext:not(.hidden),
   body.wizard-nav-visible #btnSave:not(.hidden) {
     flex: 0 0 auto;
+    width: 320px;
     min-width: 0;
     max-width: none;
     height: 64px;
-    border-radius: 32px;
+    padding: 0 24px;
+    border-radius: 20px;
     font-family: 'Open Sans', 'Inter', sans-serif;
     font-size: 20px;
     font-weight: 700;
     line-height: 1;
     box-sizing: border-box;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   }
 
-  body.wizard-nav-visible #btnNext:not(.hidden),
-  body.wizard-nav-visible #btnSave:not(.hidden) {
-    width: 320px;
-    padding: 0 24px;
+  /* Desktop Light Theme: gleiche Buttonfarben wie Mobile */
+  [data-theme="light"] body.wizard-nav-visible #btnBack:not(.hidden) {
+    background-color: #ffffff;
+    border: 2px solid #e5e7eb;
+    color: #a5a5a5;
   }
 
-  body.wizard-nav-visible #btnBack:not(.hidden) {
-    width: 160px;
-    padding: 0 20px;
-    font-weight: 600;
+  [data-theme="light"] body.wizard-nav-visible #btnBack:not(.hidden):hover {
+    background-color: #f9fafb;
+    border-color: #e5e7eb;
+    color: #a5a5a5;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted),
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted) {
+    border: none;
+    background-color: #5391f7;
+    color: #ffffff;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted):hover,
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted):hover {
+    background-color: #4280e6;
+    color: #ffffff;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnSave:not(.hidden),
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
+    border: none;
+    background-color: #a3be8c;
+    color: #ffffff;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnSave:not(.hidden):hover,
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden):hover {
+    background-color: #8fad7a;
+    color: #ffffff;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted {
+    border: none;
+    background-color: #8eaecf;
+    color: #ffffff;
+    opacity: 1;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted:hover {
+    background-color: #7c9cbb;
+    color: #ffffff;
+    opacity: 1;
+  }
+
+  /* Desktop Dark Theme: Mockup-Farben */
+  [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden) {
+    border: none;
+    background-color: #b8c7d9;
+    color: #ffffff;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnBack:not(.hidden):hover {
+    background-color: #a8b8cb;
+    color: #ffffff;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted),
+  [data-theme="dark"] body.wizard-nav-visible #btnSave:not(.hidden) {
+    border: none;
+    background-color: #5b749b;
+    color: #ffffff;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted):hover,
+  [data-theme="dark"] body.wizard-nav-visible #btnSave:not(.hidden):hover {
+    background-color: #4d6589;
+    color: #ffffff;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted {
+    border: none;
+    background-color: #5b749b;
+    color: #ffffff;
+    opacity: 0.65;
+  }
+
+  [data-theme="dark"] body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted:hover {
+    background-color: #4d6589;
+    color: #ffffff;
+    opacity: 0.78;
   }
 
   /* Wizard-Wheel: Desktop, alle Schritte & Themes, 40px tiefer */
