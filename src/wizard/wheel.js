@@ -47,19 +47,17 @@
     });
   }
 
-  /** Aufeinanderfolgend vollständig abgeschlossene Schritte 1…8 (für Fortschrittsgrafik antw_*). */
-  function consecutiveCompletedSteps(state) {
-    if (!window.WizardValidation || !window.WizardValidation.isStepValid) return 0;
-    var n = 0;
-    for (var s = 1; s <= 8; s++) {
-      if (window.WizardValidation.isStepValid(state, s)) n = s;
-      else break;
-    }
-    return n;
+  /** Aktueller Wizard-Schritt (1–8) für die Fortschrittsgrafik antw_*. */
+  function activeWheelProgressStep(state) {
+    if (!state) return 0;
+    var cur = Number(state.currentStep) || 0;
+    if (cur <= 0) return 0;
+    if (cur > 8) return 8;
+    return cur;
   }
 
   function progressAssetUrl(state) {
-    var n = consecutiveCompletedSteps(state);
+    var n = activeWheelProgressStep(state);
     if (n <= 0) return wheelBase() + 'alle_antw_off.svg';
     return wheelBase() + 'antw_' + n + '.svg';
   }
