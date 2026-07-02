@@ -12,9 +12,8 @@
   }
 
   function resolveSummaryChatAnimationUrl(state) {
-    if (!state || state.avatarType === 'none' || !state.avatarVariant) return '';
+    if (!state) return '';
     var typePrefix = TYPE_PREFIX[state.avatarType];
-    if (!typePrefix) return '';
     var locale =
       window.WizardI18n && typeof window.WizardI18n.getLocale === 'function'
         ? window.WizardI18n.getLocale()
@@ -23,6 +22,10 @@
       window.WizardI18n && typeof window.WizardI18n.themeModusSegment === 'function'
         ? window.WizardI18n.themeModusSegment()
         : 'hell';
+    if (state.avatarType === 'none') {
+      return './assets/i18n/' + locale + '/chat_auswahl_icon_' + themeModus + 'modus_ohne_auswahl.json';
+    }
+    if (!typePrefix || !state.avatarVariant) return '';
     var variant = variantFileSegment(state.avatarVariant);
     var file =
       'chat_auswahl_icon_' + themeModus + 'modus_' + typePrefix + '_' + variant + '.json';
@@ -31,10 +34,6 @@
 
   function getLottieEl() {
     return document.getElementById('summaryChatLottie');
-  }
-
-  function getNoneTextEl() {
-    return document.getElementById('summaryAvatarNoneText');
   }
 
   function destroy() {
@@ -48,34 +47,25 @@
     if (el) el.innerHTML = '';
   }
 
-  function setVisible(showLottie, showNoneText) {
+  function setVisible(showLottie) {
     var lottieEl = getLottieEl();
-    var noneEl = getNoneTextEl();
     if (lottieEl) {
       lottieEl.classList.toggle('hidden', !showLottie);
       lottieEl.setAttribute('aria-hidden', showLottie ? 'false' : 'true');
-    }
-    if (noneEl) {
-      noneEl.classList.toggle('hidden', !showNoneText);
     }
   }
 
   function mount(state) {
     destroy();
-    if (!state || state.avatarType === 'none' || !state.avatarVariant) {
-      setVisible(false, state && state.avatarType === 'none');
-      return;
-    }
-
     var el = getLottieEl();
     if (!el) return;
     var url = resolveSummaryChatAnimationUrl(state);
     if (!url) {
-      setVisible(false, false);
+      setVisible(false);
       return;
     }
 
-    setVisible(true, false);
+    setVisible(true);
 
     if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
 
