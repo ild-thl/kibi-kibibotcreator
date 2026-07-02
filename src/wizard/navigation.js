@@ -87,6 +87,10 @@
       state.mobileStep8Bridge = false;
     }
 
+    if (window.WizardWheel && typeof window.WizardWheel.primeWheelProgressForStep === 'function') {
+      window.WizardWheel.primeWheelProgressForStep(state);
+    }
+
     document.querySelectorAll('.wizard-step').forEach(function (el) {
       var id = el.id || '';
       var n = 0;
@@ -176,10 +180,10 @@
     if (state.currentStep === 8 && !mobileStep8BridgeActive && deps && typeof deps.renderAvatarStep === 'function') {
       deps.renderAvatarStep();
     }
-    if (deps && typeof deps.syncWheelCenterAnimation === 'function') deps.syncWheelCenterAnimation();
     if (window.WizardWheel && typeof window.WizardWheel.updateWizardWheel === 'function') {
       window.WizardWheel.updateWizardWheel(state);
     }
+    if (deps && typeof deps.syncWheelCenterAnimation === 'function') deps.syncWheelCenterAnimation();
     if (deps && typeof deps.syncNextButtonMuted === 'function') {
       deps.syncNextButtonMuted();
     }

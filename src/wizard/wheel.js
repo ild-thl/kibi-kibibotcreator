@@ -62,6 +62,40 @@
     return wheelBase() + 'antw_' + n + '.svg';
   }
 
+  var preloadedProgressUrls = Object.create(null);
+
+  function preloadProgressAssets() {
+    var base = wheelBase();
+    var urls = [base + 'alle_antw_off.svg'];
+    for (var i = 1; i <= 8; i++) urls.push(base + 'antw_' + i + '.svg');
+    urls.forEach(function (url) {
+      if (preloadedProgressUrls[url]) return;
+      preloadedProgressUrls[url] = true;
+      var img = new Image();
+      img.decoding = 'async';
+      img.src = url;
+    });
+  }
+
+  function setProgressImageSrc(img, url) {
+    if (!img || !url) return;
+    if (img.getAttribute('src') === url) return;
+    img.setAttribute('src', url);
+  }
+
+  /** Fortschritts-SVG im Ziel-Schritt setzen, solange die Section noch verborgen ist. */
+  function primeWheelProgressForStep(state) {
+    if (!state) return;
+    var stepNum = Number(state.currentStep) || 0;
+    if (stepNum <= 0 || stepNum > 8) return;
+    var stepEl = document.getElementById('step' + stepNum);
+    if (!stepEl || !stepEl.classList.contains('hidden')) return;
+    var img = stepEl.querySelector('.wizard-wheel-progress');
+    if (!img) return;
+    preloadProgressAssets();
+    setProgressImageSrc(img, progressAssetUrl(state));
+  }
+
   function stepOverlayAssetUrl(state) {
     /* Kein schritt_x_x Overlay mehr: Step-Layer bleibt transparent. */
     return TRANSPARENT_SVG;
@@ -78,13 +112,14 @@
     if (!state) return;
     ensureWheelHotspots();
     syncNameForValidation(state);
+    preloadProgressAssets();
     if (window.WizardTheme && typeof window.WizardTheme.syncWheelStaticLayers === 'function') {
       window.WizardTheme.syncWheelStaticLayers();
     }
     var prog = progressAssetUrl(state);
     var step = stepOverlayAssetUrl(state);
     document.querySelectorAll('.wizard-wheel-progress').forEach(function (img) {
-      if (img.getAttribute('src') !== prog) img.setAttribute('src', prog);
+      setProgressImageSrc(img, prog);
     });
     document.querySelectorAll('.wizard-wheel-step').forEach(function (img) {
       if (img.getAttribute('src') !== step) img.setAttribute('src', step);
@@ -132,9 +167,12 @@
   }
 
   applyWheelDebugFromUrlAndBindToggle();
+  preloadProgressAssets();
 
   window.WizardWheel = {
     updateWizardWheel: updateWizardWheel,
+    primeWheelProgressForStep: primeWheelProgressForStep,
+    preloadProgressAssets: preloadProgressAssets,
     setWheelDebug: setWheelDebug,
     isWheelDebugEnabled: isWheelDebugEnabled
   };
