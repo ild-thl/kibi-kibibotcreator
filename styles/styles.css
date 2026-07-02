@@ -2646,9 +2646,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     box-shadow: none;
     display: flex;
     flex-direction: column;
-    height: var(--wizard-mobile-card-height);
     min-height: var(--wizard-mobile-card-height);
-    overflow: hidden;
+    overflow: visible;
   }
 
   #step9:not(.hidden) .summary-title {
@@ -2718,15 +2717,15 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step9:not(.hidden) #summaryMobileRoot {
     flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
-    padding-bottom: var(--wizard-mobile-main-pad-bottom);
+    overflow: visible;
+    padding-bottom: 0;
     box-sizing: border-box;
   }
 
   #step9:not(.hidden) .summary-mobile-page {
     display: none;
-    height: 100%;
-    overflow: hidden;
+    height: auto;
+    overflow: visible;
   }
 
   #step9:not(.hidden) .summary-mobile-page--active {
