@@ -241,6 +241,16 @@
     updateSummary();
   }
 
+  function refreshSwipeHintLottie() {
+    if (window.WizardSwipeHintLottie && typeof window.WizardSwipeHintLottie.refresh === 'function') {
+      window.WizardSwipeHintLottie.refresh();
+      return;
+    }
+    if (window.WizardSwipeHintLottie && typeof window.WizardSwipeHintLottie.destroy === 'function') {
+      window.WizardSwipeHintLottie.destroy();
+    }
+  }
+
   function updateUI() {
     if (window.WizardNavigation && window.WizardNavigation.updateUI) {
       window.WizardNavigation.updateUI(state, TOTAL_STEPS, {
@@ -253,6 +263,7 @@
       });
     }
     syncNextButtonMuted();
+    refreshSwipeHintLottie();
   }
 
   function bindCardSelects() {

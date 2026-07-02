@@ -1754,7 +1754,42 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
 }
 
+.step1-swipe-hint {
+  display: none;
+}
+
 @media (max-width: 520px) {
+  #step1:not(.hidden) .wizard-col-main {
+    position: relative;
+  }
+
+  #step1:not(.hidden) .step1-swipe-hint {
+    display: block;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 100px;
+    height: 85px;
+    pointer-events: none;
+    z-index: 3;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+
+  #step1:not(.hidden) .step1-swipe-hint.step1-swipe-hint--fade-out,
+  #step1:not(.hidden) .step1-swipe-hint.step1-swipe-hint--dismissed {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  #step1:not(.hidden) .step1-swipe-hint-lottie,
+  #step1:not(.hidden) .step1-swipe-hint-lottie svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
   #wizardContent {
     touch-action: pan-y;
   }
