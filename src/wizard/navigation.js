@@ -1,4 +1,12 @@
 ;(function () {
+  function isMobileLayout() {
+    return window.matchMedia('(max-width: 520px)').matches;
+  }
+
+  function isMobileStep8Bridge(state) {
+    return state.currentStep === 8 && !!state.mobileStep8Bridge && isMobileLayout();
+  }
+
   function isMobileSummary(state, totalSteps) {
     return (
       state.currentStep === totalSteps &&
@@ -8,6 +16,18 @@
     );
   }
 
+  function syncStep8BridgeView(state) {
+    var bridgeActive = isMobileStep8Bridge(state);
+    var mainView = document.querySelector('#step8 .step8-main-view');
+    var bridgeView = document.querySelector('#step8 .step8-mobile-bridge');
+    if (mainView) mainView.classList.toggle('hidden', bridgeActive);
+    if (bridgeView) {
+      bridgeView.classList.toggle('hidden', !bridgeActive);
+      bridgeView.setAttribute('aria-hidden', bridgeActive ? 'false' : 'true');
+    }
+    document.body.classList.toggle('wizard-on-step8-bridge', bridgeActive);
+  }
+
   function getFirstIncompleteStep(state, totalSteps, deps) {
     var originalStep = state.currentStep;
     var isCurrentStepValid = deps && deps.isCurrentStepValid;
@@ -15,6 +35,7 @@
 
     for (var s = 1; s <= 8; s++) {
       state.currentStep = s;
+      state.mobileStep8Bridge = false;
       if (!isCurrentStepValid()) {
         state.currentStep = originalStep;
         return s;
@@ -28,9 +49,9 @@
     var stepIndicatorEl = document.getElementById('wizardStepIndicator');
     if (!stepIndicatorEl) return;
 
-    var isMobile = window.matchMedia('(max-width: 520px)').matches;
+    var isMobile = isMobileLayout();
     var navInFlow = state.currentStep > 0;
-    var showMobileNavGap = navInFlow && isMobile;
+    var showMobileNavGap = navInFlow && isMobile && !isMobileStep8Bridge(state);
 
     if (!showMobileNavGap) {
       stepIndicatorEl.textContent = '';
@@ -62,6 +83,10 @@
   }
 
   function updateUI(state, totalSteps, deps) {
+    if (state.mobileStep8Bridge && !isMobileLayout()) {
+      state.mobileStep8Bridge = false;
+    }
+
     document.querySelectorAll('.wizard-step').forEach(function (el) {
       var id = el.id || '';
       var n = 0;
@@ -70,6 +95,8 @@
       }
       el.classList.toggle('hidden', n !== state.currentStep);
     });
+
+    syncStep8BridgeView(state);
 
     var currentLabel = document.getElementById('currentStep');
     var totalLabel = document.getElementById('totalSteps');
@@ -94,15 +121,16 @@
     var nextBtnEl = document.getElementById('btnNext');
     var saveBtnEl = document.getElementById('btnSave');
     var settingsBtnEl = document.getElementById('btnSettings');
-    var mobileStep0Start = state.currentStep === 0 && window.matchMedia('(max-width: 520px)').matches;
-    var navInFlow = state.currentStep > 0 && !mobileStep0Start;
+    var mobileStep0Start = state.currentStep === 0 && isMobileLayout();
+    var mobileStep8BridgeActive = isMobileStep8Bridge(state);
+    var navInFlow = state.currentStep > 0 && !mobileStep0Start && !mobileStep8BridgeActive;
     if (navBarEl) {
-      navBarEl.classList.toggle('hidden', mobileStep0Start);
+      navBarEl.classList.toggle('hidden', mobileStep0Start || mobileStep8BridgeActive);
       navBarEl.classList.toggle('wizard-nav-in-flow', navInFlow);
-      navBarEl.classList.toggle('fixed', !navInFlow && !mobileStep0Start);
-      navBarEl.classList.toggle('bottom-0', !navInFlow && !mobileStep0Start);
-      navBarEl.classList.toggle('left-0', !navInFlow && !mobileStep0Start);
-      navBarEl.classList.toggle('right-0', !navInFlow && !mobileStep0Start);
+      navBarEl.classList.toggle('fixed', !navInFlow && !mobileStep0Start && !mobileStep8BridgeActive);
+      navBarEl.classList.toggle('bottom-0', !navInFlow && !mobileStep0Start && !mobileStep8BridgeActive);
+      navBarEl.classList.toggle('left-0', !navInFlow && !mobileStep0Start && !mobileStep8BridgeActive);
+      navBarEl.classList.toggle('right-0', !navInFlow && !mobileStep0Start && !mobileStep8BridgeActive);
     }
     document.body.classList.toggle('wizard-on-step0', state.currentStep === 0);
     document.body.classList.toggle('wizard-nav-visible', navInFlow);
@@ -112,7 +140,7 @@
     document.body.classList.add('wizard-step-' + state.currentStep);
 
     var stepGapEl = document.getElementById('wizardNavStepGap');
-    var showMobileNavGap = navInFlow && mobileStep0Start === false && window.matchMedia('(max-width: 520px)').matches;
+    var showMobileNavGap = navInFlow && mobileStep0Start === false && isMobileLayout();
     var showStepIndicator =
       showMobileNavGap &&
       state.currentStep >= 1 &&
@@ -130,11 +158,9 @@
     if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === totalSteps);
     if (nextBtnEl) {
       if (window.WizardI18n && window.WizardI18n.t) {
-        nextBtnEl.textContent = state.currentStep === (totalSteps - 1)
-          ? window.WizardI18n.t('nav.summary')
-          : window.WizardI18n.t('nav.next');
+        nextBtnEl.textContent = window.WizardI18n.t('nav.next');
       } else {
-        nextBtnEl.textContent = state.currentStep === (totalSteps - 1) ? 'Zusammenfassung' : 'Weiter';
+        nextBtnEl.textContent = 'Weiter';
       }
     }
     if (saveBtnEl) saveBtnEl.classList.toggle('hidden', state.currentStep !== totalSteps);
@@ -147,7 +173,9 @@
     if (deps && typeof deps.updateSettingsActions === 'function') deps.updateSettingsActions();
     var wizardContent = document.getElementById('wizardContent');
     if (wizardContent) wizardContent.classList.add('step-enter');
-    if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
+    if (state.currentStep === 8 && !mobileStep8BridgeActive && deps && typeof deps.renderAvatarStep === 'function') {
+      deps.renderAvatarStep();
+    }
     if (deps && typeof deps.syncWheelCenterAnimation === 'function') deps.syncWheelCenterAnimation();
     if (window.WizardWheel && typeof window.WizardWheel.updateWizardWheel === 'function') {
       window.WizardWheel.updateWizardWheel(state);
@@ -155,12 +183,17 @@
     if (deps && typeof deps.syncNextButtonMuted === 'function') {
       deps.syncNextButtonMuted();
     }
+    if (deps && typeof deps.refreshChatLottie === 'function') {
+      deps.refreshChatLottie();
+    }
   }
 
   function goToStep(state, targetStep, totalSteps, deps) {
     targetStep = Number(targetStep);
     if (targetStep < 0 || targetStep > totalSteps) return;
-    if (targetStep === state.currentStep) return;
+    if (targetStep === state.currentStep && !state.mobileStep8Bridge) return;
+
+    state.mobileStep8Bridge = false;
 
     if (targetStep < state.currentStep) {
       state.currentStep = targetStep;
@@ -229,8 +262,16 @@
       }
     }
 
+    if (state.currentStep === 8 && isMobileLayout() && !state.mobileStep8Bridge) {
+      state.mobileStep8Bridge = true;
+      if (deps && typeof deps.updateUI === 'function') deps.updateUI();
+      if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
+      return;
+    }
+
     if (state.currentStep < totalSteps) {
       state.currentStep++;
+      state.mobileStep8Bridge = false;
       if (state.currentStep === totalSteps) state.summaryPage = 1;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
@@ -240,6 +281,14 @@
   }
 
   function back(state, totalSteps, deps) {
+    if (isMobileStep8Bridge(state)) {
+      state.mobileStep8Bridge = false;
+      if (deps && typeof deps.updateUI === 'function') deps.updateUI();
+      if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
+      if (state.currentStep === 8 && deps && typeof deps.renderAvatarStep === 'function') deps.renderAvatarStep();
+      return;
+    }
+
     if (isMobileSummary(state, totalSteps)) {
       if (state.summaryPage > 1) {
         state.summaryPage--;
@@ -251,10 +300,20 @@
         if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
         return;
       }
+
+      if (isMobileLayout()) {
+        state.currentStep = 8;
+        state.mobileStep8Bridge = true;
+        state.summaryPage = 1;
+        if (deps && typeof deps.updateUI === 'function') deps.updateUI();
+        if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
+        return;
+      }
     }
 
     if (state.currentStep > 0) {
       state.currentStep--;
+      state.mobileStep8Bridge = false;
       if (deps && typeof deps.updateUI === 'function') deps.updateUI();
       if (deps && typeof deps.restoreSelections === 'function') deps.restoreSelections();
       if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
@@ -268,6 +327,7 @@
     goToStep: goToStep,
     next: next,
     back: back,
-    syncMobileNavIndicator: syncMobileNavIndicator
+    syncMobileNavIndicator: syncMobileNavIndicator,
+    isMobileStep8Bridge: isMobileStep8Bridge
   };
 })();

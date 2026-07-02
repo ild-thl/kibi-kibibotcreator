@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/styles.css?v=63">
+  <link rel="stylesheet" href="./styles/styles.css?v=68">
   <script src="./src/config.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
@@ -313,6 +313,7 @@
 
       <!-- Schritt 7: Visuelle Gestaltung (Avatar) -->
       <section id="step8" class="wizard-step hidden">
+        <div class="step8-main-view">
         <h2 class="text-lg font-medium text-gray-800 mb-4" data-i18n="steps.8.title">Visuelle Gestaltung</h2>
         <div class="wizard-step-grid">
           <div class="wizard-col-main">
@@ -345,6 +346,20 @@
           </div>
 
           <div class="wizard-col-side"></div>
+        </div>
+        </div>
+
+        <div class="step8-mobile-bridge hidden" aria-hidden="true">
+          <div class="step8-bridge-animation">
+            <div id="step8BridgeLottie" class="step8-bridge-lottie" aria-hidden="true"></div>
+          </div>
+          <div class="step8-bridge-actions">
+            <div class="step8-bridge-nav-row">
+              <button type="button" id="btnBridgeBack" class="step8-bridge-btn step8-bridge-btn--back" data-i18n="nav.back">Zurück</button>
+              <button type="button" id="btnViewSummary" class="step8-bridge-btn step8-bridge-btn--summary" data-i18n="nav.summary">Zusammenfassung</button>
+            </div>
+            <button type="button" id="btnGoSurvey" class="step8-bridge-btn step8-bridge-btn--survey" data-i18n="nav.survey">Weiter zur Umfrage</button>
+          </div>
         </div>
       </section>
 
@@ -494,7 +509,7 @@
   <script src="./src/wizard/navigation.js"></script>
   <script src="./src/wizard/wheel-center-lottie.js"></script>
   <script src="./src/wizard/welcome-lottie.js"></script>
-  <script src="./src/wizard/summary-lottie.js?v=2"></script>
+  <script src="./src/wizard/summary-lottie.js?v=3"></script>
   <script src="./src/wizard/summary-mobile.js?v=2"></script>
   <script src="./src/wizard/avatar.js"></script>
   <script src="./src/app.js"></script>

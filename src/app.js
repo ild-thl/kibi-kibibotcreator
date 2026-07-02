@@ -37,6 +37,7 @@
     // Avatar wurde aktiv erzeugt (Nutzerinteraktion)
     avatarInitialized: false,
     summaryPage: 1,
+    mobileStep8Bridge: false,
     currentStep: 0
   };
 
@@ -211,6 +212,35 @@
     URL.revokeObjectURL(url);
   }
 
+  function refreshChatLottie() {
+    if (!window.WizardSummaryLottie || typeof window.WizardSummaryLottie.refresh !== 'function') return;
+    if (state.currentStep === TOTAL_STEPS || (state.currentStep === 8 && state.mobileStep8Bridge)) {
+      window.WizardSummaryLottie.refresh(state);
+      return;
+    }
+    if (typeof window.WizardSummaryLottie.destroy === 'function') {
+      window.WizardSummaryLottie.destroy();
+    }
+  }
+
+  function backFromStep8Bridge() {
+    state.mobileStep8Bridge = false;
+    updateUI();
+    restoreSelections();
+    syncNextButtonMuted();
+    renderAvatarStep();
+  }
+
+  function goToSummaryFromBridge() {
+    state.mobileStep8Bridge = false;
+    state.currentStep = TOTAL_STEPS;
+    state.summaryPage = 1;
+    updateUI();
+    restoreSelections();
+    syncNextButtonMuted();
+    updateSummary();
+  }
+
   function updateUI() {
     if (window.WizardNavigation && window.WizardNavigation.updateUI) {
       window.WizardNavigation.updateUI(state, TOTAL_STEPS, {
@@ -218,17 +248,11 @@
         renderAvatarStep: renderAvatarStep,
         syncWheelCenterAnimation: syncWheelCenterAnimation,
         syncNextButtonMuted: syncNextButtonMuted,
-        updateSummaryNavButtons: updateSummaryNavButtons
+        updateSummaryNavButtons: updateSummaryNavButtons,
+        refreshChatLottie: refreshChatLottie
       });
     }
     syncNextButtonMuted();
-    if (
-      state.currentStep !== TOTAL_STEPS &&
-      window.WizardSummaryLottie &&
-      typeof window.WizardSummaryLottie.destroy === 'function'
-    ) {
-      window.WizardSummaryLottie.destroy();
-    }
   }
 
   function bindCardSelects() {
@@ -463,6 +487,7 @@
     state.avatarVariant = null;
     state.avatarInitialized = false;
     state.summaryPage = 1;
+    state.mobileStep8Bridge = false;
     state.currentStep = 0;
 
     if (window.WizardWheelCenter && window.WizardWheelCenter.resetNavigationTracking) {
@@ -548,8 +573,8 @@
     if (window.WizardWheelCenter && typeof window.WizardWheelCenter.refreshWheelCenterForState === 'function') {
       window.WizardWheelCenter.refreshWheelCenterForState(state);
     }
-    if (state.currentStep === TOTAL_STEPS && window.WizardSummaryLottie && typeof window.WizardSummaryLottie.refresh === 'function') {
-      window.WizardSummaryLottie.refresh(state);
+    if (state.currentStep === TOTAL_STEPS || (state.currentStep === 8 && state.mobileStep8Bridge)) {
+      refreshChatLottie();
     }
   }
 
@@ -563,8 +588,8 @@
     if (window.WizardWelcomeLottie && typeof window.WizardWelcomeLottie.refresh === 'function') {
       window.WizardWelcomeLottie.refresh();
     }
-    if (state.currentStep === TOTAL_STEPS && window.WizardSummaryLottie && typeof window.WizardSummaryLottie.refresh === 'function') {
-      window.WizardSummaryLottie.refresh(state);
+    if (state.currentStep === TOTAL_STEPS || (state.currentStep === 8 && state.mobileStep8Bridge)) {
+      refreshChatLottie();
     }
     if (window.NameSuggestions && window.NameSuggestions.applyRandomNameSuggestions) {
       window.NameSuggestions.applyRandomNameSuggestions('#step3');
@@ -636,6 +661,12 @@
     if (startBtnInline) startBtnInline.addEventListener('click', startWizard);
     if (backBtn) backBtn.addEventListener('click', back);
     if (saveBtn) saveBtn.addEventListener('click', save);
+    const btnViewSummary = document.getElementById('btnViewSummary');
+    const btnBridgeBack = document.getElementById('btnBridgeBack');
+    const btnGoSurvey = document.getElementById('btnGoSurvey');
+    if (btnViewSummary) btnViewSummary.addEventListener('click', goToSummaryFromBridge);
+    if (btnBridgeBack) btnBridgeBack.addEventListener('click', backFromStep8Bridge);
+    if (btnGoSurvey) btnGoSurvey.addEventListener('click', save);
     if (settingsBtn) settingsBtn.addEventListener('click', showSettingsModal);
     if (settingsExport) {
       settingsExport.addEventListener('click', function () {
@@ -693,6 +724,17 @@
         }
       });
     }
+
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(function () {
+        if (state.currentStep === 8 || state.currentStep === TOTAL_STEPS) {
+          updateUI();
+          if (state.currentStep === TOTAL_STEPS) updateSummary();
+        }
+      }, 120);
+    });
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {

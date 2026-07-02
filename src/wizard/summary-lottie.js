@@ -6,6 +6,7 @@
   };
 
   var instance = null;
+  var activeContainerId = '';
 
   function variantFileSegment(variant) {
     return variant === 'schwarz_weiss' ? 's_w' : variant;
@@ -32,8 +33,24 @@
     return './assets/i18n/' + locale + '/' + file;
   }
 
-  function getLottieEl() {
-    return document.getElementById('summaryChatLottie');
+  function getLottieEl(containerId) {
+    return document.getElementById(containerId || 'summaryChatLottie');
+  }
+
+  function isBridgeVisible() {
+    var step8 = document.getElementById('step8');
+    var bridge = document.querySelector('#step8 .step8-mobile-bridge');
+    return !!(step8 && !step8.classList.contains('hidden') && bridge && !bridge.classList.contains('hidden'));
+  }
+
+  function resolveActiveContainerId() {
+    if (document.querySelector('#step9:not(.hidden)')) {
+      return 'summaryChatLottie';
+    }
+    if (isBridgeVisible()) {
+      return 'step8BridgeLottie';
+    }
+    return '';
   }
 
   function destroy() {
@@ -43,29 +60,47 @@
       } catch (e) {}
     }
     instance = null;
-    var el = getLottieEl();
-    if (el) el.innerHTML = '';
+    activeContainerId = '';
+    ['summaryChatLottie', 'step8BridgeLottie'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = '';
+    });
   }
 
-  function setVisible(showLottie) {
-    var lottieEl = getLottieEl();
+  function setVisible(containerId, showLottie) {
+    var lottieEl = getLottieEl(containerId);
     if (lottieEl) {
       lottieEl.classList.toggle('hidden', !showLottie);
       lottieEl.setAttribute('aria-hidden', showLottie ? 'false' : 'true');
     }
   }
 
-  function mount(state) {
-    destroy();
-    var el = getLottieEl();
-    if (!el) return;
-    var url = resolveSummaryChatAnimationUrl(state);
-    if (!url) {
-      setVisible(false);
+  function mount(state, containerId) {
+    var targetId = containerId || resolveActiveContainerId();
+    if (!targetId) {
+      destroy();
       return;
     }
 
-    setVisible(true);
+    if (activeContainerId && activeContainerId !== targetId) {
+      var previousEl = getLottieEl(activeContainerId);
+      if (previousEl) previousEl.innerHTML = '';
+    }
+
+    var el = getLottieEl(targetId);
+    if (!el) return;
+    var url = resolveSummaryChatAnimationUrl(state);
+    if (!url) {
+      setVisible(targetId, false);
+      return;
+    }
+
+    if (instance && activeContainerId === targetId) {
+      destroy();
+    }
+
+    setVisible(targetId, true);
+    activeContainerId = targetId;
 
     if (!window.lottie || typeof window.lottie.loadAnimation !== 'function') return;
 
@@ -79,11 +114,12 @@
   }
 
   function refresh(state) {
-    if (!document.querySelector('#step9:not(.hidden)')) {
+    var containerId = resolveActiveContainerId();
+    if (!containerId) {
       destroy();
       return;
     }
-    mount(state);
+    mount(state, containerId);
   }
 
   window.WizardSummaryLottie = {

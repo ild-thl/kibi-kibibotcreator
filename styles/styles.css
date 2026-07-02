@@ -304,6 +304,14 @@ body {
   outline: none;
 }
 
+.step8-mobile-bridge {
+  display: none;
+}
+
+#step8:not(.hidden) > .step8-main-view:not(.hidden) {
+  display: contents;
+}
+
 .card-select.selected {
   border-color: var(--color-accent);
   background: var(--color-accent-soft);
@@ -1026,7 +1034,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 #step5:not(.hidden) > h2,
 #step6:not(.hidden) > h2,
 #step7:not(.hidden) > h2,
-#step8:not(.hidden) > h2 {
+#step8:not(.hidden) .step8-main-view > h2 {
   grid-column: 2;
   grid-row: 1;
   margin-bottom: 0.75rem; /* Tailwind: mb-4 bleibt optisch ähnlich */
@@ -1043,7 +1051,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 #step5:not(.hidden) > .wizard-step-grid,
 #step6:not(.hidden) > .wizard-step-grid,
 #step7:not(.hidden) > .wizard-step-grid,
-#step8:not(.hidden) > .wizard-step-grid {
+#step8:not(.hidden) .step8-main-view > .wizard-step-grid {
   grid-column: 1 / span 2;
   grid-row: 2;
 }
@@ -1642,7 +1650,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step5:not(.hidden) > h2,
   #step6:not(.hidden) > h2,
   #step7:not(.hidden) > h2,
-  #step8:not(.hidden) > h2 {
+  #step8:not(.hidden) .step8-main-view > h2 {
     margin-left: 0;
     margin-top: 0;
     margin-bottom: 0.9rem;
@@ -2050,14 +2058,16 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* ── Wizard-Schritte 1–9 (Mobile, gleiche Spec wie Startseite) ── */
-  body.wizard-nav-visible > div.w-screen {
+  body.wizard-nav-visible > div.w-screen,
+  body.wizard-on-step8-bridge > div.w-screen {
     width: 100% !important;
     max-width: 100% !important;
     padding: 32px 24px 0 !important;
     box-sizing: border-box;
   }
 
-  body.wizard-nav-visible > div.w-screen > header {
+  body.wizard-nav-visible > div.w-screen > header,
+  body.wizard-on-step8-bridge > div.w-screen > header {
     margin-bottom: 0 !important;
     width: 100%;
     max-width: 342px;
@@ -2069,7 +2079,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     justify-content: flex-start;
   }
 
-  body.wizard-nav-visible > div.w-screen > header .page-title {
+  body.wizard-nav-visible > div.w-screen > header .page-title,
+  body.wizard-on-step8-bridge > div.w-screen > header .page-title {
     font-family: 'Open Sans', sans-serif;
     font-size: 18px;
     font-weight: 700;
@@ -2082,15 +2093,18 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     overflow: visible;
   }
 
-  body.wizard-nav-visible > div.w-screen > header .page-title__line {
+  body.wizard-nav-visible > div.w-screen > header .page-title__line,
+  body.wizard-on-step8-bridge > div.w-screen > header .page-title__line {
     display: block;
   }
 
-  body.wizard-nav-visible > div.w-screen > header .page-title__line--1::after {
+  body.wizard-nav-visible > div.w-screen > header .page-title__line--1::after,
+  body.wizard-on-step8-bridge > div.w-screen > header .page-title__line--1::after {
     content: none;
   }
 
-  body.wizard-nav-visible > div.w-screen > header .page-title__line--2 {
+  body.wizard-nav-visible > div.w-screen > header .page-title__line--2,
+  body.wizard-on-step8-bridge > div.w-screen > header .page-title__line--2 {
     position: absolute;
     top: calc(18px * 1.3);
     left: 0;
@@ -2098,11 +2112,13 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     max-width: calc(100% - 2rem);
   }
 
-  body.wizard-nav-visible #btnSettings.settings-gear {
+  body.wizard-nav-visible #btnSettings.settings-gear,
+  body.wizard-on-step8-bridge #btnSettings.settings-gear {
     color: #547399;
   }
 
-  body.wizard-nav-visible #btnSettings.settings-gear:hover {
+  body.wizard-nav-visible #btnSettings.settings-gear:hover,
+  body.wizard-on-step8-bridge #btnSettings.settings-gear:hover {
     color: #3d5570;
   }
 
@@ -2143,7 +2159,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step5:not(.hidden) > .wizard-step-grid,
   #step6:not(.hidden) > .wizard-step-grid,
   #step7:not(.hidden) > .wizard-step-grid,
-  #step8:not(.hidden) > .wizard-step-grid {
+  #step8:not(.hidden) .step8-main-view > .wizard-step-grid {
     display: contents;
   }
 
@@ -2195,7 +2211,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step5:not(.hidden) > h2,
   #step6:not(.hidden) > h2,
   #step7:not(.hidden) > h2,
-  #step8:not(.hidden) > h2 {
+  #step8:not(.hidden) .step8-main-view > h2 {
     order: 2;
     width: 100%;
     max-width: 342px;
@@ -2869,13 +2885,15 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   body.wizard-on-step0 > div.w-screen > header,
   body:has(#step0:not(.hidden)) > div.w-screen > header,
-  body.wizard-nav-visible > div.w-screen > header {
+  body.wizard-nav-visible > div.w-screen > header,
+  body.wizard-on-step8-bridge > div.w-screen > header {
     padding-right: 2rem;
   }
 
   body.wizard-on-step0 #btnSettings.settings-gear,
   body:has(#step0:not(.hidden)) #btnSettings.settings-gear,
-  body.wizard-nav-visible #btnSettings.settings-gear {
+  body.wizard-nav-visible #btnSettings.settings-gear,
+  body.wizard-on-step8-bridge #btnSettings.settings-gear {
     right: 0;
     /* Oberkante Zahnrad ≈ Oberkante Zeile 1 (Open Sans 18px / line-height 1.3) */
     top: calc((18px * 1.3 - 18px) / 2);
@@ -2886,7 +2904,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   body.wizard-on-step0 #btnSettings.settings-gear svg,
   body:has(#step0:not(.hidden)) #btnSettings.settings-gear svg,
-  body.wizard-nav-visible #btnSettings.settings-gear svg {
+  body.wizard-nav-visible #btnSettings.settings-gear svg,
+  body.wizard-on-step8-bridge #btnSettings.settings-gear svg {
     position: absolute;
     top: 0;
     right: 0;
@@ -2899,13 +2918,15 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   body.wizard-on-step0 #btnSettings.settings-gear:hover,
   body:has(#step0:not(.hidden)) #btnSettings.settings-gear:hover,
-  body.wizard-nav-visible #btnSettings.settings-gear:hover {
+  body.wizard-nav-visible #btnSettings.settings-gear:hover,
+  body.wizard-on-step8-bridge #btnSettings.settings-gear:hover {
     transform: translateY(-1px);
   }
 
   body.wizard-on-step0 header,
   body:has(#step0:not(.hidden)) header,
-  body.wizard-nav-visible header {
+  body.wizard-nav-visible header,
+  body.wizard-on-step8-bridge header {
     margin-bottom: 0 !important;
   }
 
@@ -3524,6 +3545,145 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     border-color: var(--wizard-selection-color);
   }
 
+  /* Schritt 8: Mobile-Zwischenseite (Zusammenfassung oder Umfrage) */
+  body.wizard-on-step8-bridge > div.w-screen {
+    padding-bottom: 0 !important;
+  }
+
+  #step8:not(.hidden) .step8-mobile-bridge:not(.hidden) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  #step8:not(.hidden) .step8-bridge-animation {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-top: calc(var(--wizard-mobile-heading-to-wheel) - var(--wizard-mobile-page-title-height));
+    margin-bottom: var(--wizard-mobile-wheel-to-card);
+    aspect-ratio: 750 / 650;
+    overflow: visible;
+    flex-shrink: 0;
+  }
+
+  #step8:not(.hidden) .step8-bridge-lottie {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #step8:not(.hidden) .step8-bridge-lottie svg {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  #step8:not(.hidden) .step8-bridge-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 342px;
+    margin: 0 auto 25px;
+    padding: 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  #step8:not(.hidden) .step8-bridge-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 342px;
+  }
+
+  #step8:not(.hidden) .step8-bridge-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 16px;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: none !important;
+  }
+
+  #step8:not(.hidden) .step8-bridge-btn--back,
+  #step8:not(.hidden) .step8-bridge-btn--summary {
+    flex: 0 0 165px;
+    width: 165px;
+    max-width: 165px;
+  }
+
+  #step8:not(.hidden) .step8-bridge-btn--survey {
+    width: 100%;
+    max-width: 342px;
+  }
+
+  [data-theme="light"] #step8:not(.hidden) .step8-bridge-btn--back {
+    background-color: #ffffff;
+    border: 2px solid #e5e7eb;
+    color: #a5a5a5;
+  }
+
+  [data-theme="light"] #step8:not(.hidden) .step8-bridge-btn--back:hover {
+    background-color: #f9fafb;
+    color: #a5a5a5;
+  }
+
+  [data-theme="dark"] #step8:not(.hidden) .step8-bridge-btn--back {
+    background-color: #abc1d5;
+    color: #ffffff;
+    border: none;
+  }
+
+  [data-theme="dark"] #step8:not(.hidden) .step8-bridge-btn--back:hover {
+    background-color: #9ab3c9;
+  }
+
+  [data-theme="light"] #step8:not(.hidden) .step8-bridge-btn--summary {
+    border: none;
+    background-color: #5391f7;
+    color: #ffffff;
+  }
+
+  [data-theme="light"] #step8:not(.hidden) .step8-bridge-btn--summary:hover {
+    background-color: #4280e6;
+  }
+
+  [data-theme="dark"] #step8:not(.hidden) .step8-bridge-btn--summary {
+    border: none;
+    background-color: #547399;
+    color: #ffffff;
+  }
+
+  [data-theme="dark"] #step8:not(.hidden) .step8-bridge-btn--summary:hover {
+    background-color: #3d5570;
+  }
+
+  #step8:not(.hidden) .step8-bridge-btn--survey {
+    border: none;
+    background-color: #a3be8c;
+    color: #ffffff;
+  }
+
+  #step8:not(.hidden) .step8-bridge-btn--survey:hover {
+    background-color: #8fad7a;
+  }
+
   /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */
   html {
     overflow-x: hidden;
@@ -3545,19 +3705,22 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   [data-theme="light"] body:has(#step0:not(.hidden)) > div.w-screen > header .page-title,
   [data-theme="light"] body.wizard-on-step0 > div.w-screen > header .page-title,
-  [data-theme="light"] body.wizard-nav-visible > div.w-screen > header .page-title {
+  [data-theme="light"] body.wizard-nav-visible > div.w-screen > header .page-title,
+  [data-theme="light"] body.wizard-on-step8-bridge > div.w-screen > header .page-title {
     color: #333333;
   }
 
   [data-theme="light"] body:has(#step0:not(.hidden)) #btnSettings.settings-gear,
   [data-theme="light"] body.wizard-on-step0 #btnSettings.settings-gear,
-  [data-theme="light"] body.wizard-nav-visible #btnSettings.settings-gear {
+  [data-theme="light"] body.wizard-nav-visible #btnSettings.settings-gear,
+  [data-theme="light"] body.wizard-on-step8-bridge #btnSettings.settings-gear {
     color: #333333;
   }
 
   [data-theme="light"] body:has(#step0:not(.hidden)) #btnSettings.settings-gear:hover,
   [data-theme="light"] body.wizard-on-step0 #btnSettings.settings-gear:hover,
-  [data-theme="light"] body.wizard-nav-visible #btnSettings.settings-gear:hover {
+  [data-theme="light"] body.wizard-nav-visible #btnSettings.settings-gear:hover,
+  [data-theme="light"] body.wizard-on-step8-bridge #btnSettings.settings-gear:hover {
     color: #222222;
   }
 
