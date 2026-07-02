@@ -106,6 +106,10 @@
     }
     document.body.classList.toggle('wizard-on-step0', state.currentStep === 0);
     document.body.classList.toggle('wizard-nav-visible', navInFlow);
+    for (var stepClass = 0; stepClass <= totalSteps; stepClass++) {
+      document.body.classList.remove('wizard-step-' + stepClass);
+    }
+    document.body.classList.add('wizard-step-' + state.currentStep);
 
     var stepGapEl = document.getElementById('wizardNavStepGap');
     var showMobileNavGap = navInFlow && mobileStep0Start === false && window.matchMedia('(max-width: 520px)').matches;
