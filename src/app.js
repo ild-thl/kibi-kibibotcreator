@@ -598,6 +598,9 @@
     if (window.WizardSelection && typeof window.WizardSelection.syncStep2GreetingLabels === 'function') {
       window.WizardSelection.syncStep2GreetingLabels(state);
     }
+    if (window.WizardSelection && typeof window.WizardSelection.syncStep2FieldLocks === 'function') {
+      window.WizardSelection.syncStep2FieldLocks(state);
+    }
     if (window.WizardWelcomeLottie && typeof window.WizardWelcomeLottie.refresh === 'function') {
       window.WizardWelcomeLottie.refresh();
     }

@@ -1,6 +1,14 @@
 ;(function () {
   var PRIVACY_NONE_KEY = 'keine-daten-speichern';
 
+  var STEP2_FIELDS = [
+    'personality_greeting',
+    'personality_humor',
+    'personality_answer',
+    'personality_tone',
+    'personality_style'
+  ];
+
   function escAttr(value) {
     if (typeof CSS !== 'undefined' && CSS.escape) return CSS.escape(String(value));
     return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
@@ -22,6 +30,64 @@
       var option = readOption(btn);
       if (!field || !option) return;
       btn.textContent = window.WizardI18n.optionLabel(field, option, greeting);
+    });
+  }
+
+  function firstOpenStep2FieldIndex(state) {
+    for (var i = 0; i < STEP2_FIELDS.length; i++) {
+      if (!state[STEP2_FIELDS[i]]) return i;
+    }
+    return -1;
+  }
+
+  function isStep2PersonalityField(field) {
+    return STEP2_FIELDS.indexOf(field) >= 0;
+  }
+
+  /** Schritt-2: nur Anrede zuerst, danach nacheinander Humor → Antwortstil → Ton → Stil. */
+  function isStep2FieldEnabled(state, field) {
+    var idx = STEP2_FIELDS.indexOf(field);
+    if (idx < 0) return true;
+    var openIdx = firstOpenStep2FieldIndex(state);
+    if (openIdx < 0) return true;
+    return idx <= openIdx;
+  }
+
+  function clearLockedStep2Selections(state) {
+    var openIdx = firstOpenStep2FieldIndex(state);
+    if (openIdx < 0) return false;
+    var changed = false;
+    for (var i = openIdx + 1; i < STEP2_FIELDS.length; i++) {
+      var field = STEP2_FIELDS[i];
+      if (state[field]) {
+        state[field] = '';
+        changed = true;
+      }
+      document.querySelectorAll('.card-select[data-field="' + field + '"]').forEach(function (btn) {
+        btn.classList.remove('selected');
+      });
+    }
+    return changed;
+  }
+
+  function syncStep2FieldLocks(state) {
+    if (!state) return;
+    clearLockedStep2Selections(state);
+
+    document.querySelectorAll('#step2 .space-y-4 > div').forEach(function (group) {
+      var sampleBtn = group.querySelector('.card-select[data-field]');
+      if (!sampleBtn) return;
+      var field = sampleBtn.dataset.field;
+      if (!isStep2PersonalityField(field)) return;
+
+      var enabled = isStep2FieldEnabled(state, field);
+      group.classList.toggle('step2-field-group--locked', !enabled);
+      group.querySelectorAll('.card-select[data-field="' + field + '"]').forEach(function (btn) {
+        btn.disabled = !enabled;
+        btn.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+        btn.classList.toggle('card-select--locked', !enabled);
+        if (!enabled) btn.classList.remove('selected');
+      });
     });
   }
 
@@ -49,6 +115,7 @@
         const field = this.dataset.field;
         const isMulti = this.dataset.multi === 'true';
         if (!field) return;
+        if (isStep2PersonalityField(field) && !isStep2FieldEnabled(state, field)) return;
 
         var optionValue = readOption(this);
         var previousValue = isMulti ? null : state[field];
@@ -123,6 +190,7 @@
 
         if (typeof updateWizardWheel === 'function') updateWizardWheel();
         if (typeof syncNextButtonMuted === 'function') syncNextButtonMuted();
+        if (isStep2PersonalityField(field)) syncStep2FieldLocks(state);
       });
     });
   }
@@ -200,12 +268,14 @@
       });
     }
     syncStep2GreetingLabels(state);
+    syncStep2FieldLocks(state);
   }
 
   window.WizardSelection = {
     bindCardSelects: bindCardSelects,
     restoreSelections: restoreSelections,
     syncStep2GreetingLabels: syncStep2GreetingLabels,
+    syncStep2FieldLocks: syncStep2FieldLocks,
     readOption: readOption
   };
 })();

@@ -326,6 +326,41 @@ body {
   background: var(--color-accent-soft);
 }
 
+/* Schritt 2: gesperrte Bereiche bis zur Reihenfolge freigeschaltet */
+#step2 .step2-field-group--locked > p {
+  color: var(--color-text-muted);
+  opacity: 0.72;
+}
+
+#step2 .card-select--locked,
+#step2 .card-select:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--color-surface-border) !important;
+  background: var(--color-surface) !important;
+  color: var(--color-text-muted) !important;
+}
+
+#step2 .card-select--locked::before,
+#step2 .card-select--locked::after,
+#step2 .card-select:disabled::before,
+#step2 .card-select:disabled::after {
+  opacity: 0.45;
+}
+
+#step2 .card-select--locked:hover,
+#step2 .card-select:disabled:hover,
+#step2 .card-select--locked:focus-visible,
+#step2 .card-select:disabled:focus-visible {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--color-surface-border) !important;
+  background: var(--color-surface) !important;
+}
+
 .btn-primary {
   background: var(--color-accent);
 }
