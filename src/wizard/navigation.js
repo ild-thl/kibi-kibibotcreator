@@ -125,7 +125,7 @@
     var mobileStep8BridgeActive = isMobileStep8Bridge(state);
     var navInFlow = state.currentStep > 0 && !mobileStep0Start && !mobileStep8BridgeActive;
     if (navBarEl) {
-      navBarEl.classList.toggle('hidden', mobileStep0Start || mobileStep8BridgeActive);
+      navBarEl.classList.toggle('hidden', state.currentStep === 0 || mobileStep8BridgeActive);
       navBarEl.classList.toggle('wizard-nav-in-flow', navInFlow);
       navBarEl.classList.toggle('fixed', !navInFlow && !mobileStep0Start && !mobileStep8BridgeActive);
       navBarEl.classList.toggle('bottom-0', !navInFlow && !mobileStep0Start && !mobileStep8BridgeActive);
@@ -151,9 +151,9 @@
     }
     syncMobileNavIndicator(state, totalSteps);
 
-    if (startSpacerEl) startSpacerEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
-    if (startBtnEl) startBtnEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
-    if (startBtnInlineEl) startBtnInlineEl.classList.toggle('hidden', state.currentStep !== 0 || !mobileStep0Start);
+    if (startSpacerEl) startSpacerEl.classList.add('hidden');
+    if (startBtnEl) startBtnEl.classList.add('hidden');
+    if (startBtnInlineEl) startBtnInlineEl.classList.toggle('hidden', state.currentStep !== 0);
     if (backBtnEl) backBtnEl.classList.toggle('hidden', state.currentStep === 0);
     if (nextBtnEl) nextBtnEl.classList.toggle('hidden', state.currentStep === 0 || state.currentStep === totalSteps);
     if (nextBtnEl) {
