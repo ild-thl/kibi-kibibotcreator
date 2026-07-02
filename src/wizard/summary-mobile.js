@@ -11,13 +11,6 @@
     privacy: true
   };
 
-  function t(key, vars) {
-    if (window.WizardI18n && window.WizardI18n.t) {
-      return window.WizardI18n.t(key, vars);
-    }
-    return key;
-  }
-
   function iconUrl(key) {
     if (!SECTION_ICONS[key]) return '';
     return './assets/summary/icons/' + key + '.svg';
@@ -76,7 +69,6 @@
     }).join('');
 
     setPage(page || 1);
-    updatePageIndicator(page || 1);
   }
 
   function setPage(page) {
@@ -85,14 +77,7 @@
       var n = Number(el.getAttribute('data-summary-page'));
       el.classList.toggle('summary-mobile-page--active', n === page);
     });
-    updatePageIndicator(page);
     return page;
-  }
-
-  function updatePageIndicator(page) {
-    var el = document.getElementById('summaryPageIndicator');
-    if (!el) return;
-    el.textContent = t('nav.pageOf', { current: page, total: SUMMARY_PAGE_COUNT });
   }
 
   function isMobileSummaryLayout() {

@@ -24,6 +24,43 @@
     return totalSteps;
   }
 
+  function syncMobileNavIndicator(state, totalSteps) {
+    var stepIndicatorEl = document.getElementById('wizardStepIndicator');
+    if (!stepIndicatorEl) return;
+
+    var isMobile = window.matchMedia('(max-width: 520px)').matches;
+    var navInFlow = state.currentStep > 0;
+    var showMobileNavGap = navInFlow && isMobile;
+
+    if (!showMobileNavGap) {
+      stepIndicatorEl.textContent = '';
+      return;
+    }
+
+    if (state.currentStep >= 1 && state.currentStep <= 8) {
+      stepIndicatorEl.textContent =
+        window.WizardI18n && window.WizardI18n.t
+          ? window.WizardI18n.t('nav.stepOf', { current: state.currentStep, total: 8 })
+          : 'Schritt ' + state.currentStep + ' von 8';
+      return;
+    }
+
+    if (state.currentStep === totalSteps) {
+      var pageCount =
+        window.WizardSummaryMobile && window.WizardSummaryMobile.SUMMARY_PAGE_COUNT
+          ? window.WizardSummaryMobile.SUMMARY_PAGE_COUNT
+          : 3;
+      var page = state.summaryPage || 1;
+      stepIndicatorEl.textContent =
+        window.WizardI18n && window.WizardI18n.t
+          ? window.WizardI18n.t('nav.pageOf', { current: page, total: pageCount })
+          : 'Seite ' + page + ' von ' + pageCount;
+      return;
+    }
+
+    stepIndicatorEl.textContent = '';
+  }
+
   function updateUI(state, totalSteps, deps) {
     document.querySelectorAll('.wizard-step').forEach(function (el) {
       var id = el.id || '';
@@ -71,22 +108,16 @@
     document.body.classList.toggle('wizard-nav-visible', navInFlow);
 
     var stepGapEl = document.getElementById('wizardNavStepGap');
-    var stepIndicatorEl = document.getElementById('wizardStepIndicator');
     var showMobileNavGap = navInFlow && mobileStep0Start === false && window.matchMedia('(max-width: 520px)').matches;
-    var showStepIndicator = showMobileNavGap && state.currentStep >= 1 && state.currentStep <= 8;
+    var showStepIndicator =
+      showMobileNavGap &&
+      state.currentStep >= 1 &&
+      state.currentStep <= totalSteps;
     if (stepGapEl) {
       stepGapEl.classList.toggle('hidden', !showMobileNavGap);
       stepGapEl.setAttribute('aria-hidden', showStepIndicator ? 'false' : 'true');
     }
-    if (stepIndicatorEl) {
-      if (showStepIndicator) {
-        stepIndicatorEl.textContent = window.WizardI18n && window.WizardI18n.t
-          ? window.WizardI18n.t('nav.stepOf', { current: state.currentStep, total: 8 })
-          : 'Schritt ' + state.currentStep + ' von 8';
-      } else {
-        stepIndicatorEl.textContent = '';
-      }
-    }
+    syncMobileNavIndicator(state, totalSteps);
 
     if (startSpacerEl) startSpacerEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
     if (startBtnEl) startBtnEl.classList.toggle('hidden', state.currentStep !== 0 || mobileStep0Start);
@@ -188,6 +219,7 @@
           window.WizardSummaryMobile.setPage(state.summaryPage);
         }
         if (deps && typeof deps.updateSummaryNavButtons === 'function') deps.updateSummaryNavButtons();
+        syncMobileNavIndicator(state, totalSteps);
         if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
         return;
       }
@@ -211,6 +243,7 @@
           window.WizardSummaryMobile.setPage(state.summaryPage);
         }
         if (deps && typeof deps.updateSummaryNavButtons === 'function') deps.updateSummaryNavButtons();
+        syncMobileNavIndicator(state, totalSteps);
         if (typeof deps.syncNextButtonMuted === 'function') deps.syncNextButtonMuted();
         return;
       }
@@ -230,6 +263,7 @@
     updateUI: updateUI,
     goToStep: goToStep,
     next: next,
-    back: back
+    back: back,
+    syncMobileNavIndicator: syncMobileNavIndicator
   };
 })();

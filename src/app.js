@@ -384,6 +384,9 @@
     if (!onLastPage && window.WizardI18n && window.WizardI18n.t) {
       nextBtn.textContent = window.WizardI18n.t('nav.next');
     }
+    if (window.WizardNavigation && typeof window.WizardNavigation.syncMobileNavIndicator === 'function') {
+      window.WizardNavigation.syncMobileNavIndicator(state, TOTAL_STEPS);
+    }
   }
 
   function updateSummary() {

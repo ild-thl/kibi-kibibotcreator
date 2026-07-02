@@ -2751,16 +2751,6 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     color: #333333;
   }
 
-  #step9:not(.hidden) .summary-page-indicator {
-    margin: 20px 0 0;
-    text-align: center;
-    font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    color: #999999;
-  }
-
   /* 1024px-Regeln explizit zurücksetzen */
   body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
     padding: 0;
