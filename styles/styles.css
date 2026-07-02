@@ -982,18 +982,27 @@ header h1,
   }
 
   #step0:not(.hidden) .step0-welcome-graphic {
-    margin: auto 0 0;
+    margin: 28px 0 0;
     width: 100%;
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
+    flex-shrink: 0;
   }
 
   #step0:not(.hidden) .step0-welcome-graphic .step0-welcome-lottie {
-    width: min(100%, 26rem);
+    width: min(100%, 22rem);
+    aspect-ratio: 750 / 650;
     max-width: 100%;
-    max-height: 280px;
+    max-height: none;
     margin: 0;
+    flex-shrink: 0;
+  }
+
+  #step0:not(.hidden) .step0-welcome-graphic .step0-welcome-lottie svg {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   #step0:not(.hidden) > .step0-start-action {
@@ -1255,6 +1264,19 @@ header h1,
     width: 160px;
     padding: 0 20px;
     font-weight: 600;
+  }
+
+  /* Wizard-Wheel: Desktop, alle Schritte & Themes, 40px tiefer */
+  #step0:not(.hidden) .wizard-col-wheel,
+  #step1:not(.hidden) .wizard-col-wheel,
+  #step2:not(.hidden) .wizard-col-wheel,
+  #step3:not(.hidden) .wizard-col-wheel,
+  #step4:not(.hidden) .wizard-col-wheel,
+  #step5:not(.hidden) .wizard-col-wheel,
+  #step6:not(.hidden) .wizard-col-wheel,
+  #step7:not(.hidden) .wizard-col-wheel,
+  #step8:not(.hidden) .wizard-col-wheel {
+    margin-top: 40px;
   }
 }
 
