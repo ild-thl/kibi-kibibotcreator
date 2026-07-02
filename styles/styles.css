@@ -19,15 +19,17 @@
   --color-bg-gradient: linear-gradient(90deg, #eef2ff 0%, #e0e7ff 50%, #f5f3ff 100%);
   --color-surface: #ffffff;
   --color-surface-border: #e5e7eb;
-  --color-accent: #3b82f6;
-  --color-accent-hover: #2563eb;
-  --color-accent-soft: rgba(59, 130, 246, 0.08);
-  --color-nav-next: #3b82f6;
-  --color-nav-next-hover: #2563eb;
+  --color-accent: #5391f7;
+  --color-accent-hover: #4280e6;
+  --color-accent-soft: rgba(83, 145, 247, 0.08);
+  --color-nav-next: #5391f7;
+  --color-nav-next-hover: #4280e6;
   --color-nav-next-muted: #8eaecf;
   --color-nav-next-muted-hover: #7c9cbb;
   --color-nav-bar-bg: rgba(238, 242, 255, 0.95);
-  --color-input-focus: #3b82f6;
+  --color-input-focus: #5391f7;
+  --wizard-selection-color: #5391f7;
+  --wizard-pagination-color: #8bb6fa;
   --color-modal-bg: #ffffff;
   --color-modal-border: #e5e7eb;
   --color-settings-segment-bg: #f3f4f6;
@@ -48,6 +50,8 @@
   --color-nav-next-muted-hover: #7c9cbb;
   --color-nav-bar-bg: rgba(129, 161, 193, 0.95);
   --color-input-focus: #a3be8c;
+  --wizard-selection-color: #547399;
+  --wizard-pagination-color: #547399;
   --color-modal-bg: #ffffff;
   --color-modal-border: #d8dee9;
   --color-settings-segment-bg: #e8eef4;
@@ -170,12 +174,12 @@ body {
 /* Checkbox: Hover/Fokus soll wie sensitiv wirken (Rahmen wird blau) */
 .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
 .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):focus-visible::before {
-  border-color: #3b82f6;
+  border-color: var(--wizard-selection-color);
 }
 
 .card-select[data-multi="true"].selected:not(.avatar-opt)::before {
-  border-color: #007aff;
-  background: #007aff;
+  border-color: var(--wizard-selection-color);
+  background: var(--wizard-selection-color);
 }
 
 .card-select[data-multi="true"].selected:not(.avatar-opt)::after {
@@ -193,8 +197,8 @@ body {
 
 /* Einfachauswahl als Radio */
 .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before {
-  border-color: #3b82f6;
-  background: #3b82f6;
+  border-color: var(--wizard-selection-color);
+  background: var(--wizard-selection-color);
 }
 
 /* Radio: bei Auswahl kleiner Mittelpunkt (wie im Beispiel) */
@@ -220,7 +224,7 @@ body {
 /* Radio: Hover/Fokus soll wie sensitiv wirken (Ring wird blau) */
 .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
 .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):focus-visible::before {
-  border-color: #3b82f6;
+  border-color: var(--wizard-selection-color);
 }
 
 /* Radio: bei Hover/Fokus auch die Fläche (inkl. Text) leicht highlighten */
@@ -291,12 +295,12 @@ body {
 }
 
 #step8 .avatar-variant-opt.selected {
-  border-color: #547399;
+  border-color: var(--wizard-selection-color);
 }
 
 #step8 .avatar-variant-opt:hover,
 #step8 .avatar-variant-opt:focus-visible {
-  border-color: #547399;
+  border-color: var(--wizard-selection-color);
   outline: none;
 }
 
@@ -465,11 +469,16 @@ body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
-  font-size: var(--wizard-mobile-font-step-indicator, 13px);
+  font-size: var(--wizard-mobile-font-step-indicator, 13pt);
   font-weight: 600;
   line-height: 1;
-  color: #547399;
+  color: var(--wizard-pagination-color, #8bb6fa);
   text-align: center;
+}
+
+[data-theme="light"] #btnBack:not(.hidden) {
+  background-color: #ffffff;
+  color: #a5a5a5;
 }
 
 #validationOk {
@@ -1732,7 +1741,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-section-gap: 20px;
     --wizard-mobile-font-heading: 16px;
     --wizard-mobile-font-body: 14px;
-    --wizard-mobile-font-step-indicator: 13px;
+    --wizard-mobile-font-step-indicator: 13pt;
     --wizard-mobile-line-height-heading: 20px;
     --wizard-mobile-line-height-body: 18px;
     --wizard-mobile-main-pad-bottom: 48px;
@@ -2356,8 +2365,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step6:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
   #step7:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before,
   #step8:not(.hidden) .wizard-col-side .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::before {
-    border-color: #547399;
-    background: #547399;
+    border-color: var(--wizard-selection-color);
+    background: var(--wizard-selection-color);
   }
 
   #step1:not(.hidden) .wizard-col-main .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
@@ -2376,8 +2385,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step6:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
   #step7:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before,
   #step8:not(.hidden) .wizard-col-side .card-select[data-multi="true"].selected:not(.avatar-opt)::before {
-    border-color: #547399;
-    background: #547399;
+    border-color: var(--wizard-selection-color);
+    background: var(--wizard-selection-color);
   }
 
   #step1:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]):not(.selected):not(.avatar-opt):hover::before,
@@ -2396,7 +2405,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step6:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
   #step7:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before,
   #step8:not(.hidden) .wizard-col-main .card-select[data-multi="true"]:not(.selected):not(.avatar-opt):hover::before {
-    border-color: #547399;
+    border-color: var(--wizard-selection-color);
   }
 
   #step1:not(.hidden) .wizard-col-main .card-select:not([data-multi="true"]).selected:not(.avatar-opt)::after,
@@ -2505,27 +2514,28 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   [data-theme="light"] body.wizard-nav-visible #btnNext,
   [data-theme="light"] body.wizard-nav-visible #btnSave {
     border: none;
-    background-color: #a3be8c !important;
+    background-color: #5391f7 !important;
     color: #ffffff !important;
   }
 
   [data-theme="light"] body.wizard-nav-visible #btnNext:hover,
   [data-theme="light"] body.wizard-nav-visible #btnSave:hover {
-    background-color: #8fad7a;
+    background-color: #4280e6 !important;
   }
 
-  body.wizard-nav-visible #btnSave:not(.hidden) {
+  [data-theme="dark"] body.wizard-nav-visible #btnSave:not(.hidden) {
     border: none !important;
-    background-color: #a3be8c !important;
+    background-color: #547399 !important;
     color: #ffffff !important;
   }
 
-  body.wizard-nav-visible #btnSave:not(.hidden):hover {
-    background-color: #8fad7a !important;
+  [data-theme="dark"] body.wizard-nav-visible #btnSave:not(.hidden):hover {
+    background-color: #3d5570 !important;
   }
 
   [data-theme="light"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted) {
-    background-color: #a3be8c !important;
+    background-color: #5391f7 !important;
+    color: #ffffff !important;
   }
 
   /* Mobile Schritte 1–8: einheitliche Ausgrau-Farbe bei unvollständigem Schritt */
@@ -2537,6 +2547,17 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   body.wizard-nav-visible #btnNext:not(.hidden).wizard-nav-next--muted:hover {
     background-color: #7c9cbb !important;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnBack:not(.hidden) {
+    background-color: #ffffff !important;
+    border: 2px solid #e5e7eb;
+    color: #a5a5a5 !important;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnBack:not(.hidden):hover {
+    background-color: #f9fafb !important;
+    color: #a5a5a5 !important;
   }
 
   body.wizard-nav-visible #btnBack {
@@ -2579,7 +2600,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   /* Summary (Schritt 9): gleiche Weiter-Button-Farbe wie Schritte 1-8 erzwingen */
   [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted),
   [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
-    background-color: #a3be8c !important;
+    background-color: #5391f7 !important;
     color: #ffffff !important;
     border: none !important;
   }
@@ -3410,8 +3431,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select.selected::before {
-    border-color: #547399;
-    background: #547399;
+    border-color: var(--wizard-selection-color);
+    background: var(--wizard-selection-color);
   }
 
   #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options > .card-select.selected::after {
@@ -3456,7 +3477,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   #step8:not(.hidden) .avatar-variant-opt.selected {
-    border-color: #547399;
+    border-color: var(--wizard-selection-color);
   }
 
   /* Step-0: Scroll-Reserve (nach generischen w-screen-Overrides) */
