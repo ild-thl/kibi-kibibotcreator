@@ -2466,7 +2466,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   body.wizard-nav-visible #wizardNavBar > .wizard-nav-actions {
     width: 100% !important;
     max-width: 342px;
-    margin-top: 20px;
+    margin-top: 0px;
     padding-left: 0 !important;
     padding-right: 0 !important;
     justify-content: center;
