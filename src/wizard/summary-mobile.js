@@ -12,9 +12,15 @@
     visual: true
   };
 
+  function currentThemeFolder() {
+    var theme = document.documentElement.getAttribute('data-theme');
+    return theme === 'dark' ? 'dark' : 'light';
+  }
+
   function iconUrl(key) {
     if (!SECTION_ICONS[key]) return '';
-    return './assets/summary/icons/' + key + '.svg';
+    var themeFolder = currentThemeFolder();
+    return './assets/summary/icons/' + themeFolder + '/' + key + '.svg';
   }
 
   function escapeHtml(str) {
