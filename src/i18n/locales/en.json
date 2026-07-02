@@ -105,10 +105,10 @@
       "usagePurpose": "Use & purpose",
       "personalityTone": "Personality & tone",
       "roleName": "Role & name",
-      "interaction": "Interaction",
+      "interaction": "Workflow & interaction",
       "knowledge": "Knowledge & competence",
       "feedback": "Learning & feedback",
-      "privacy": "Privacy",
+      "privacy": "Privacy principles",
       "visualDesign": "Visual design"
     }
   },

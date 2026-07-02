@@ -1207,7 +1207,7 @@ header h1,
     padding-bottom: 0;
   }
 
-  /* Schritt 9: gleiche Seitenbreite, bestehendes Zwei-Spalten-Summary */
+  /* Schritt 9: Desktop-Mockup (Chat links, Zusammenfassungskarte rechts) */
   #step9:not(.hidden) {
     width: 100%;
     max-width: 1250px;
@@ -1217,8 +1217,183 @@ header h1,
   }
 
   #step9:not(.hidden) .summary-layout {
+    display: grid;
+    grid-template-columns: 450px 760px;
+    column-gap: 40px;
+    align-items: start;
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
     gap: 40px;
-    align-items: stretch;
+  }
+
+  #step9:not(.hidden) .summary-left {
+    margin-top: 40px;
+    width: 450px;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  #step9:not(.hidden) .summary-desktop-legacy {
+    display: none !important;
+  }
+
+  #step9:not(.hidden) .summary-desktop-only {
+    display: block;
+  }
+
+  #step9:not(.hidden) .summary-mobile-only {
+    display: none !important;
+  }
+
+  #step9:not(.hidden) .summary-avatar-frame {
+    width: 450px;
+    height: 620px;
+    margin: 0;
+    background: transparent;
+    overflow: hidden;
+    display: block;
+  }
+
+  #step9:not(.hidden) .summary-chat-lottie {
+    width: 100%;
+    height: 100%;
+  }
+
+  #step9:not(.hidden) .summary-chat-lottie svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  #step9:not(.hidden) .summary-card {
+    width: 760px;
+    min-height: 620px;
+    max-height: 620px;
+    box-sizing: border-box;
+    padding: 36px;
+    background: #ffffff;
+    border: none;
+    border-radius: 24px;
+    box-shadow: none;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #step9:not(.hidden) .summary-card::before,
+  #step9:not(.hidden) .summary-card::after {
+    display: none !important;
+  }
+
+  #step9:not(.hidden) .summary-card-header {
+    margin: 0;
+    padding: 0;
+  }
+
+  #step9:not(.hidden) .summary-card-title {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #333333;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  #step9:not(.hidden) .summary-card-ready {
+    margin: 28px 0 0;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #333333;
+  }
+
+  #step9:not(.hidden) .summary-card-hint {
+    margin: 10px 0 0;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #333333;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 24px;
+    margin-top: 28px;
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+    box-sizing: border-box;
+  }
+
+  #step9:not(.hidden) .summary-desktop-column {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-width: 0;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin: 0;
+    padding-left: 15px;
+    box-sizing: border-box;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section + .summary-mobile-section {
+    margin-top: 0;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section__icon {
+    flex: 0 0 55px;
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section__title {
+    margin: 0 0 4px;
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #333333;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section__item {
+    font-family: 'Open Sans', 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #333333;
+  }
+
+  #step9:not(.hidden) .summary-desktop-grid .summary-mobile-section__item + .summary-mobile-section__item {
+    margin-top: 2px;
   }
 
   /* Navigation Schritte 1–9: unter der Karte, rechtsbündig */
@@ -2010,6 +2185,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 .summary-mobile {
+  display: none;
+}
+
+.summary-desktop-only {
   display: none;
 }
 
@@ -3487,8 +3666,16 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     color: #333333;
   }
 
-  #step9:not(.hidden) .summary-desktop {
+  #step9:not(.hidden) .summary-desktop-legacy {
     display: none !important;
+  }
+
+  #step9:not(.hidden) .summary-desktop-only {
+    display: none !important;
+  }
+
+  #step9:not(.hidden) .summary-mobile-only {
+    display: block;
   }
 
   #step9:not(.hidden) .summary-mobile {

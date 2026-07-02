@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles/styles.css?v=84">
+  <link rel="stylesheet" href="./styles/styles.css?v=85">
   <script src="./src/config.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 </head>
@@ -399,18 +399,24 @@
       <section id="step9" class="wizard-step hidden">
         <div class="summary-layout">
           <div class="summary-left">
-            <h2 class="summary-title summary-desktop" data-i18n="steps.9.title">Dein personalisierter Avatar ist bereit</h2>
-            <p class="summary-subtitle summary-desktop" data-i18n="steps.9.subtitle">Du kannst Deinen Avatar jetzt nutzen oder exportieren!</p>
+            <h2 class="summary-title summary-desktop-legacy" data-i18n="steps.9.title">Dein personalisierter Avatar ist bereit</h2>
+            <p class="summary-subtitle summary-desktop-legacy" data-i18n="steps.9.subtitle">Du kannst Deinen Avatar jetzt nutzen oder exportieren!</p>
             <div class="summary-avatar-frame">
               <div id="summaryChatLottie" class="summary-chat-lottie hidden" aria-hidden="true"></div>
             </div>
           </div>
 
-          <div class="summary-bubble">
-            <span class="summary-bubble-pointer summary-desktop"></span>
-            <h3 class="summary-box-title" data-i18n="steps.9.boxTitle">Zusammenfassung</h3>
-            <div id="summaryMobileRoot" class="summary-mobile" aria-live="polite"></div>
-            <dl class="summary-list summary-desktop">
+          <div class="summary-bubble summary-card">
+            <span class="summary-bubble-pointer summary-mobile-only" aria-hidden="true"></span>
+            <header class="summary-card-header summary-desktop-only">
+              <h2 class="summary-card-title" data-i18n="steps.9.boxTitle">Zusammenfassung</h2>
+              <p class="summary-card-ready" data-i18n="steps.9.mobileReady">Dein Avatar ist bereit!</p>
+              <p class="summary-card-hint" data-i18n="steps.9.mobileHint">Überprüfe deine Einstellungen und erstelle deinen Avatar.</p>
+            </header>
+            <h3 class="summary-box-title summary-mobile-only" data-i18n="steps.9.boxTitle">Zusammenfassung</h3>
+            <div id="summaryDesktopRoot" class="summary-desktop-grid summary-desktop-only" aria-live="polite"></div>
+            <div id="summaryMobileRoot" class="summary-mobile summary-mobile-only" aria-live="polite"></div>
+            <dl class="summary-list summary-desktop-legacy hidden" aria-hidden="true">
               <div><dt data-i18n="summary.usage">Einsatz</dt><dd id="summaryUsage">–</dd></div>
               <div><dt data-i18n="summary.help">Hilfestellung</dt><dd id="summaryHelp">–</dd></div>
               <div><dt data-i18n="summary.role">Rolle</dt><dd id="summaryRole">–</dd></div>
@@ -515,7 +521,7 @@
   <script src="./src/wizard/wheel-center-lottie.js"></script>
   <script src="./src/wizard/welcome-lottie.js"></script>
   <script src="./src/wizard/summary-lottie.js?v=3"></script>
-  <script src="./src/wizard/summary-mobile.js?v=2"></script>
+  <script src="./src/wizard/summary-mobile.js?v=3"></script>
   <script src="./src/wizard/avatar.js"></script>
   <script src="./src/app.js"></script>
 </body>
