@@ -279,6 +279,22 @@
     if (state.currentStep === 1) {
       syncCurrentStepSelectionsFromDom();
     }
+    if (state.currentStep === 8) {
+      var avatarStep = document.getElementById('step8');
+      if (avatarStep && !avatarStep.classList.contains('hidden')) {
+        var selectedTypeBtn = avatarStep.querySelector('.card-select[data-field="avatarType"].selected');
+        var selectedType = selectedTypeBtn ? (selectedTypeBtn.dataset.option || '') : '';
+        if (selectedType) {
+          state.avatarType = selectedType;
+        }
+        if (state.avatarType === 'none') {
+          state.avatarVariant = null;
+        } else {
+          var selectedVariantBtn = avatarStep.querySelector('#avatarVariantPicker .avatar-variant-opt.selected');
+          state.avatarVariant = selectedVariantBtn ? (selectedVariantBtn.dataset.value || null) : null;
+        }
+      }
+    }
     if (state.currentStep === 3) {
       const input = document.getElementById('inputName');
       if (input) state.name = input.value.trim();
