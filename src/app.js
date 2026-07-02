@@ -750,6 +750,15 @@
         updateUI();
       }, 150);
     });
+
+    if (window.WizardSwipeNavigation && typeof window.WizardSwipeNavigation.bind === 'function') {
+      window.WizardSwipeNavigation.bind({
+        state: state,
+        totalSteps: TOTAL_STEPS,
+        onNext: next,
+        onBack: back
+      });
+    }
   }
 
   function boot() {

@@ -1755,6 +1755,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 @media (max-width: 520px) {
+  #wizardContent {
+    touch-action: pan-y;
+  }
+
   :root {
     --wizard-wheel-size: 245px;
     --wheel-hotspot-size: 3.0625rem;
