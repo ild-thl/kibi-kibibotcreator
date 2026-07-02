@@ -588,6 +588,7 @@
     if (state.currentStep === TOTAL_STEPS || (state.currentStep === 8 && state.mobileStep8Bridge)) {
       refreshChatLottie();
     }
+    if (state.currentStep === TOTAL_STEPS) updateSummary();
   }
 
   function onLocaleChange() {
