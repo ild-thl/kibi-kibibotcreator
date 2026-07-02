@@ -8,7 +8,8 @@
     interaction: true,
     knowledge: true,
     feedback: true,
-    privacy: true
+    privacy: true,
+    visual: true
   };
 
   function iconUrl(key) {

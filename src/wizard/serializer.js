@@ -184,6 +184,18 @@
     var privacyItems = [];
     pushLabels(privacyItems, 'privacy', state.privacy);
 
+    var visualItems = [];
+    if (state.avatarType) {
+      if (state.avatarType === 'none') {
+        visualItems.push(tFn('avatar.type.none'));
+      } else {
+        visualItems.push(tFn('avatar.type.' + state.avatarType));
+        if (state.avatarVariant) {
+          visualItems.push(tFn('avatar.variant.' + state.avatarVariant));
+        }
+      }
+    }
+
     function section(icon, titleKey, items) {
       return {
         icon: icon,
@@ -202,14 +214,15 @@
       {
         sections: [
           section('role-name', 'summary.mobile.roleName', roleNameItems),
-          section('interaction', 'summary.mobile.interaction', interactionItems)
+          section('interaction', 'summary.mobile.interaction', interactionItems),
+          section('knowledge', 'summary.mobile.knowledge', knowledgeItems)
         ]
       },
       {
         sections: [
-          section('knowledge', 'summary.mobile.knowledge', knowledgeItems),
           section('feedback', 'summary.mobile.feedback', feedbackItems),
-          section('privacy', 'summary.mobile.privacy', privacyItems)
+          section('privacy', 'summary.mobile.privacy', privacyItems),
+          section('visual', 'summary.mobile.visualDesign', visualItems)
         ]
       }
     ];
