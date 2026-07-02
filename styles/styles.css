@@ -4137,6 +4137,28 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     transform: translate(-50%, -50%) rotate(45deg);
   }
 
+  /* Step 5 EN: dezenter Abstand + Entscheidungs-Grid, damit alles sichtbar bleibt */
+  html[lang="en"] {
+    --wizard-mobile-step5-section-gap: 13px;
+    --wizard-mobile-step5-option-row-gap: 14px;
+    --wizard-mobile-step5-main-pad-bottom: 6px;
+  }
+
+  html[lang="en"] #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(3) .card-select:nth-child(1) {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  html[lang="en"] #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(3) .card-select:nth-child(2) {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  html[lang="en"] #step5:not(.hidden) .wizard-col-main > .grid.gap-3:nth-of-type(3) .card-select:nth-child(3) {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
   /* Step 6: Lernen & Feedback – Mobile-Spec */
   #step6:not(.hidden) .wizard-col-main {
     overflow: hidden;
