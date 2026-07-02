@@ -1209,25 +1209,27 @@ header h1,
 
   /* Schritt 9: Desktop-Mockup (Chat links, Zusammenfassungskarte rechts) */
   #step9:not(.hidden) {
+    display: grid;
+    grid-template-columns: 450px 760px;
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 40px;
     width: 100%;
     max-width: 1250px;
     margin: 0 auto;
     min-height: 0;
     padding-bottom: 0;
+    position: relative;
   }
 
   #step9:not(.hidden) .summary-layout {
-    display: grid;
-    grid-template-columns: 450px 760px;
-    column-gap: 40px;
-    align-items: start;
-    width: 100%;
-    max-width: 1250px;
-    margin: 0 auto;
-    gap: 40px;
+    display: contents;
   }
 
   #step9:not(.hidden) .summary-left {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    justify-self: center;
     margin-top: 40px;
     width: 450px;
     max-width: 450px;
@@ -1250,7 +1252,7 @@ header h1,
 
   #step9:not(.hidden) .summary-avatar-frame {
     width: 450px;
-    height: 620px;
+    height: 450px;
     margin: 0;
     background: transparent;
     overflow: hidden;
@@ -1268,6 +1270,8 @@ header h1,
   }
 
   #step9:not(.hidden) .summary-card {
+    grid-column: 2;
+    grid-row: 1 / span 2;
     width: 760px;
     min-height: 620px;
     max-height: 620px;
