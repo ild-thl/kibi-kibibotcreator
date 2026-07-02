@@ -150,7 +150,21 @@
     }
 
     const inputName = document.getElementById('inputName');
-    if (inputName) inputName.value = state.name;
+    if (inputName) inputName.value = state.name || '';
+    document.querySelectorAll('.card-select[data-field="nameChoice"]').forEach(function (btn) {
+      btn.classList.remove('selected');
+    });
+    if (state.nameManual) {
+      var manualBtn = document.querySelector(
+        '#step3 .card-select[data-field="nameChoice"][data-suggestion=""]'
+      );
+      if (manualBtn) manualBtn.classList.add('selected');
+    } else if (state.name) {
+      document.querySelectorAll('#step3 .card-select[data-field="nameChoice"]').forEach(function (btn) {
+        var suggestion = btn.dataset.suggestion || '';
+        if (suggestion && suggestion === state.name) btn.classList.add('selected');
+      });
+    }
     if (typeof updateNameInputState === 'function') updateNameInputState();
     if (state.role) selectCard('role', state.role);
     document.querySelectorAll('.card-select[data-field="avatarType"]').forEach(function (b) {

@@ -54,6 +54,7 @@
   function updateNameInputState() {
     var input = document.getElementById('inputName');
     if (!input) return;
+    input.classList.toggle('hidden', !state.nameManual);
     input.disabled = !state.nameManual;
   }
 
