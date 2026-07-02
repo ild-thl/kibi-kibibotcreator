@@ -142,7 +142,7 @@
 
       var bg = dark
         ? (shouldMute ? '#8eaecf' : '#547399')
-        : (shouldMute ? '#8eaecf' : '#a3be8c');
+        : (shouldMute ? '#8eaecf' : '#5391f7');
 
       btn.style.setProperty('background-color', bg, 'important');
       btn.style.setProperty('color', '#ffffff', 'important');
