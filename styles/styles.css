@@ -2576,6 +2576,21 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     background-color: #7c9cbb !important;
   }
 
+  /* Summary (Schritt 9): gleiche Weiter-Button-Farbe wie Schritte 1-8 erzwingen */
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted),
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
+    background-color: #a3be8c !important;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
+  [data-theme="dark"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted),
+  [data-theme="dark"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
+    background-color: #547399 !important;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
   body.wizard-nav-visible > div.w-screen {
     padding-bottom: 0 !important;
   }
