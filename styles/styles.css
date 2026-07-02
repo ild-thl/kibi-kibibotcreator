@@ -1759,10 +1759,6 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 }
 
 @media (max-width: 520px) {
-  #step1:not(.hidden) .wizard-col-main {
-    position: relative;
-  }
-
   #step1:not(.hidden) .step1-swipe-hint {
     display: block;
     position: absolute;
@@ -1810,6 +1806,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-line-height-heading: 20px;
     --wizard-mobile-line-height-body: 18px;
     --wizard-mobile-main-pad-bottom: 48px;
+    --wizard-mobile-card-fold-cut: 28px;
+    --wizard-mobile-card-fold-flap: 21px;
+    --wizard-mobile-card-fold-color: #ccd1db;
     --wizard-mobile-step2-question-to-label: 22px;
     --wizard-mobile-step2-label-to-options: 11px;
     --wizard-mobile-step2-section-gap: 14px;
@@ -2288,9 +2287,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     width: 100%;
     max-width: 342px;
     box-sizing: border-box;
-    background: #ffffff;
-    border-radius: 0 0 15px 15px;
-    padding: 0 var(--wizard-mobile-card-pad-x);
+    background: transparent;
+    border-radius: 0 0 0 15px;
+    padding: 0 var(--wizard-mobile-card-pad-x) var(--wizard-mobile-main-pad-bottom);
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -2298,6 +2297,60 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-card-title-height));
     min-height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-card-title-height));
     overflow: hidden;
+  }
+
+  #step1:not(.hidden) .wizard-col-main > *:not(.step1-swipe-hint),
+  #step2:not(.hidden) .wizard-col-main > *,
+  #step3:not(.hidden) .wizard-col-main > *,
+  #step4:not(.hidden) .wizard-col-main > *,
+  #step5:not(.hidden) .wizard-col-main > *,
+  #step6:not(.hidden) .wizard-col-main > *,
+  #step7:not(.hidden) .wizard-col-main > *,
+  #step8:not(.hidden) .wizard-col-main > *,
+  #step1:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step2:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step3:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step4:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step5:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step6:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step7:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step8:not(.hidden) .wizard-col-side:not(:empty) > *,
+  #step9:not(.hidden) .summary-bubble > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  #step1:not(.hidden) .wizard-col-main::before,
+  #step2:not(.hidden) .wizard-col-main::before,
+  #step3:not(.hidden) .wizard-col-main::before,
+  #step4:not(.hidden) .wizard-col-main::before,
+  #step5:not(.hidden) .wizard-col-main::before,
+  #step6:not(.hidden) .wizard-col-main::before,
+  #step7:not(.hidden) .wizard-col-main::before,
+  #step8:not(.hidden) .wizard-col-main::before,
+  #step1:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step2:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step3:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step4:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step5:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step6:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step7:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step8:not(.hidden) .wizard-col-side:not(:empty)::before,
+  #step9:not(.hidden) .summary-bubble::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--color-surface);
+    border-radius: var(--wizard-mobile-card-fold-radius, 0 0 0 15px);
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--wizard-mobile-card-fold-cut)),
+      calc(100% - var(--wizard-mobile-card-fold-cut)) 100%,
+      0 100%
+    );
+    z-index: 0;
+    pointer-events: none;
   }
 
   #step1:not(.hidden) .wizard-col-main::after,
@@ -2315,11 +2368,72 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step5:not(.hidden) .wizard-col-side:not(:empty)::after,
   #step6:not(.hidden) .wizard-col-side:not(:empty)::after,
   #step7:not(.hidden) .wizard-col-side:not(:empty)::after,
-  #step8:not(.hidden) .wizard-col-side:not(:empty)::after {
+  #step8:not(.hidden) .wizard-col-side:not(:empty)::after,
+  #step9:not(.hidden) .summary-bubble::after {
     content: '';
-    display: block;
-    flex: 0 0 var(--wizard-mobile-main-pad-bottom);
-    min-height: var(--wizard-mobile-main-pad-bottom);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: var(--wizard-mobile-card-fold-cut);
+    height: var(--wizard-mobile-card-fold-cut);
+    background: var(--wizard-mobile-card-fold-color);
+    clip-path: polygon(
+      0 100%,
+      100% 0,
+      calc(100% - var(--wizard-mobile-card-fold-flap)) calc(100% - var(--wizard-mobile-card-fold-flap))
+    );
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  #step1:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step2:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step3:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step4:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step5:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step6:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step7:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step8:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::before,
+  #step1:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after,
+  #step2:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after,
+  #step3:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after,
+  #step4:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after,
+  #step5:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after,
+  #step6:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after,
+  #step7:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after,
+  #step8:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main::after {
+    content: none;
+  }
+
+  #step1:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main,
+  #step2:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main,
+  #step3:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main,
+  #step4:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main,
+  #step5:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main,
+  #step6:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main,
+  #step7:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main,
+  #step8:not(.hidden) .wizard-step-grid:has(.wizard-col-side:not(:empty)) .wizard-col-main {
+    border-radius: 0;
+  }
+
+  #step1:not(.hidden) .wizard-col-main,
+  #step2:not(.hidden) .wizard-col-main,
+  #step3:not(.hidden) .wizard-col-main,
+  #step4:not(.hidden) .wizard-col-main,
+  #step5:not(.hidden) .wizard-col-main,
+  #step6:not(.hidden) .wizard-col-main,
+  #step7:not(.hidden) .wizard-col-main,
+  #step8:not(.hidden) .wizard-col-main,
+  #step1:not(.hidden) .wizard-col-side:not(:empty),
+  #step2:not(.hidden) .wizard-col-side:not(:empty),
+  #step3:not(.hidden) .wizard-col-side:not(:empty),
+  #step4:not(.hidden) .wizard-col-side:not(:empty),
+  #step5:not(.hidden) .wizard-col-side:not(:empty),
+  #step6:not(.hidden) .wizard-col-side:not(:empty),
+  #step7:not(.hidden) .wizard-col-side:not(:empty),
+  #step8:not(.hidden) .wizard-col-side:not(:empty),
+  #step9:not(.hidden) .summary-bubble {
+    position: relative;
   }
 
   #step1:not(.hidden) .wizard-question-title,
@@ -2774,9 +2888,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
-    background: #ffffff;
+    background: transparent;
     border: none;
-    border-radius: 15px;
+    --wizard-mobile-card-fold-radius: 15px 15px 0 15px;
     padding: var(--wizard-mobile-card-pad-top) var(--wizard-mobile-card-pad-x) 0;
     box-shadow: none;
     display: flex;
@@ -2919,7 +3033,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-col-main:not(:empty),
   body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-col-side:not(:empty) {
-    background: #ffffff;
+    background: transparent;
   }
 
   body.wizard-on-step0 > div.w-screen > header,
@@ -3003,11 +3117,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-step2-card-title-height));
     min-height: calc(var(--wizard-mobile-card-height) - var(--wizard-mobile-step2-card-title-height));
     overflow: hidden;
-  }
-
-  #step2:not(.hidden) .wizard-col-main::after {
-    flex: 0 0 var(--wizard-mobile-step2-main-pad-bottom);
-    min-height: var(--wizard-mobile-step2-main-pad-bottom);
+    padding-bottom: var(--wizard-mobile-step2-main-pad-bottom);
   }
 
   #step2:not(.hidden) .wizard-col-main .space-y-4 {
@@ -3048,13 +3158,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* Step 3: Rolle & Name – Mobile-Spec */
-  #step3:not(.hidden) .wizard-col-main::after {
-    flex: 0 0 var(--wizard-mobile-step3-main-pad-bottom);
-    min-height: var(--wizard-mobile-step3-main-pad-bottom);
-  }
-
   #step3:not(.hidden) .wizard-col-main {
     overflow: hidden;
+    padding-bottom: var(--wizard-mobile-step3-main-pad-bottom);
   }
 
   #step3:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
@@ -3154,13 +3260,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* Step 4: Arbeitsweise & Interaktion – Mobile-Spec */
-  #step4:not(.hidden) .wizard-col-main::after {
-    flex: 0 0 var(--wizard-mobile-step4-main-pad-bottom);
-    min-height: var(--wizard-mobile-step4-main-pad-bottom);
-  }
-
   #step4:not(.hidden) .wizard-col-main {
     overflow: hidden;
+    padding-bottom: var(--wizard-mobile-step4-main-pad-bottom);
   }
 
   #step4:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
@@ -3212,13 +3314,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* Step 5: Wissen & Kompetenz – Mobile-Spec */
-  #step5:not(.hidden) .wizard-col-main::after {
-    flex: 0 0 var(--wizard-mobile-step5-main-pad-bottom);
-    min-height: var(--wizard-mobile-step5-main-pad-bottom);
-  }
-
   #step5:not(.hidden) .wizard-col-main {
     overflow: hidden;
+    padding-bottom: var(--wizard-mobile-step5-main-pad-bottom);
   }
 
   #step5:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
@@ -3323,13 +3421,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* Step 6: Lernen & Feedback – Mobile-Spec */
-  #step6:not(.hidden) .wizard-col-main::after {
-    flex: 0 0 var(--wizard-mobile-step6-main-pad-bottom);
-    min-height: var(--wizard-mobile-step6-main-pad-bottom);
-  }
-
   #step6:not(.hidden) .wizard-col-main {
     overflow: hidden;
+    padding-bottom: var(--wizard-mobile-step6-main-pad-bottom);
   }
 
   #step6:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
@@ -3380,13 +3474,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* Step 7: Datenschutzprinzipien – Mobile-Spec (wie Schritt 6) */
-  #step7:not(.hidden) .wizard-col-main::after {
-    flex: 0 0 var(--wizard-mobile-step7-main-pad-bottom);
-    min-height: var(--wizard-mobile-step7-main-pad-bottom);
-  }
-
   #step7:not(.hidden) .wizard-col-main {
     overflow: hidden;
+    padding-bottom: var(--wizard-mobile-step7-main-pad-bottom);
   }
 
   #step7:not(.hidden) .wizard-col-main > .wizard-question-title:first-of-type {
@@ -3437,13 +3527,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* Step 8: Visuelle Gestaltung – Mobile-Spec */
-  #step8:not(.hidden) .wizard-col-main::after {
-    flex: 0 0 var(--wizard-mobile-step8-main-pad-bottom);
-    min-height: var(--wizard-mobile-step8-main-pad-bottom);
-  }
-
   #step8:not(.hidden) .wizard-col-main {
     overflow: hidden;
+    padding-bottom: var(--wizard-mobile-step8-main-pad-bottom);
   }
 
   #step8:not(.hidden) .wizard-col-main > .wizard-question-title {
