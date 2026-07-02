@@ -88,24 +88,33 @@ body {
   align-items: start;
 }
 
-/* Schritt 3: drei Zufallsnamen + Chatbot in einer Zeile (je 7rem) */
+/* Schritt 3: drei Zufallsnamen in Zeile 1, Chatbot Zeile 2, Eigene Eingabe Zeile 3 */
 #step3 .name-options {
   display: grid;
-  grid-template-columns: repeat(4, 7rem);
+  grid-template-columns: repeat(3, 7rem);
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: row;
   gap: 0.5rem;
   justify-content: start;
   align-items: start;
 }
+
+#step3 .name-options .card-select:nth-child(1) { grid-row: 1; grid-column: 1; }
+#step3 .name-options .card-select:nth-child(2) { grid-row: 2; grid-column: 1; }
+#step3 .name-options .card-select:nth-child(3) { grid-row: 3; grid-column: 1; }
+#step3 .name-options .card-select:nth-child(4) { grid-row: 1; grid-column: 2; }
+#step3 .name-options .card-select:nth-child(5) { grid-row: 1; grid-column: 3; }
 
 #step3 .role-options .card-select,
 #step3 .name-options .card-select {
   width: 100%;
 }
 
-/* "Eigene Eingabe" in der Zeile unter den vier Namensvorschlägen */
+/* „Eigene Eingabe“ in Zeile 3 über die volle Breite */
 #step3 .name-options .card-select[data-suggestion=""] {
   white-space: nowrap;
   width: max-content;
+  grid-row: 3;
   grid-column: 1 / -1;
 }
 
