@@ -3478,5 +3478,23 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     flex-shrink: 0;
   }
 
+  [data-theme="light"] body:has(#step0:not(.hidden)) > div.w-screen > header .page-title,
+  [data-theme="light"] body.wizard-on-step0 > div.w-screen > header .page-title,
+  [data-theme="light"] body.wizard-nav-visible > div.w-screen > header .page-title {
+    color: #333333;
+  }
+
+  [data-theme="light"] body:has(#step0:not(.hidden)) #btnSettings.settings-gear,
+  [data-theme="light"] body.wizard-on-step0 #btnSettings.settings-gear,
+  [data-theme="light"] body.wizard-nav-visible #btnSettings.settings-gear {
+    color: #333333;
+  }
+
+  [data-theme="light"] body:has(#step0:not(.hidden)) #btnSettings.settings-gear:hover,
+  [data-theme="light"] body.wizard-on-step0 #btnSettings.settings-gear:hover,
+  [data-theme="light"] body.wizard-nav-visible #btnSettings.settings-gear:hover {
+    color: #222222;
+  }
+
 }
 
