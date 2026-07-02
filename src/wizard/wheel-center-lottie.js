@@ -311,6 +311,41 @@
     return window.location && window.location.protocol === 'file:';
   }
 
+  function isTransitionWheelUrl(url) {
+    return typeof url === 'string' && url.indexOf(BASE + 'transitions/') === 0;
+  }
+
+  /** Gibt es nach dem aktuellen Kandidaten noch Step-Auswahl-Medien (sel-… unter step-NN/)? */
+  function hasStepSelectionCandidatesAfter(urls, index) {
+    if (!urls || index == null) return false;
+    for (var i = index + 1; i < urls.length; i++) {
+      var u = urls[i];
+      if (typeof u !== 'string') continue;
+      if (u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1) return true;
+    }
+    return false;
+  }
+
+  /** Schritte ohne eigene Wheel-Auswahl-Grafiken: nach Übergang nur innenkreis zeigen. */
+  function shouldClearWheelAfterTransition(state) {
+    var step = state && state.currentStep;
+    return step != null && step >= 3 && step <= 7;
+  }
+
+  /** Nur innenkreis-Hintergrund (::before), kein Platzhalter-Bild oder Lottie-Rest. */
+  function clearWheelCenterToInnenkreis(wrap) {
+    if (!wrap) return;
+    removeHoldFramesFromWrap(wrap);
+    abortPendingInWrap(wrap);
+    instances.forEach(destroyInstance);
+    instances = [];
+    wrap.querySelectorAll('.wheel-center-lottie').forEach(function (el) {
+      el.remove();
+    });
+    var img = wrap.querySelector('img');
+    if (img) img.style.display = 'none';
+  }
+
   function wheelThemeBase() {
     if (window.WizardTheme && typeof window.WizardTheme.wheelBaseUrl === 'function') {
       return window.WizardTheme.wheelBaseUrl();
@@ -840,10 +875,12 @@
 
   function tryPlayIndex(state, urls, index, wrap) {
     if (index >= urls.length) {
-      if (wrap) {
+      if (shouldClearWheelAfterTransition(state)) {
+        clearWheelCenterToInnenkreis(wrap);
+      } else {
         removeHoldFramesFromWrap(wrap);
         var imgEnd = wrap.querySelector('img');
-        if (imgEnd) imgEnd.style.display = 'block';
+        if (imgEnd) imgEnd.style.display = 'none';
       }
       return;
     }
@@ -875,6 +912,25 @@
 
     function onClipComplete() {
       rememberWheelSvgForStep(state.currentStep, anim);
+      if (!isTransitionWheelUrl(url)) return;
+      if (hasStepSelectionCandidatesAfter(urls, index)) {
+        if (settled) return;
+        settled = true;
+        if (loadTimer) clearTimeout(loadTimer);
+        try {
+          anim.removeEventListener('DOMLoaded', reveal);
+          anim.removeEventListener('complete', onClipComplete);
+          anim.removeEventListener('data_failed', advance);
+          anim.removeEventListener('config_error', advance);
+          anim.removeEventListener('error', advance);
+        } catch (eDone) {}
+        tearDownAttempt();
+        tryPlayIndex(state, urls, index + 1, wrap);
+        return;
+      }
+      if (shouldClearWheelAfterTransition(state)) {
+        clearWheelCenterToInnenkreis(wrap);
+      }
     }
 
     function tearDownAttempt() {
@@ -948,7 +1004,9 @@
       rememberWheelSvgForStep(state.currentStep, anim);
       rememberResolvedWheelMedia(state.currentStep, url);
       rememberLastWheelMediaForStep(state.currentStep, state, url);
-      rememberCompletedStepWheelVisual(state.currentStep, state, url, root);
+      if (!isTransitionWheelUrl(url)) {
+        rememberCompletedStepWheelVisual(state.currentStep, state, url, root);
+      }
     }
 
     try {
