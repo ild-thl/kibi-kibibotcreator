@@ -457,6 +457,24 @@ body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
   background-color: var(--color-nav-next-muted-hover) !important;
 }
 
+[data-theme="light"] #btnSave {
+  background-color: #a3be8c;
+  color: #ffffff;
+}
+
+[data-theme="light"] #btnSave:hover {
+  background-color: #8fad7a;
+}
+
+[data-theme="dark"] #btnSave {
+  background-color: #a3be8c;
+  color: #ffffff;
+}
+
+[data-theme="dark"] #btnSave:hover {
+  background-color: #8fad7a;
+}
+
 #wizardNavBar {
   background: var(--color-nav-bar-bg) !important;
 }
@@ -2511,26 +2529,34 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     display: none !important;
   }
 
-  [data-theme="light"] body.wizard-nav-visible #btnNext,
-  [data-theme="light"] body.wizard-nav-visible #btnSave {
+  [data-theme="light"] body.wizard-nav-visible #btnNext {
     border: none;
     background-color: #5391f7 !important;
     color: #ffffff !important;
   }
 
-  [data-theme="light"] body.wizard-nav-visible #btnNext:hover,
-  [data-theme="light"] body.wizard-nav-visible #btnSave:hover {
+  [data-theme="light"] body.wizard-nav-visible #btnNext:hover {
     background-color: #4280e6 !important;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnSave {
+    border: none;
+    background-color: #a3be8c !important;
+    color: #ffffff !important;
+  }
+
+  [data-theme="light"] body.wizard-nav-visible #btnSave:hover {
+    background-color: #8fad7a !important;
   }
 
   [data-theme="dark"] body.wizard-nav-visible #btnSave:not(.hidden) {
     border: none !important;
-    background-color: #547399 !important;
+    background-color: #a3be8c !important;
     color: #ffffff !important;
   }
 
   [data-theme="dark"] body.wizard-nav-visible #btnSave:not(.hidden):hover {
-    background-color: #3d5570 !important;
+    background-color: #8fad7a !important;
   }
 
   [data-theme="light"] body.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted) {
@@ -2597,19 +2623,37 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     background-color: #7c9cbb !important;
   }
 
-  /* Summary (Schritt 9): gleiche Weiter-Button-Farbe wie Schritte 1-8 erzwingen */
-  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted),
-  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
+  /* Summary (Schritt 9): Weiter #5391f7, Umfrage-Button wie „Avatar erstellen“ */
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted) {
     background-color: #5391f7 !important;
     color: #ffffff !important;
     border: none !important;
   }
 
-  [data-theme="dark"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted),
-  [data-theme="dark"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
+    background-color: #a3be8c !important;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
+  [data-theme="light"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden):hover {
+    background-color: #8fad7a !important;
+  }
+
+  [data-theme="dark"] body.wizard-step-9.wizard-nav-visible #btnNext:not(.hidden):not(.wizard-nav-next--muted) {
     background-color: #547399 !important;
     color: #ffffff !important;
     border: none !important;
+  }
+
+  [data-theme="dark"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden) {
+    background-color: #a3be8c !important;
+    color: #ffffff !important;
+    border: none !important;
+  }
+
+  [data-theme="dark"] body.wizard-step-9.wizard-nav-visible #btnSave:not(.hidden):hover {
+    background-color: #8fad7a !important;
   }
 
   body.wizard-nav-visible > div.w-screen {
