@@ -539,7 +539,7 @@ body.wizard-nav-visible .wizard-step:not(.hidden) .wizard-step-grid {
   margin: 0;
   padding: 0;
   font-family: 'Open Sans', sans-serif;
-  font-size: var(--wizard-mobile-font-step-indicator, 13pt);
+  font-size: var(--wizard-mobile-font-step-indicator, 14px);
   font-weight: 600;
   line-height: 1;
   color: var(--wizard-pagination-color, #8bb6fa);
@@ -2540,54 +2540,66 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-card-height: 375px;
     --wizard-mobile-card-pad-top: 28px;
     --wizard-mobile-card-pad-x: 20px;
-    --wizard-mobile-card-heading-to-question: 20px;
-    --wizard-mobile-question-to-option: 18px;
-    --wizard-mobile-option-gap: 14px;
-    --wizard-mobile-section-gap: 20px;
+    --wizard-mobile-card-heading-to-question: 18px;
+    --wizard-mobile-question-to-option: 16px;
+    --wizard-mobile-option-gap: 12px;
+    --wizard-mobile-section-gap: 18px;
+    /* Typografie-Hierarchie: Überschrift → Frage → Antwort (Größen unverändert) */
     --wizard-mobile-font-heading: 16px;
+    --wizard-mobile-font-question: 14px;
+    --wizard-mobile-font-answer: 14px;
+    --wizard-mobile-font-compact: 13px;
     --wizard-mobile-font-body: 14px;
-    --wizard-mobile-font-step-indicator: 13pt;
-    --wizard-mobile-line-height-heading: 20px;
-    --wizard-mobile-line-height-body: 18px;
+    --wizard-mobile-weight-heading: 600;
+    --wizard-mobile-weight-question: 600;
+    --wizard-mobile-weight-answer: 500;
+    --wizard-mobile-color-heading: #333333;
+    --wizard-mobile-color-question: #333333;
+    --wizard-mobile-color-answer: #555555;
+    --wizard-mobile-line-height-heading: 19px;
+    --wizard-mobile-line-height-question: 17px;
+    --wizard-mobile-line-height-answer: 17px;
+    --wizard-mobile-line-height-body: var(--wizard-mobile-line-height-answer);
+    --wizard-mobile-font-step-indicator: 14px;
     --wizard-mobile-main-pad-bottom: 48px;
     --wizard-mobile-card-fold-cut: 28px;
     --wizard-mobile-card-fold-flap: 21px;
     --wizard-mobile-card-fold-color: #ccd1db;
-    --wizard-mobile-step2-question-to-label: 22px;
-    --wizard-mobile-step2-label-to-options: 11px;
-    --wizard-mobile-step2-section-gap: 14px;
-    --wizard-mobile-step2-label-font: 13px;
-    --wizard-mobile-step2-label-line-height: 13px;
-    --wizard-mobile-step2-option-line-height: 13px;
+    --wizard-mobile-step2-question-to-label: 20px;
+    --wizard-mobile-step2-label-to-options: 10px;
+    --wizard-mobile-step2-section-gap: 12px;
+    --wizard-mobile-step2-label-font: var(--wizard-mobile-font-compact);
+    --wizard-mobile-step2-label-line-height: var(--wizard-mobile-font-compact);
+    --wizard-mobile-step2-option-line-height: var(--wizard-mobile-font-compact);
     --wizard-mobile-step2-main-pad-bottom: 24px;
     --wizard-mobile-step2-card-title-height: calc(
       var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading) +
         var(--wizard-mobile-card-heading-to-question) + var(--wizard-mobile-line-height-body) +
         var(--wizard-mobile-step2-question-to-label)
     );
-    --wizard-mobile-step3-question-to-option: 12px;
-    --wizard-mobile-step3-section-gap: 22px;
-    --wizard-mobile-step3-option-row-gap: 17px;
+    --wizard-mobile-step3-question-to-option: 10px;
+    --wizard-mobile-step3-section-gap: 16px;
+    --wizard-mobile-step3-option-row-gap: 13px;
     --wizard-mobile-step3-option-col-gap: 8px;
     --wizard-mobile-step3-option-line-height: 18px;
-    --wizard-mobile-step3-name-to-input: 6px;
-    --wizard-mobile-step3-main-pad-bottom: 4px;
-    --wizard-mobile-step4-question-to-option: 10px;
-    --wizard-mobile-step4-section-gap: 25px;
-    --wizard-mobile-step4-option-row-gap: 17px;
-    --wizard-mobile-step4-option-line-height: 18px;
-    --wizard-mobile-step4-option-min-height: 22px;
+    --wizard-mobile-step3-name-to-input: 12px;
+    --wizard-mobile-step3-main-pad-bottom: 12px;
+    --wizard-mobile-step4-question-to-option: 8px;
+    --wizard-mobile-step4-section-gap: 22px;
+    --wizard-mobile-step4-option-row-gap: 15px;
+    --wizard-mobile-step4-option-line-height: var(--wizard-mobile-line-height-answer);
+    --wizard-mobile-step4-option-min-height: 20px;
     --wizard-mobile-step4-radio-offset: 2px;
     --wizard-mobile-step4-main-pad-bottom: 12px;
-    --wizard-mobile-step5-question-to-option: 8px;
-    --wizard-mobile-step5-section-gap: 16px;
-    --wizard-mobile-step5-option-row-gap: 17px;
+    --wizard-mobile-step5-question-to-option: 6px;
+    --wizard-mobile-step5-section-gap: 14px;
+    --wizard-mobile-step5-option-row-gap: 15px;
     --wizard-mobile-step5-option-col-gap: 8px;
-    --wizard-mobile-step5-option-line-height: 18px;
-    --wizard-mobile-step5-option-min-height: 22px;
+    --wizard-mobile-step5-option-line-height: var(--wizard-mobile-line-height-answer);
+    --wizard-mobile-step5-option-min-height: 20px;
     --wizard-mobile-step5-radio-offset: 2px;
     --wizard-mobile-step5-main-pad-bottom: 10px;
-    --wizard-mobile-step6-text-gap: 22px;
+    --wizard-mobile-step6-text-gap: 20px;
     --wizard-mobile-step6-text-leading: calc(
       var(--wizard-mobile-step6-option-line-height) - var(--wizard-mobile-font-body)
     );
@@ -2595,10 +2607,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-step6-option-row-gap: calc(
       var(--wizard-mobile-step6-text-gap) - var(--wizard-mobile-step6-text-leading) + 3px
     );
-    --wizard-mobile-step6-option-line-height: 18px;
-    --wizard-mobile-step6-option-min-height: 18px;
+    --wizard-mobile-step6-option-line-height: var(--wizard-mobile-line-height-answer);
+    --wizard-mobile-step6-option-min-height: var(--wizard-mobile-line-height-answer);
     --wizard-mobile-step6-main-pad-bottom: 12px;
-    --wizard-mobile-step7-text-gap: 22px;
+    --wizard-mobile-step7-text-gap: 20px;
     --wizard-mobile-step7-text-leading: calc(
       var(--wizard-mobile-step7-option-line-height) - var(--wizard-mobile-font-body)
     );
@@ -2606,23 +2618,23 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     --wizard-mobile-step7-option-row-gap: calc(
       var(--wizard-mobile-step7-text-gap) - var(--wizard-mobile-step7-text-leading) + 3px
     );
-    --wizard-mobile-step7-option-line-height: 18px;
-    --wizard-mobile-step7-option-min-height: 18px;
+    --wizard-mobile-step7-option-line-height: var(--wizard-mobile-line-height-answer);
+    --wizard-mobile-step7-option-min-height: var(--wizard-mobile-line-height-answer);
     --wizard-mobile-step7-main-pad-bottom: 12px;
-    --wizard-mobile-step8-text-gap: 22px;
+    --wizard-mobile-step8-text-gap: 20px;
     --wizard-mobile-step8-text-leading: calc(
       var(--wizard-mobile-step8-option-line-height) - var(--wizard-mobile-font-body)
     );
-    --wizard-mobile-step8-question-to-label: 25px;
-    --wizard-mobile-step8-label-to-options: 14px;
+    --wizard-mobile-step8-question-to-label: 22px;
+    --wizard-mobile-step8-label-to-options: 12px;
     --wizard-mobile-step8-option-row-gap: calc(
       var(--wizard-mobile-step8-text-gap) - var(--wizard-mobile-step8-text-leading) + 3px
     );
     --wizard-mobile-step8-option-col-gap: 8px;
-    --wizard-mobile-step8-label-font: 13px;
-    --wizard-mobile-step8-label-line-height: 13px;
-    --wizard-mobile-step8-option-line-height: 18px;
-    --wizard-mobile-step8-option-min-height: 18px;
+    --wizard-mobile-step8-label-font: var(--wizard-mobile-font-compact);
+    --wizard-mobile-step8-label-line-height: var(--wizard-mobile-font-compact);
+    --wizard-mobile-step8-option-line-height: var(--wizard-mobile-line-height-answer);
+    --wizard-mobile-step8-option-min-height: var(--wizard-mobile-line-height-answer);
     --wizard-mobile-step8-main-pad-bottom: 12px;
     --wizard-mobile-card-title-height: calc(
       var(--wizard-mobile-card-pad-top) + var(--wizard-mobile-line-height-heading)
@@ -3004,9 +3016,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     flex-shrink: 0;
     font-family: 'Open Sans', 'Inter', sans-serif;
     font-size: var(--wizard-mobile-font-heading);
-    font-weight: 600;
+    font-weight: var(--wizard-mobile-weight-heading);
     line-height: var(--wizard-mobile-line-height-heading);
-    color: #333333;
+    color: var(--wizard-mobile-color-heading);
   }
 
   #step1:not(.hidden) .wizard-col-main,
@@ -3195,10 +3207,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step7:not(.hidden) .wizard-question-title,
   #step8:not(.hidden) .wizard-question-title {
     font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: var(--wizard-mobile-font-body);
-    font-weight: 600;
-    line-height: var(--wizard-mobile-line-height-body);
-    color: #333333;
+    font-size: var(--wizard-mobile-font-question);
+    font-weight: var(--wizard-mobile-weight-question);
+    line-height: var(--wizard-mobile-line-height-question);
+    color: var(--wizard-mobile-color-question);
     margin-top: 0 !important;
     margin-bottom: var(--wizard-mobile-question-to-option) !important;
   }
@@ -3258,10 +3270,11 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step7:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt),
   #step8:not(.hidden) .wizard-col-side .card-select:not(.avatar-opt) {
     padding: 0 0 0 calc(18px + 10px) !important;
-    font-size: var(--wizard-mobile-font-body) !important;
-    font-weight: 500 !important;
-    line-height: var(--wizard-mobile-line-height-body) !important;
-    min-height: var(--wizard-mobile-line-height-body);
+    font-size: var(--wizard-mobile-font-answer) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
+    line-height: var(--wizard-mobile-line-height-answer) !important;
+    min-height: var(--wizard-mobile-line-height-answer);
+    color: var(--wizard-mobile-color-answer) !important;
     clip-path: none;
   }
 
@@ -3375,10 +3388,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step7:not(.hidden) .wizard-col-main .text-sm.font-medium,
   #step8:not(.hidden) .wizard-col-main .text-sm.font-medium {
     font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: var(--wizard-mobile-font-body);
-    font-weight: 600;
-    line-height: var(--wizard-mobile-line-height-body);
-    color: #333333 !important;
+    font-size: var(--wizard-mobile-font-question);
+    font-weight: var(--wizard-mobile-weight-question);
+    line-height: var(--wizard-mobile-line-height-question);
+    color: var(--wizard-mobile-color-question) !important;
   }
 
   body.wizard-nav-visible #wizardNavBar {
@@ -3856,19 +3869,19 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     margin: 0;
     font-family: 'Open Sans', 'Inter', sans-serif;
     font-size: var(--wizard-mobile-font-heading);
-    font-weight: 600;
+    font-weight: var(--wizard-mobile-weight-heading);
     line-height: var(--wizard-mobile-line-height-heading);
-    color: #333333;
+    color: var(--wizard-mobile-color-heading);
   }
 
   #step2:not(.hidden) > h2.wizard-card-header--step2 .wizard-card-lead {
     display: block;
     margin: var(--wizard-mobile-card-heading-to-question) 0 0;
     font-family: 'Open Sans', 'Inter', sans-serif;
-    font-size: var(--wizard-mobile-font-body);
-    font-weight: 600;
-    line-height: var(--wizard-mobile-line-height-body);
-    color: #333333;
+    font-size: var(--wizard-mobile-font-question);
+    font-weight: var(--wizard-mobile-weight-question);
+    line-height: var(--wizard-mobile-line-height-question);
+    color: var(--wizard-mobile-color-question);
   }
 
   #step2:not(.hidden) .wizard-col-main {
@@ -3891,9 +3904,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step2:not(.hidden) .wizard-col-main .space-y-4 > div > .text-sm.font-medium {
     font-family: 'Open Sans', 'Inter', sans-serif;
     font-size: var(--wizard-mobile-step2-label-font) !important;
-    font-weight: 400 !important;
+    font-weight: var(--wizard-mobile-weight-question) !important;
     line-height: var(--wizard-mobile-step2-label-line-height) !important;
-    color: #333333 !important;
+    color: var(--wizard-mobile-color-question) !important;
     margin-top: 0 !important;
     margin-bottom: var(--wizard-mobile-step2-label-to-options) !important;
   }
@@ -3911,8 +3924,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     width: 100%;
     white-space: normal;
     font-size: var(--wizard-mobile-step2-label-font) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
     line-height: var(--wizard-mobile-step2-option-line-height) !important;
     min-height: var(--wizard-mobile-step2-option-line-height) !important;
+    color: var(--wizard-mobile-color-answer) !important;
   }
 
   /* Step 3: Rolle & Name – Mobile-Spec */
@@ -3958,7 +3973,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   #step3:not(.hidden) .name-options .card-select:nth-child(5) { grid-row: 1; grid-column: 3; }
 
   #step3:not(.hidden) .name-options {
-    margin-bottom: var(--wizard-mobile-step3-name-to-input) !important;
+    margin-bottom: 0 !important;
   }
 
   #step3:not(.hidden) .role-options .card-select:not(.avatar-opt),
@@ -3968,11 +3983,12 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     width: 100%;
     box-sizing: border-box;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible;
     text-overflow: ellipsis;
     padding: 0 0 0 calc(18px + 8px) !important;
-    font-size: var(--wizard-mobile-font-body) !important;
-    font-weight: 500 !important;
+    font-size: var(--wizard-mobile-font-answer) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
+    color: var(--wizard-mobile-color-answer) !important;
     line-height: var(--wizard-mobile-step3-option-line-height) !important;
     min-height: var(--wizard-mobile-step3-option-line-height) !important;
     max-height: none;
@@ -4017,6 +4033,10 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     border: 1px solid #d1d5db;
   }
 
+  #step3:not(.hidden) #inputName:not(.hidden) {
+    margin-top: var(--wizard-mobile-step3-name-to-input);
+  }
+
   /* Step 4: Arbeitsweise & Interaktion – Mobile-Spec */
   #step4:not(.hidden) .wizard-col-main {
     overflow: hidden;
@@ -4049,8 +4069,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     overflow: visible;
     text-align: left;
     padding: 0 0 0 calc(18px + 8px) !important;
-    font-size: var(--wizard-mobile-font-body) !important;
-    font-weight: 500 !important;
+    font-size: var(--wizard-mobile-font-answer) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
+    color: var(--wizard-mobile-color-answer) !important;
     line-height: var(--wizard-mobile-step4-option-line-height) !important;
     min-height: var(--wizard-mobile-step4-option-min-height);
     max-height: none;
@@ -4146,8 +4167,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     overflow: visible;
     text-align: left;
     padding: 0 0 0 calc(18px + 8px) !important;
-    font-size: var(--wizard-mobile-font-body) !important;
-    font-weight: 500 !important;
+    font-size: var(--wizard-mobile-font-answer) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
+    color: var(--wizard-mobile-color-answer) !important;
     line-height: var(--wizard-mobile-step5-option-line-height) !important;
     min-height: var(--wizard-mobile-step5-option-min-height);
     max-height: none;
@@ -4180,8 +4202,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 
   /* Step 5 EN: dezenter Abstand + Entscheidungs-Grid, damit alles sichtbar bleibt */
   html[lang="en"] {
-    --wizard-mobile-step5-section-gap: 13px;
-    --wizard-mobile-step5-option-row-gap: 14px;
+    --wizard-mobile-step5-section-gap: 11px;
+    --wizard-mobile-step5-option-row-gap: 12px;
     --wizard-mobile-step5-main-pad-bottom: 6px;
   }
 
@@ -4231,8 +4253,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     overflow: visible;
     text-align: left;
     padding: 0 0 0 calc(18px + 8px) !important;
-    font-size: var(--wizard-mobile-font-body) !important;
-    font-weight: 500 !important;
+    font-size: var(--wizard-mobile-font-answer) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
+    color: var(--wizard-mobile-color-answer) !important;
     line-height: var(--wizard-mobile-step6-option-line-height) !important;
     min-height: var(--wizard-mobile-step6-option-min-height) !important;
     max-height: none;
@@ -4284,8 +4307,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     overflow: visible;
     text-align: left;
     padding: 0 0 0 calc(18px + 8px) !important;
-    font-size: var(--wizard-mobile-font-body) !important;
-    font-weight: 500 !important;
+    font-size: var(--wizard-mobile-font-answer) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
+    color: var(--wizard-mobile-color-answer) !important;
     line-height: var(--wizard-mobile-step7-option-line-height) !important;
     min-height: var(--wizard-mobile-step7-option-min-height) !important;
     max-height: none;
@@ -4333,9 +4357,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     margin-bottom: var(--wizard-mobile-step8-label-to-options) !important;
     font-family: 'Open Sans', 'Inter', sans-serif;
     font-size: var(--wizard-mobile-step8-label-font) !important;
-    font-weight: 400 !important;
+    font-weight: var(--wizard-mobile-weight-question) !important;
     line-height: var(--wizard-mobile-step8-label-line-height) !important;
-    color: #333333 !important;
+    color: var(--wizard-mobile-color-question) !important;
   }
 
   #step8:not(.hidden) .wizard-col-main .space-y-4 > div:first-child > .avatar-type-options {
@@ -4383,8 +4407,9 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     box-shadow: none !important;
     transform: none !important;
     padding: 0 0 0 calc(18px + 8px) !important;
-    font-size: var(--wizard-mobile-font-body) !important;
-    font-weight: 500 !important;
+    font-size: var(--wizard-mobile-font-answer) !important;
+    font-weight: var(--wizard-mobile-weight-answer) !important;
+    color: var(--wizard-mobile-color-answer) !important;
     line-height: var(--wizard-mobile-step8-option-line-height) !important;
     min-height: var(--wizard-mobile-step8-option-min-height) !important;
     max-height: none;
