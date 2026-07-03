@@ -42,6 +42,8 @@
   var previousUiStep = null;
   /** URL → JSON, damit Übergänge ohne erneuten Netzwerk-Roundtrip starten. */
   var animationDataCache = {};
+  /** URL → SVG-Text (Auswahl-Grafiken während Übergang vorladen). */
+  var svgTextCache = {};
   /** URL → true/false (existiert / fehlt), um wiederholte Fallback-Timeouts zu vermeiden. */
   var mediaAvailabilityCache = {};
   /** Schrittnummer → geklontes SVG (letzter sichtbarer Wheel-Zustand), weil reveal() Lotties auf anderen Steps aus dem DOM entfernt. */
@@ -324,6 +326,82 @@
       if (u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1) return true;
     }
     return false;
+  }
+
+  /** Nach erfolgreichem Übergangs-JSON: SVG-Fallbacks desselben Übergangs überspringen. */
+  function indexAfterTransitionGroup(urls, fromIndex) {
+    for (var i = fromIndex + 1; i < urls.length; i++) {
+      var u = urls[i];
+      if (typeof u !== 'string') continue;
+      if (u.indexOf(BASE + 'transitions/') === 0) continue;
+      return i;
+    }
+    return urls.length;
+  }
+
+  /** Auswahl-Kandidaten nach Übergang erneut versuchen (nicht an alter „fehlt“-Markierung hängen bleiben). */
+  function clearMissingFlagsForStepSelectionUrls(urls, fromIndex) {
+    if (!urls || fromIndex == null) return;
+    for (var i = fromIndex + 1; i < urls.length; i++) {
+      var u = urls[i];
+      if (typeof u !== 'string') continue;
+      if (u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1 && mediaAvailabilityCache[u] === false) {
+        delete mediaAvailabilityCache[u];
+      }
+    }
+  }
+
+  function isStepSelectionWheelUrl(u) {
+    return typeof u === 'string' && u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1;
+  }
+
+  function prefetchWheelSvgText(url) {
+    if (!url || typeof url !== 'string' || url.slice(-4).toLowerCase() !== '.svg') return;
+    if (svgTextCache[url] || mediaAvailabilityCache[url] === false) return;
+    if (!window.fetch) return;
+    fetch(url)
+      .then(function (r) {
+        if (!r.ok) throw new Error('svg_prefetch');
+        return r.text();
+      })
+      .then(function (text) {
+        if (!isLikelySvgDocument(text)) throw new Error('svg_prefetch_invalid');
+        svgTextCache[url] = sanitizeSvgText(text);
+        markMediaAvailable(url);
+      })
+      .catch(function () {});
+  }
+
+  function prefetchStepSelectionSvgCandidates(urls, fromIndex, limit) {
+    if (!urls || fromIndex == null) return;
+    var max = limit == null ? 4 : limit;
+    var count = 0;
+    for (var i = indexAfterTransitionGroup(urls, fromIndex); i < urls.length && count < max; i++) {
+      var u = urls[i];
+      if (!isStepSelectionWheelUrl(u) || u.slice(-4).toLowerCase() !== '.svg') continue;
+      prefetchWheelSvgText(u);
+      count++;
+    }
+  }
+
+  /** Letzter sichtbarer Frame (Layer-op), ohne leere Kompositions-Tails am Ende. */
+  function getLottiePlayEndFrame(anim, skipFrames, dataUrl) {
+    var skip = skipFrames || 0;
+    var tf = 60;
+    try {
+      if (anim && anim.totalFrames) tf = anim.totalFrames;
+    } catch (e) {}
+    var maxOp = skip + 1;
+    try {
+      var data = (anim && anim.animationData) || (dataUrl && animationDataCache[dataUrl]);
+      if (data && data.layers) {
+        for (var li = 0; li < data.layers.length; li++) {
+          var ly = data.layers[li];
+          if (ly && typeof ly.op === 'number' && ly.op > maxOp) maxOp = ly.op;
+        }
+      }
+    } catch (e2) {}
+    return Math.min(tf - 1, Math.max(skip + 1, Math.ceil(maxOp)));
   }
 
   /** Schritte ohne eigene Wheel-Auswahl-Grafiken: nach Übergang nur innenkreis zeigen. */
@@ -734,6 +812,12 @@
       fail();
       return;
     }
+    if (svgTextCache[url]) {
+      root.innerHTML = svgTextCache[url];
+      markMediaAvailable(url);
+      revealStatic();
+      return;
+    }
     fetch(url)
       .then(function (r) {
         if (!r.ok) {
@@ -750,7 +834,8 @@
           wheelAnimDebug('svg_invalid_payload', { url: url, index: index });
           throw new Error('invalid_svg_payload');
         }
-        root.innerHTML = sanitizeSvgText(text);
+        svgTextCache[url] = sanitizeSvgText(text);
+        root.innerHTML = svgTextCache[url];
         if (settled) return;
         markMediaAvailable(url);
         revealStatic();
@@ -815,6 +900,33 @@
     }
   }
 
+  function appendUniqueWheelUrls(target, source) {
+    if (!source || !source.length) return target;
+    if (!target) target = [];
+    var seen = {};
+    for (var ti = 0; ti < target.length; ti++) seen[target[ti]] = true;
+    for (var si = 0; si < source.length; si++) {
+      var u = source[si];
+      if (!u || seen[u]) continue;
+      seen[u] = true;
+      target.push(u);
+    }
+    return target;
+  }
+
+  function urlListPlaysTransitionBeforeSelection(urls) {
+    if (!urls || !urls.length) return false;
+    for (var i = 0; i < urls.length; i++) {
+      var u = urls[i];
+      if (typeof u !== 'string') continue;
+      if (u.indexOf(BASE + 'transitions/') === 0) {
+        return hasStepSelectionCandidatesAfter(urls, i);
+      }
+      if (u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1) return false;
+    }
+    return false;
+  }
+
   function playCandidateUrls(state, urls, holdFromStep) {
     if (!urls || !urls.length) return;
     if (shouldSkipWheelAnimations(state)) return;
@@ -822,6 +934,14 @@
     urls = expandWheelMediaCandidates(urls);
     urls = prioritizeKnownAvailable(urls);
     if (!urls.length) return;
+    if (urlListPlaysTransitionBeforeSelection(urls)) {
+      for (var pi = 0; pi < urls.length; pi++) {
+        if (typeof urls[pi] === 'string' && urls[pi].indexOf(BASE + 'transitions/') === 0) {
+          prefetchStepSelectionSvgCandidates(urls, pi, 4);
+          break;
+        }
+      }
+    }
     wheelAnimDebug('candidate_list', {
       step: state && state.currentStep,
       holdFromStep: holdFromStep,
@@ -849,7 +969,9 @@
     abortPendingInWrap(wrap);
     var curStep = state && state.currentStep;
     var completedHoldCache = completedStepSelectionWheelCache[curStep];
+    var playTransitionBeforeSelection = urlListPlaysTransitionBeforeSelection(urls);
     var useCompletedHold =
+      !playTransitionBeforeSelection &&
       curStep != null &&
       window.WizardValidation &&
       typeof window.WizardValidation.isStepValid === 'function' &&
@@ -878,9 +1000,15 @@
       if (shouldClearWheelAfterTransition(state)) {
         clearWheelCenterToInnenkreis(wrap);
       } else {
-        removeHoldFramesFromWrap(wrap);
-        var imgEnd = wrap.querySelector('img');
-        if (imgEnd) imgEnd.style.display = 'none';
+        var hasWheelGraphic =
+          wrap &&
+          (wrap.querySelector('.wheel-center-lottie:not(.wheel-center-lottie--pending) svg') ||
+            wrap.querySelector('.wheel-center-hold-frame svg'));
+        if (!hasWheelGraphic) {
+          removeHoldFramesFromWrap(wrap);
+          var imgEnd = wrap.querySelector('img');
+          if (imgEnd) imgEnd.style.display = 'none';
+        }
       }
       return;
     }
@@ -908,26 +1036,59 @@
     var introSkipFrames = transitionIntroSkipFrames(url);
     var anim;
     var settled = false;
+    var chainAdvanced = false;
     var loadTimer;
+    var chainFallbackTimer;
+
+    function advanceToSelectionAfterTransition() {
+      if (!isTransitionWheelUrl(url) || !hasStepSelectionCandidatesAfter(urls, index)) return;
+      if (chainAdvanced) return;
+      chainAdvanced = true;
+      if (loadTimer) clearTimeout(loadTimer);
+      if (chainFallbackTimer) clearTimeout(chainFallbackTimer);
+      try {
+        anim.removeEventListener('DOMLoaded', reveal);
+        anim.removeEventListener('complete', onClipComplete);
+        anim.removeEventListener('complete', advanceToSelectionAfterTransition);
+        anim.removeEventListener('data_failed', advance);
+        anim.removeEventListener('config_error', advance);
+        anim.removeEventListener('error', advance);
+      } catch (eDone) {}
+      tearDownAttempt();
+      clearMissingFlagsForStepSelectionUrls(urls, index);
+      tryPlayIndex(state, urls, indexAfterTransitionGroup(urls, index), wrap);
+    }
+
+    function scheduleTransitionChainFallback(animInst) {
+      if (!isTransitionWheelUrl(url) || !hasStepSelectionCandidatesAfter(urls, index)) return;
+      var skip = introSkipFrames;
+      var endFrame = getLottiePlayEndFrame(animInst, skip, url);
+      var rate = animInst.frameRate || 30;
+      var durMs = Math.max(280, ((endFrame - skip) / rate) * 1000 + 40);
+      chainFallbackTimer = setTimeout(advanceToSelectionAfterTransition, durMs);
+    }
+
+    function bindTransitionNearEndAdvance(animInst, endFrame) {
+      if (!isTransitionWheelUrl(url) || !hasStepSelectionCandidatesAfter(urls, index)) return;
+      function onTransitionNearEnd() {
+        if (chainAdvanced) return;
+        try {
+          if (animInst.currentFrame >= endFrame - 1) {
+            animInst.removeEventListener('enterFrame', onTransitionNearEnd);
+            advanceToSelectionAfterTransition();
+          }
+        } catch (eFrame) {}
+      }
+      try {
+        animInst.addEventListener('enterFrame', onTransitionNearEnd);
+      } catch (eBind) {}
+    }
 
     function onClipComplete() {
       rememberWheelSvgForStep(state.currentStep, anim);
       if (!isTransitionWheelUrl(url)) return;
-      if (hasStepSelectionCandidatesAfter(urls, index)) {
-        if (settled) return;
-        settled = true;
-        if (loadTimer) clearTimeout(loadTimer);
-        try {
-          anim.removeEventListener('DOMLoaded', reveal);
-          anim.removeEventListener('complete', onClipComplete);
-          anim.removeEventListener('data_failed', advance);
-          anim.removeEventListener('config_error', advance);
-          anim.removeEventListener('error', advance);
-        } catch (eDone) {}
-        tearDownAttempt();
-        tryPlayIndex(state, urls, index + 1, wrap);
-        return;
-      }
+      advanceToSelectionAfterTransition();
+      if (chainAdvanced) return;
       if (shouldClearWheelAfterTransition(state)) {
         clearWheelCenterToInnenkreis(wrap);
       }
@@ -943,13 +1104,22 @@
       if (root && root.parentNode) root.remove();
     }
 
+    function nextCandidateIndexAfterFailure() {
+      if (isTransitionWheelUrl(url) && hasStepSelectionCandidatesAfter(urls, index)) {
+        return indexAfterTransitionGroup(urls, index);
+      }
+      return index + 1;
+    }
+
     function advance() {
       if (settled) return;
       settled = true;
       if (loadTimer) clearTimeout(loadTimer);
+      if (chainFallbackTimer) clearTimeout(chainFallbackTimer);
       try {
         anim.removeEventListener('DOMLoaded', reveal);
         anim.removeEventListener('complete', onClipComplete);
+        anim.removeEventListener('complete', advanceToSelectionAfterTransition);
         anim.removeEventListener('data_failed', advance);
         anim.removeEventListener('config_error', advance);
         anim.removeEventListener('error', advance);
@@ -957,7 +1127,7 @@
       markMediaMissing(url);
       wheelAnimDebug('candidate_failed', { type: 'json', url: url, index: index });
       tearDownAttempt();
-      tryPlayIndex(state, urls, index + 1, wrap);
+      tryPlayIndex(state, urls, nextCandidateIndexAfterFailure(), wrap);
     }
 
     function reveal() {
@@ -997,15 +1167,35 @@
           var tf = anim.totalFrames;
           var skip = introSkipFrames;
           if (tf > 0 && skip >= tf) skip = Math.max(0, tf - 1);
+          var endFrame = getLottiePlayEndFrame(anim, skip, url);
           anim.goToAndStop(skip, true);
-          anim.play();
-        } catch (eSkip) {}
+          if (isTransitionWheelUrl(url) && hasStepSelectionCandidatesAfter(urls, index)) {
+            prefetchStepSelectionSvgCandidates(urls, index, 4);
+            if (typeof anim.playSegments === 'function') {
+              anim.playSegments([[skip, endFrame]], true);
+            } else {
+              anim.play();
+            }
+            bindTransitionNearEndAdvance(anim, endFrame);
+          } else {
+            anim.play();
+          }
+        } catch (eSkip) {
+          try {
+            anim.play();
+          } catch (ePlay) {}
+        }
       }
       rememberWheelSvgForStep(state.currentStep, anim);
       rememberResolvedWheelMedia(state.currentStep, url);
       rememberLastWheelMediaForStep(state.currentStep, state, url);
       if (!isTransitionWheelUrl(url)) {
         rememberCompletedStepWheelVisual(state.currentStep, state, url, root);
+      } else if (hasStepSelectionCandidatesAfter(urls, index)) {
+        try {
+          anim.addEventListener('complete', advanceToSelectionAfterTransition);
+        } catch (eChain) {}
+        scheduleTransitionChainFallback(anim);
       }
     }
 
@@ -1326,13 +1516,17 @@
     var selDone =
       stepComplete && completedCache && completedCache.url && completedCache.fp === fpNow;
     if (selDone) {
-      prefUrls.push(completedCache.url);
-      wheelAnimDebug('wheel_completed_step_url_pref', { step: cur, url: completedCache.url });
+      if (!isKnownMissingMedia(completedCache.url)) {
+        prefUrls.push(completedCache.url);
+        wheelAnimDebug('wheel_completed_step_url_pref', { step: cur, url: completedCache.url });
+      }
     } else {
       var cached = lastWheelMediaByStep[cur];
       if (cached && cached.url && cached.fp === fpNow && isWheelStepMediaCacheableUrl(cur, cached.url)) {
-        prefUrls.push(cached.url);
-        wheelAnimDebug('wheel_media_cache_hit', { step: cur, fp: fpNow, url: cached.url });
+        if (!isKnownMissingMedia(cached.url)) {
+          prefUrls.push(cached.url);
+          wheelAnimDebug('wheel_media_cache_hit', { step: cur, fp: fpNow, url: cached.url });
+        }
       } else if (cached && cached.url) {
         wheelAnimDebug('wheel_media_cache_miss', {
           step: cur,
@@ -1344,16 +1538,18 @@
     }
     var restoreUrls = restoreStepWheelCandidates(cur, state);
     var transUrls = transitionCandidates(from, cur, state);
+    var selectionUrls = appendUniqueWheelUrls(appendUniqueWheelUrls([], prefUrls), restoreUrls);
     var urls;
     /*
-     * Rückwärts auf einen bereits gültigen Schritt: nur Step-Auswahl (pref + restore).
-     * Übergangs-JSONs (from-step / to-step) würden sonst oft kurz nach der korrekten Grafik starten
-     * und wie ein „alter“ Zwischenschritt wirken.
+     * Wiederbesuch mit bestehender Auswahl: zuerst Übergang, danach Auswahl-Grafik.
+     * Erstbesuch (keine Auswahl auf dem Zielschritt): nur Übergang.
      */
-    if (selDone && from > cur) {
-      urls = prefUrls.concat(restoreUrls);
+    if (transUrls.length && selectionUrls.length) {
+      urls = transUrls.concat(selectionUrls);
+    } else if (selectionUrls.length) {
+      urls = selectionUrls;
     } else {
-      urls = prefUrls.concat(restoreUrls.length ? restoreUrls.concat(transUrls) : transUrls);
+      urls = transUrls;
     }
     playCandidateUrls(state, urls, from);
   }
