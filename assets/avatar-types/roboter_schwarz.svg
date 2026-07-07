@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Roboter_schwarz" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 85 96.2">
-  <!-- Generator: Adobe Illustrator 30.5.1, SVG Export Plug-In . SVG Version: 2.1.4 Build 3)  -->
-  <path d="M85,58.4c0-6.7-3.6-12.2-8.1-12.3v-18.9H8.2v18.9C3.7,46.1,0,51.6,0,58.4s3.7,12.2,8.2,12.3v25.5h68.7v-25.5c4.5-.2,8.1-5.6,8.1-12.3Z" fill="#3b4252"/>
-  <g>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 320 320">
+  <!-- Generator: Adobe Illustrator 30.6.0, SVG Export Plug-In . SVG Version: 2.1.4 Build 109)  -->
+  <g id="Hg_transparent_mit_abspeichern_fuer_Positionierung">
+    <circle cx="160" cy="160" r="154.3" fill="#78e5f5" opacity="0"/>
+  </g>
+  <g id="Ebene_17">
     <g>
-      <rect x="17.9" y="45" width="17.2" height="17.2" rx="8.6" ry="8.6" fill="#fff"/>
-      <rect x="22.1" y="46.9" width="8.8" height="8.8" rx="4.4" ry="4.4" fill="#3b4252"/>
+      <path d="M231.8,166c0-11.1-6-20.1-13.4-20.3v-31.2h-113.1v31.2c-7.5.2-13.5,9.2-13.5,20.3s6,20.2,13.5,20.3v42h113.1v-42c7.4-.2,13.4-9.2,13.4-20.3Z" fill="#3b4252"/>
+      <g>
+        <g>
+          <rect x="121.3" y="143.9" width="28.3" height="28.3" rx="14.2" ry="14.2" fill="#fff"/>
+          <rect x="128.2" y="147" width="14.5" height="14.5" rx="7.3" ry="7.3" fill="#3b4252"/>
+        </g>
+        <g>
+          <rect x="174.1" y="143.9" width="28.3" height="28.3" rx="14.2" ry="14.2" fill="#fff"/>
+          <rect x="181" y="147" width="14.5" height="14.5" rx="7.3" ry="7.3" fill="#3b4252"/>
+        </g>
+        <path d="M144.8,88.9c-2.2-4.3-7.5-6-11.8-3.7-4.3,2.2-6,7.5-3.7,11.8,1.8,3.4,5.4,5.1,8.9,4.6l18.7,35.8,5.3-2.8-18.7-35.8c2.4-2.6,3.1-6.6,1.3-10Z" fill="#3b4252"/>
+        <path d="M171.8,76.7c1-4.7,5.7-7.7,10.4-6.7,4.7,1,7.7,5.7,6.7,10.4-.8,3.7-3.8,6.3-7.4,6.8l-8.5,39.5-5.8-1.3,8.5-39.5c-3-1.9-4.7-5.5-3.9-9.2Z" fill="#3b4252"/>
+        <line x1="129" y1="194.4" x2="129" y2="207.3" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="7.6"/>
+        <line x1="145.2" y1="194.4" x2="145.2" y2="207.3" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="7.6"/>
+        <line x1="161.9" y1="194.4" x2="161.9" y2="207.3" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="7.6"/>
+        <line x1="178.2" y1="194.4" x2="178.2" y2="207.3" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="7.6"/>
+        <line x1="194.9" y1="194.4" x2="194.9" y2="207.3" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="7.6"/>
+      </g>
     </g>
-    <g>
-      <rect x="50" y="45" width="17.2" height="17.2" rx="8.6" ry="8.6" fill="#fff"/>
-      <rect x="54.2" y="46.9" width="8.8" height="8.8" rx="4.4" ry="4.4" fill="#3b4252"/>
-    </g>
-    <path d="M32.2,11.6c-1.4-2.6-4.6-3.6-7.2-2.3s-3.6,4.6-2.3,7.2c1.1,2,3.3,3.1,5.4,2.8l11.3,21.8,3.2-1.7-11.3-21.8c1.5-1.6,1.9-4,.8-6Z" fill="#3b4252"/>
-    <path d="M48.6,4.2c.6-2.9,3.5-4.7,6.3-4.1,2.9.6,4.7,3.5,4.1,6.3-.5,2.3-2.3,3.8-4.5,4.1l-5.2,24-3.5-.8,5.2-24c-1.8-1.2-2.9-3.4-2.4-5.6Z" fill="#3b4252"/>
-    <line x1="22.6" y1="75.7" x2="22.6" y2="83.5" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="4.6"/>
-    <line x1="32.5" y1="75.7" x2="32.5" y2="83.5" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="4.6"/>
-    <line x1="42.6" y1="75.7" x2="42.6" y2="83.5" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="4.6"/>
-    <line x1="52.5" y1="75.7" x2="52.5" y2="83.5" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="4.6"/>
-    <line x1="62.6" y1="75.7" x2="62.6" y2="83.5" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="4.6"/>
   </g>
 </svg>

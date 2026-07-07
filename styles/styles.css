@@ -2134,28 +2134,28 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
 /* Typ-spezifisches Feintuning im Kreis (SVG-Avatare aus assets/avatar-types). */
 .wizard-wheel-avatar img[data-avatar-type="human"],
 .wizard-wheel-avatar img[src*="/avatar-types/mensch_"] {
-  width: 72% !important;
-  height: 72% !important;
-  max-width: 72%;
-  max-height: 72%;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
   transform: none;
 }
 
 .wizard-wheel-avatar img[data-avatar-type="robot"],
 .wizard-wheel-avatar img[src*="/avatar-types/roboter_"] {
-  width: 68% !important;
-  height: 68% !important;
-  max-width: 68%;
-  max-height: 68%;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
   transform: none;
 }
 
 .wizard-wheel-avatar img[data-avatar-type="owl"],
 .wizard-wheel-avatar img[src*="/avatar-types/eule_"] {
-  width: 66% !important;
-  height: 66% !important;
-  max-width: 66%;
-  max-height: 66%;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  max-height: 100%;
   transform: none;
 }
 
