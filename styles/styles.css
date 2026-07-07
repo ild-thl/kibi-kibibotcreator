@@ -4569,8 +4569,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     width: 100%;
     box-sizing: border-box;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
+    text-overflow: clip;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -4580,7 +4580,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
     font-weight: var(--wizard-mobile-weight-answer) !important;
     color: var(--wizard-mobile-color-answer) !important;
     line-height: var(--wizard-mobile-step8-option-line-height) !important;
-    min-height: var(--wizard-mobile-step8-option-min-height) !important;
+    min-height: calc(var(--wizard-mobile-step8-option-min-height) + 2px) !important;
     max-height: none;
   }
 
@@ -4610,8 +4610,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   }
 
   /* Schritt 8: Bild-Auswahl (Mockup – 4 Varianten, 30px Abstand) */
-  #step8:not(.hidden) .avatar-variant-section:not(.hidden) {
-    margin-top: 18px;
+  #step8:not(.hidden) .wizard-col-main .space-y-4 > #avatarVariantSection.avatar-variant-section:not(.hidden) {
+    margin-top: 26px !important;
     width: 100%;
   }
 
