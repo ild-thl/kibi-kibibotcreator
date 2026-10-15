@@ -149,8 +149,9 @@
     return window.matchMedia('(max-width: 520px)').matches;
   }
 
+  /** Mockup-Summary (Desktop + Tablet/Kompakt); Mobile bleibt paginiert. */
   function isDesktopSummaryLayout() {
-    return window.matchMedia('(min-width: 1025px)').matches;
+    return window.matchMedia('(min-width: 521px)').matches;
   }
 
   window.WizardSummaryMobile = {

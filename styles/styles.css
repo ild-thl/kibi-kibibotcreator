@@ -698,7 +698,7 @@ header h1,
 }
 
 /* Wenn Step 2 untereinander gestapelt wird: gleicher Abstand zwischen Antwortstil und Ton */
-@media (max-width: 1024px) {
+@media (max-width: 520px) {
   /* Header: keep room for settings gear to avoid overlap with long title. */
   body > div.w-screen > header {
     padding-right: 2.5rem;
@@ -866,8 +866,56 @@ header h1,
   margin-bottom: 0.75rem;
 }
 
-/* Wizard Desktop-Mockup ab 1025px, Mobile bleibt in @media (max-width: 520px) */
-@media (min-width: 1025px) {
+/*
+ * Breakpoints:
+ * - Mobile: max-width 520px (eigener Block weiter unten)
+ * - Tablet: min-width 521px und (max-width 1024px ODER max-height 899px) = bisheriger Kompakt-Desktop
+ * - Desktop: min-width 1025px und min-height 900px
+ */
+@media (min-width: 521px) and (max-width: 1024px),
+       (min-width: 521px) and (max-height: 899px) {
+  :root {
+    --wizard-desktop-pad-top: 36px;
+    --wizard-desktop-pad-x: 72px;
+    --wizard-desktop-header-gap: 16px;
+    --wizard-desktop-page-title: 24px;
+    --wizard-desktop-wheel: 360px;
+    --wizard-desktop-card-w: 640px;
+    --wizard-desktop-card-h: 482px;
+    --wizard-desktop-card-header-h: 64px;
+    --wizard-desktop-col-gap: 32px;
+    --wizard-desktop-layout-max: 1032px;
+    --wizard-desktop-card-pad: 26px;
+    --wizard-desktop-card-title-gap: 16px;
+    --wizard-desktop-wheel-margin-top: 16px;
+    --wizard-desktop-start-gap: 6px;
+    --wizard-desktop-welcome-graphic-gap: 10px;
+    --wizard-desktop-welcome-lottie-max: 17rem;
+    --wizard-desktop-nav-gap: 6px;
+    --wizard-desktop-card-heading-pad-bottom: 10px;
+    --wizard-desktop-question-to-option: 8px;
+    --wizard-desktop-question-section-gap: 12px;
+    --wizard-desktop-option-gap: 5px;
+    --wizard-desktop-step3-question-to-option: 6px;
+    --wizard-desktop-step3-section-gap: 15px;
+    --wizard-desktop-step3-col-gap: 13px;
+    --wizard-desktop-step3-option-gap: 6px;
+    --wizard-desktop-step5-option-gap: 0;
+    --wizard-desktop-step5-option-pad-y: 1px;
+    --wizard-desktop-summary-title: 16px;
+    --wizard-desktop-summary-text: 13px;
+    --wizard-desktop-summary-ready-gap: 6px;
+    --wizard-desktop-summary-hint-gap: 3px;
+    --wizard-desktop-summary-grid-top: 8px;
+    --wizard-desktop-summary-section-gap: 8px;
+    --wizard-desktop-summary-section-icon: 40px;
+    --wizard-desktop-summary-section-inner-gap: 6px;
+    --wizard-desktop-summary-title-to-list: 1px;
+    --wizard-desktop-summary-item-gap: 0;
+  }
+}
+
+@media (min-width: 1025px) and (min-height: 900px) {
   :root {
     --wizard-desktop-pad-top: 68px;
     --wizard-desktop-pad-x: 96px;
@@ -907,50 +955,10 @@ header h1,
     --wizard-desktop-summary-title-to-list: 2px;
     --wizard-desktop-summary-item-gap: 1px;
   }
+}
 
-  /* Kompakt: z. B. 1920×1200 @ 150 % Windows-Skalierung (~1280×800 CSS-Pixel) */
-  @media (max-height: 899px) {
-    :root {
-      --wizard-desktop-pad-top: 36px;
-      --wizard-desktop-pad-x: 72px;
-      --wizard-desktop-header-gap: 16px;
-      --wizard-desktop-page-title: 24px;
-      --wizard-desktop-wheel: 360px;
-      --wizard-desktop-card-w: 640px;
-      --wizard-desktop-card-h: 482px;
-      --wizard-desktop-card-header-h: 64px;
-      --wizard-desktop-col-gap: 32px;
-      --wizard-desktop-layout-max: 1032px;
-      --wizard-desktop-card-pad: 26px;
-      --wizard-desktop-card-title-gap: 16px;
-      --wizard-desktop-wheel-margin-top: 16px;
-      --wizard-desktop-start-gap: 6px;
-      --wizard-desktop-welcome-graphic-gap: 10px;
-      --wizard-desktop-welcome-lottie-max: 17rem;
-      --wizard-desktop-nav-gap: 6px;
-      --wizard-desktop-card-heading-pad-bottom: 10px;
-      --wizard-desktop-question-to-option: 8px;
-      --wizard-desktop-question-section-gap: 12px;
-      --wizard-desktop-option-gap: 5px;
-      --wizard-desktop-step3-question-to-option: 6px;
-      --wizard-desktop-step3-section-gap: 15px;
-      --wizard-desktop-step3-col-gap: 13px;
-      --wizard-desktop-step3-option-gap: 6px;
-      --wizard-desktop-step5-option-gap: 0;
-      --wizard-desktop-step5-option-pad-y: 1px;
-      --wizard-desktop-summary-title: 16px;
-      --wizard-desktop-summary-text: 13px;
-      --wizard-desktop-summary-ready-gap: 6px;
-      --wizard-desktop-summary-hint-gap: 3px;
-      --wizard-desktop-summary-grid-top: 8px;
-      --wizard-desktop-summary-section-gap: 8px;
-      --wizard-desktop-summary-section-icon: 40px;
-      --wizard-desktop-summary-section-inner-gap: 6px;
-      --wizard-desktop-summary-title-to-list: 1px;
-      --wizard-desktop-summary-item-gap: 0;
-    }
-  }
-
+/* Mockup-Layout (Wheel + Karte): Tablet und Desktop – Maße über --wizard-desktop-* */
+@media (min-width: 521px) {
   body.wizard-on-step0 > div.w-screen,
   body.wizard-nav-visible > div.w-screen,
   body:has(#step0:not(.hidden)) > div.w-screen {
@@ -1816,24 +1824,6 @@ header h1,
   display: flex;
 }
 
-@media (min-width: 521px) and (max-width: 1024px) {
-  #step0:not(.hidden) > .step0-start-action {
-    justify-content: center;
-    margin-top: 1.25rem;
-    padding-left: 0;
-  }
-
-  #step0:not(.hidden) .step0-start-btn {
-    width: min(320px, 100%);
-    height: 56px;
-    border-radius: 28px;
-    font-size: 18px;
-    font-weight: 700;
-    background-color: #a3be8c;
-    color: #ffffff;
-  }
-}
-
 #step0 .step0-lead {
   font-size: 1rem;
   font-weight: 600;
@@ -1956,8 +1946,8 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   line-height: 1;
 }
 
-/* Schritt-Überschrift soll über den Fragen rechts stehen (Tablet / schmaler Desktop) */
-@media (max-width: 1024px) {
+/* Mobile-Zwischenlayout (nur ≤520px; Tablet nutzt Mockup ab 521px) */
+@media (max-width: 520px) {
   #step1:not(.hidden),
   #step2:not(.hidden),
   #step3:not(.hidden),
@@ -2514,7 +2504,7 @@ body.wizard-wheel-debug .wizard-wheel-jump::after {
   transform: none;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 520px) {
   /* Outer page wrapper from index.html (Tailwind: w-screen px-16 py-12 pb-28) */
   body > div.w-screen {
     padding-left: 1rem !important;

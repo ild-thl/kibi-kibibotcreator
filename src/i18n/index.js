@@ -157,11 +157,17 @@
     return theme === 'dark' ? 'dunkel' : 'hell';
   }
 
-  /** Abgestimmt auf CSS-Breakpoints (1024 / 520). */
+  /**
+   * Abgestimmt auf CSS-Breakpoints:
+   * - mobil: width <= 520
+   * - tablet: width 521–1024 ODER height < 900 (bei width >= 521)
+   * - desktop: width >= 1025 und height >= 900
+   */
   function viewportVariant() {
     var w = typeof window.innerWidth === 'number' ? window.innerWidth : 1280;
+    var h = typeof window.innerHeight === 'number' ? window.innerHeight : 900;
     if (w <= 520) return 'mobil';
-    if (w <= 1024) return 'tablet';
+    if (w <= 1024 || h < 900) return 'tablet';
     return 'desktop';
   }
 
