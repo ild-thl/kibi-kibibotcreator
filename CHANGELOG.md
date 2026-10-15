@@ -5,6 +5,28 @@ Alle wesentlichen Änderungen an diesem Projekt werden in dieser Datei dokumenti
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
 
+## [Unreleased]
+
+**Breakpoint-Umbau: Tablet = bisheriger Kompakt-Desktop**
+
+### Geändert
+
+- Viewport-Varianten neu definiert:
+  - **Mobile:** `max-width: 520px` (unverändert, Einspalten-Layout)
+  - **Tablet:** `min-width: 521px` und (`max-width: 1024px` **oder** `max-height: 899px`) – Darstellung wie der bisherige Kompakt-Desktop (Wheel + Karte)
+  - **Desktop:** `min-width: 1025px` und `min-height: 900px` – bisheriger Desktop normal
+- Mockup-Layout (Wheel links, Karte rechts) gilt ab **521px** Breite; Maße über `--wizard-desktop-*`
+- Altes Zwischenlayout für 521–1024px entfernt (nur noch Mobile ≤520px)
+- Kein Portrait-Sonderfall für Tablet (bei schmalen Breiten ggf. horizontales Scrollen)
+- `viewportVariant()` (i18n) berücksichtigt Viewport-Höhe (`tablet` bei Höhe &lt; 900px)
+- Summary: Mockup-Grid (Desktop-Renderer) ab 521px; Mobile bleibt paginiert
+
+### Technisch
+
+- Betroffene Dateien: `styles/styles.css`, `src/i18n/index.js`, `src/wizard/summary-mobile.js`
+
+---
+
 ## [v0.2.1-rc.1] – 2026-07-07
 
 **Zweiter Prototyp – Nachbesserungen (Release-Candidate)**
@@ -24,8 +46,7 @@ Kleiner Patch-Release auf Basis von `v0.2.0-rc.1` mit Layout- und Theme-Korrektu
 
 ### Technisch
 
-- 3 Commits seit `v0.2.0-rc.1`
-- HEAD: `2651d4f`
+- 3 Commits seit `v0.2.0-rc.1` (Stand Tag: `2651d4f`; CHANGELOG-Commit: `10635cc`)
 
 ---
 
@@ -42,7 +63,7 @@ Großes Feature- und Design-Update seit dem ersten Prototypen: vollständige Mob
 - **Mobile Ansicht** für alle Schritte (0–8) inkl. Paginierung
 - **Swipe-Navigation** zwischen Schritten mit Hinweis-Animation (blendet nach 3 Sekunden aus)
 - **Desktop-Mockup** ab 1025px Viewport-Breite (Wheel links, Karten-Layout rechts)
-- **Kompakt-Desktop-Modus** für geringe Viewport-Höhen (z. B. 150 %-Windows-Skalierung)
+- **Kompakt-Desktop-Modus** für geringe Viewport-Höhen (z. B. 150 %-Windows-Skalierung; später zur Tablet-Variante weiterentwickelt, siehe Unreleased)
 - **Neue Zusammenfassung (Schritt 9):** Desktop-Layout mit Chat-Animation und Summary-Karte; mobile paginierte Ansicht mit Icons
 - **Zwischenseite** zwischen Schritt 8 und Zusammenfassung (Bridge: Zusammenfassung oder Umfrage)
 - **Schritt 8:** Neue Avatar-Bilder (Mensch, Roboter, Eule; je 4 Farbvarianten), Varianten-Picker, Option „Kein Avatar-Bild“ (KIBI-38)
@@ -106,3 +127,4 @@ Großes Feature- und Design-Update seit dem ersten Prototypen: vollständige Mob
 | `v0.1.0-rc.1` | 2026-04-17 | Erster Prototyp |
 | `v0.2.0-rc.1` | 2026-07-03 | Zweiter Prototyp |
 | `v0.2.1-rc.1` | 2026-07-07 | Patch auf v0.2.0-rc.1 (Layout/Theme-Fixes) |
+| *(Unreleased)* | 2026-10-15 | Tablet = Kompakt-Desktop Breakpoints |
