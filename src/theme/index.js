@@ -1,7 +1,7 @@
 ;(function () {
   var SUPPORTED = ['light', 'dark'];
   var STORAGE_KEY = 'wizard.theme';
-  var DEFAULT_THEME = 'light';
+  var DEFAULT_THEME = 'dark';
 
   var theme = DEFAULT_THEME;
   var listeners = [];
