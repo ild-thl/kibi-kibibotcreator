@@ -404,10 +404,60 @@
     return Math.min(tf - 1, Math.max(skip + 1, Math.ceil(maxOp)));
   }
 
+  /** Ob im Schritt mindestens ein Animations-relevantes Feld gesetzt ist. */
+  function stepHasAnyFieldSelection(step, state) {
+    var fields = STEP_FIELDS[step];
+    if (!fields || !fields.length || !state) return false;
+    for (var i = 0; i < fields.length; i++) {
+      if (valueSlugFromState(state, fields[i]) != null) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Schritt 4 ohne eigene Auswahl: zuletzt gezeigte Schritt-3-Medien weiterverwenden
+   * (kein Übergang, kein Leeren des Centers).
+   */
+  function urlsForStep3CarryOverOnStep4(state) {
+    var urls = [];
+    var fp3 = stepWheelFingerprint(3, state);
+    var completed = completedStepSelectionWheelCache[3];
+    if (completed && completed.url && completed.fp === fp3 && !isKnownMissingMedia(completed.url)) {
+      urls.push(completed.url);
+    }
+    var cached = lastWheelMediaByStep[3];
+    if (cached && cached.url && cached.fp === fp3 && !isKnownMissingMedia(cached.url)) {
+      urls = appendUniqueWheelUrls(urls, [cached.url]);
+    }
+    return appendUniqueWheelUrls(urls, restoreStepWheelCandidates(3, state));
+  }
+
+  /** Hold-Frame / SVG-Klon von Schritt 3 im aktiven Wheel belassen (ohne Transition). */
+  function holdStep3VisualOnActiveWheel() {
+    var wrap = getActiveWheelAvatar();
+    if (!wrap) return;
+    abortPendingInWrap(wrap);
+    if (completedStepWheelSvgClone[3]) {
+      removeHoldFramesFromWrap(wrap);
+      var ch = document.createElement('div');
+      ch.className = 'wheel-center-hold-frame';
+      ch.setAttribute('aria-hidden', 'true');
+      ch.appendChild(completedStepWheelSvgClone[3].cloneNode(true));
+      wrap.appendChild(ch);
+      var imgHold = wrap.querySelector('img');
+      if (imgHold) imgHold.style.display = 'none';
+      return;
+    }
+    injectHoldFrame(wrap, 3, 4);
+  }
+
   /** Schritte ohne eigene Wheel-Auswahl-Grafiken: nach Übergang nur innenkreis zeigen. */
   function shouldClearWheelAfterTransition(state) {
     var step = state && state.currentStep;
-    return step != null && step >= 3 && step <= 7;
+    if (step == null) return false;
+    /* Schritt 4: Schritt-3-Grafik behalten, solange in Schritt 4 nichts gewählt wurde. */
+    if (step === 4 && !stepHasAnyFieldSelection(4, state)) return false;
+    return step >= 3 && step <= 7;
   }
 
   /** Nur innenkreis-Hintergrund (::before), kein Platzhalter-Bild oder Lottie-Rest. */
@@ -794,7 +844,8 @@
       removeHoldFramesFromWrap(root.parentNode);
       instances.forEach(destroyInstance);
       instances = [];
-      document.querySelectorAll('.wheel-center-lottie').forEach(function (el) {
+      /* Nur im eigenen Wheel aufräumen – sonst löschen späte Reveals anderer Steps das aktuelle Bild. */
+      wrap.querySelectorAll('.wheel-center-lottie').forEach(function (el) {
         if (el !== root) el.remove();
       });
       root.classList.remove('wheel-center-lottie--pending');
@@ -1089,6 +1140,8 @@
       if (!isTransitionWheelUrl(url)) return;
       advanceToSelectionAfterTransition();
       if (chainAdvanced) return;
+      /* Nur das Wheel leeren, das noch aktiv ist – nicht ein altes Wrap nach Step-Sprung. */
+      if (wrap !== getActiveWheelAvatar()) return;
       if (shouldClearWheelAfterTransition(state)) {
         clearWheelCenterToInnenkreis(wrap);
       }
@@ -1154,7 +1207,8 @@
       });
       instances = [anim];
 
-      document.querySelectorAll('.wheel-center-lottie').forEach(function (el) {
+      /* Nur im eigenen Wheel aufräumen – späte Reveals anderer Steps dürfen das aktuelle Bild nicht löschen. */
+      wrap.querySelectorAll('.wheel-center-lottie').forEach(function (el) {
         if (el !== root) el.remove();
       });
 
@@ -1505,6 +1559,28 @@
       return;
     }
     if (shouldSkipWheelAnimations(state)) return;
+
+    /*
+     * Schritt 4 ohne eigene Auswahl: immer letzten Stand aus Schritt 3 zeigen
+     * (kein animierter Übergang 3→4 / kein generisches to-step-04).
+     */
+    if (cur === 4 && !stepHasAnyFieldSelection(4, state)) {
+      /* Offene Plays von Zwischenschritten (Sprung 1→4 via while-updateUI) abbrechen. */
+      instances.forEach(destroyInstance);
+      instances = [];
+      document.querySelectorAll('.wheel-center-lottie--pending').forEach(function (el) {
+        el.remove();
+      });
+      var carryUrls = urlsForStep3CarryOverOnStep4(state);
+      wheelAnimDebug('step4_carry_step3', { from: from, urls: carryUrls });
+      if (carryUrls.length) {
+        playCandidateUrls(state, carryUrls, 3);
+      } else {
+        holdStep3VisualOnActiveWheel();
+      }
+      return;
+    }
+
     dropCompletedStepWheelCacheIfStale(cur, state);
     var prefUrls = [];
     var fpNow = stepWheelFingerprint(cur, state);
@@ -1538,6 +1614,10 @@
     }
     var restoreUrls = restoreStepWheelCandidates(cur, state);
     var transUrls = transitionCandidates(from, cur, state);
+    /* Kein animierter Übergang von Schritt 3 nach 4. */
+    if (from === 3 && cur === 4) {
+      transUrls = [];
+    }
     var selectionUrls = appendUniqueWheelUrls(appendUniqueWheelUrls([], prefUrls), restoreUrls);
     var urls;
     /*
@@ -1550,6 +1630,10 @@
       urls = selectionUrls;
     } else {
       urls = transUrls;
+    }
+    if (!urls.length && cur === 4) {
+      holdStep3VisualOnActiveWheel();
+      return;
     }
     playCandidateUrls(state, urls, from);
   }
