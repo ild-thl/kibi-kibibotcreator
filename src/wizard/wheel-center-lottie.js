@@ -314,26 +314,52 @@
   }
 
   function isTransitionWheelUrl(url) {
-    return typeof url === 'string' && url.indexOf(BASE + 'transitions/') === 0;
+    if (typeof url !== 'string') return false;
+    /* Step-interne Morphs (sel-from-…-to-…) wie transitions/ verkettbar zum Endzustand. */
+    return url.indexOf(BASE + 'transitions/') === 0 || url.indexOf('/sel-from-') !== -1;
   }
 
-  /** Gibt es nach dem aktuellen Kandidaten noch Step-Auswahl-Medien (sel-… unter step-NN/)? */
+  /** Endzustand-Auswahl (sel-…), nicht Morph (sel-from-…) und nicht transitions/. */
+  function isFinalStepSelectionWheelUrl(u) {
+    return (
+      typeof u === 'string' &&
+      u.indexOf('/step-') !== -1 &&
+      u.indexOf('/sel-') !== -1 &&
+      u.indexOf('/sel-from-') === -1
+    );
+  }
+
+  /** Gibt es nach dem aktuellen Kandidaten noch Step-Endzustand-Medien (sel-…, kein sel-from-)? */
   function hasStepSelectionCandidatesAfter(urls, index) {
     if (!urls || index == null) return false;
     for (var i = index + 1; i < urls.length; i++) {
-      var u = urls[i];
-      if (typeof u !== 'string') continue;
-      if (u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1) return true;
+      if (isFinalStepSelectionWheelUrl(urls[i])) return true;
     }
     return false;
   }
 
+  /** Morph-URL → zugehörige Endzustand-URL (sel-from-…-to-X → sel-X). */
+  function endStateUrlFromMorphUrl(url) {
+    if (!url || typeof url !== 'string') return null;
+    var m = /^(.*\/)sel-from-.+-to-(.+)\.(json|svg)$/i.exec(url);
+    if (!m) return null;
+    return m[1] + 'sel-' + m[2] + '.' + m[3];
+  }
+
   /** Nach erfolgreichem Übergangs-JSON: SVG-Fallbacks desselben Übergangs überspringen. */
   function indexAfterTransitionGroup(urls, fromIndex) {
+    var fromUrl = urls && urls[fromIndex];
+    var fromBase =
+      typeof fromUrl === 'string' && fromUrl.toLowerCase().slice(-5) === '.json'
+        ? fromUrl.slice(0, -5)
+        : null;
     for (var i = fromIndex + 1; i < urls.length; i++) {
       var u = urls[i];
       if (typeof u !== 'string') continue;
       if (u.indexOf(BASE + 'transitions/') === 0) continue;
+      /* SVG-Fallback derselben Morph-/Transition-URL überspringen. */
+      if (fromBase && (u === fromBase + '.svg' || u.indexOf(fromBase + '.') === 0)) continue;
+      if (u.indexOf('/sel-from-') !== -1) continue;
       return i;
     }
     return urls.length;
@@ -344,15 +370,14 @@
     if (!urls || fromIndex == null) return;
     for (var i = fromIndex + 1; i < urls.length; i++) {
       var u = urls[i];
-      if (typeof u !== 'string') continue;
-      if (u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1 && mediaAvailabilityCache[u] === false) {
+      if (isFinalStepSelectionWheelUrl(u) && mediaAvailabilityCache[u] === false) {
         delete mediaAvailabilityCache[u];
       }
     }
   }
 
   function isStepSelectionWheelUrl(u) {
-    return typeof u === 'string' && u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1;
+    return isFinalStepSelectionWheelUrl(u);
   }
 
   function prefetchWheelSvgText(url) {
@@ -455,8 +480,11 @@
   function shouldClearWheelAfterTransition(state) {
     var step = state && state.currentStep;
     if (step == null) return false;
-    /* Schritt 4: Schritt-3-Grafik behalten, solange in Schritt 4 nichts gewählt wurde. */
-    if (step === 4 && !stepHasAnyFieldSelection(4, state)) return false;
+    /*
+     * Schritt 4: entweder Schritt-3-Carry-over oder role+workflow-Animation –
+     * Center nie auf Innenkreis leeren.
+     */
+    if (step === 4) return false;
     return step >= 3 && step <= 7;
   }
 
@@ -584,10 +612,79 @@
     lastResolvedWheelMedia = { step: stepNum, base: base, url: url };
   }
 
+  /**
+   * Schritt 4: Wheel hängt an Rolle (Schritt 3) + Arbeitsweise (oben).
+   * Beispiele (unten) beeinflussen die Animation nicht.
+   */
+  function step4RoleWorkflowBase(state) {
+    if (!state || !state.role || !state.interaction_workflow) return null;
+    return 'role-' + slugify(state.role) + '__workflow-' + slugify(state.interaction_workflow);
+  }
+
+  function step4SelectionCandidates(state, meta) {
+    var roleSlug = state && state.role ? slugify(state.role) : null;
+    if (!roleSlug) return [];
+    if (meta && meta.field && meta.field !== 'interaction_workflow') return [];
+
+    var prefix = BASE + 'step-04/';
+    var nextWf = state && state.interaction_workflow ? slugify(state.interaction_workflow) : null;
+    if (!nextWf && meta && meta.value) nextWf = slugify(meta.value);
+    if (!nextWf) return [];
+
+    var seen = {};
+    var out = [];
+    function push(u) {
+      if (!u || seen[u]) return;
+      seen[u] = true;
+      out.push(u);
+    }
+
+    if (meta && Object.prototype.hasOwnProperty.call(meta, 'previousValue')) {
+      var prevWf =
+        meta.previousValue == null || meta.previousValue === ''
+          ? null
+          : slugify(meta.previousValue);
+      if (prevWf && prevWf !== nextWf) {
+        /* Umschalten: nur Morph – Endzustand steckt bereits im Morph, kein zweites Intro. */
+        push(
+          prefix +
+            'sel-from-role-' +
+            roleSlug +
+            '__workflow-' +
+            prevWf +
+            '-to-role-' +
+            roleSlug +
+            '__workflow-' +
+            nextWf +
+            '.json'
+        );
+        return out;
+      }
+    }
+
+    /* Erste Auswahl der Arbeitsweise: Endzustand-Animation. */
+    push(prefix + 'sel-role-' + roleSlug + '__workflow-' + nextWf + '.json');
+    return out;
+  }
+
+  function step4RestoreCandidates(state) {
+    var base = step4RoleWorkflowBase(state);
+    if (!base) return [];
+    return [BASE + 'step-04/sel-' + base + '.json'];
+  }
+
   /** Fingerprint der Auswahl für einen Schritt (gleiche Auswahl → gleiche „letzte“ Grafik wieder möglich). */
   function stepWheelFingerprint(step, state) {
     if (!state) return '';
     if (step === 0) return '0|start';
+    if (step === 4) {
+      return (
+        '4|role-' +
+        (state.role ? slugify(state.role) : '') +
+        '|workflow-' +
+        (state.interaction_workflow ? slugify(state.interaction_workflow) : '')
+      );
+    }
     var base = canonicalSelBase(state, step) || '';
     if (step === 1) {
       /* Kein JSON.stringify(help_context): Array-Reihenfolge kann wechseln, canonicalSelBase nutzt ohnehin sortierte Slugs. */
@@ -604,16 +701,33 @@
     return url.indexOf(seg) !== -1 && url.indexOf('/sel-') !== -1;
   }
 
+  /** Endzustand-Auswahl (kein sel-from-Morph, keine transitions/). */
+  function isStepFolderFinalSelectionUrl(stepNum, url) {
+    if (!isStepFolderSelectionUrl(stepNum, url)) return false;
+    return url.indexOf('/sel-from-') === -1;
+  }
+
   /** Nur Step-Auswahl (oder Schritt-0-Start) cachen – keine Übergangs-JSONs. */
   function isWheelStepMediaCacheableUrl(stepNum, url) {
     if (!url || typeof url !== 'string') return false;
     if (stepNum === 0) return true;
     if (url.indexOf('/transitions/') !== -1) return false;
-    return isStepFolderSelectionUrl(stepNum, url);
+    return isStepFolderFinalSelectionUrl(stepNum, url);
   }
 
   function rememberLastWheelMediaForStep(stepNum, state, url) {
     if (stepNum == null || !state || !url) return;
+    /*
+     * Schritt-4-Morph endet bereits im Zielzustand: als Cache den statischen
+     * Endzustand merken (nicht die Morph-URL), damit kein zweites Intro folgt.
+     */
+    if (stepNum === 4 && url.indexOf('/sel-from-') !== -1) {
+      var endUrl = step4RestoreCandidates(state)[0];
+      if (endUrl) {
+        lastWheelMediaByStep[4] = { url: endUrl, fp: stepWheelFingerprint(4, state) };
+      }
+      return;
+    }
     if (!isWheelStepMediaCacheableUrl(stepNum, url)) return;
     lastWheelMediaByStep[stepNum] = { url: url, fp: stepWheelFingerprint(stepNum, state) };
   }
@@ -635,7 +749,7 @@
    */
   function rememberCompletedStepWheelVisual(stepNum, state, url, rootEl) {
     if (stepNum == null || !state || !url || !rootEl) return;
-    if (!isStepFolderSelectionUrl(stepNum, url)) return;
+    if (!isStepFolderFinalSelectionUrl(stepNum, url)) return;
     if (!window.WizardValidation || typeof window.WizardValidation.isStepValid !== 'function') return;
     if (!window.WizardValidation.isStepValid(state, stepNum)) return;
     completedStepSelectionWheelCache[stepNum] = { url: url, fp: stepWheelFingerprint(stepNum, state) };
@@ -970,7 +1084,7 @@
     for (var i = 0; i < urls.length; i++) {
       var u = urls[i];
       if (typeof u !== 'string') continue;
-      if (u.indexOf(BASE + 'transitions/') === 0) {
+      if (u.indexOf(BASE + 'transitions/') === 0 || u.indexOf('/sel-from-') !== -1) {
         return hasStepSelectionCandidatesAfter(urls, i);
       }
       if (u.indexOf('/step-') !== -1 && u.indexOf('/sel-') !== -1) return false;
@@ -1140,6 +1254,20 @@
       if (!isTransitionWheelUrl(url)) return;
       advanceToSelectionAfterTransition();
       if (chainAdvanced) return;
+      /* Morph ohne Folge-Auswahl: auf letztem Frame stehen bleiben (kein Tear-down). */
+      if (url.indexOf('/sel-from-') !== -1) {
+        try {
+          if (anim && typeof anim.goToAndStop === 'function') {
+            var holdTf = anim.totalFrames;
+            if (holdTf > 0) anim.goToAndStop(holdTf - 1, true);
+          }
+        } catch (eHold) {}
+        if (wrap === getActiveWheelAvatar() && root) {
+          var endUrl = endStateUrlFromMorphUrl(url);
+          if (endUrl) rememberCompletedStepWheelVisual(state.currentStep, state, endUrl, root);
+        }
+        return;
+      }
       /* Nur das Wheel leeren, das noch aktiv ist – nicht ein altes Wrap nach Step-Sprung. */
       if (wrap !== getActiveWheelAvatar()) return;
       if (shouldClearWheelAfterTransition(state)) {
@@ -1341,6 +1469,7 @@
 
   function selectionCandidates(step, state, meta) {
     if (meta.isMulti && meta.added === false) return [];
+    if (step === 4) return step4SelectionCandidates(state, meta);
     var fields = STEP_FIELDS[step];
     if (!fields || fields.indexOf(meta.field) < 0) return [];
 
@@ -1441,6 +1570,7 @@
    * (z. B. wenn der Nutzer später wieder auf den Schritt springt – passend zur Auswahl).
    */
   function restoreStepWheelCandidates(step, state) {
+    if (step === 4) return step4RestoreCandidates(state);
     var fields = STEP_FIELDS[step];
     if (!fields || !fields.length || !state) return [];
 
@@ -1561,10 +1691,11 @@
     if (shouldSkipWheelAnimations(state)) return;
 
     /*
-     * Schritt 4 ohne eigene Auswahl: immer letzten Stand aus Schritt 3 zeigen
+     * Schritt 4 ohne Arbeitsweise: immer letzten Stand aus Schritt 3 zeigen
      * (kein animierter Übergang 3→4 / kein generisches to-step-04).
+     * Sobald interaction_workflow gesetzt ist: role+workflow-Animation (siehe restore unten).
      */
-    if (cur === 4 && !stepHasAnyFieldSelection(4, state)) {
+    if (cur === 4 && !state.interaction_workflow) {
       /* Offene Plays von Zwischenschritten (Sprung 1→4 via while-updateUI) abbrechen. */
       instances.forEach(destroyInstance);
       instances = [];
