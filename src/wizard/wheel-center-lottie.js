@@ -614,14 +614,59 @@
 
   /**
    * Schritt 4: Wheel hängt an Rolle (Schritt 3) + Arbeitsweise (oben).
-   * Beispiele (unten) beeinflussen die Animation nicht.
+   * Beispiele (unten): Morph beim Wechsel zwischen den drei Optionen.
    */
   function step4RoleWorkflowBase(state) {
     if (!state || !state.role || !state.interaction_workflow) return null;
     return 'role-' + slugify(state.role) + '__workflow-' + slugify(state.interaction_workflow);
   }
 
+  /** Morph-Kandidaten für „Soll Dein Avatar mit Beispielen arbeiten?“ (unabhängig von Rolle). */
+  function step4ExamplesSelectionCandidates(state, meta) {
+    var prefix = BASE + 'step-04/';
+    var nextEx =
+      state && state.interaction_examples ? slugify(state.interaction_examples) : null;
+    if (!nextEx && meta && meta.value) nextEx = slugify(meta.value);
+    if (!nextEx) return [];
+
+    var seen = {};
+    var out = [];
+    function push(u) {
+      if (!u || seen[u]) return;
+      seen[u] = true;
+      out.push(u);
+    }
+
+    if (meta && Object.prototype.hasOwnProperty.call(meta, 'previousValue')) {
+      var prevEx =
+        meta.previousValue == null || meta.previousValue === ''
+          ? null
+          : slugify(meta.previousValue);
+      if (prevEx && prevEx !== nextEx) {
+        push(
+          prefix +
+            'sel-from-examples-' +
+            prevEx +
+            '-to-examples-' +
+            nextEx +
+            '.json'
+        );
+        return out;
+      }
+    }
+
+    /*
+     * Erste Beispiele-Auswahl: keine eigenen Endzustand-JSONs – aktuelles Wheel behalten
+     * (Rolle/Workflow bzw. Schritt-3-Carry-over). Morphs greifen erst beim Umschalten.
+     */
+    return out;
+  }
+
   function step4SelectionCandidates(state, meta) {
+    if (meta && meta.field === 'interaction_examples') {
+      return step4ExamplesSelectionCandidates(state, meta);
+    }
+
     var roleSlug = state && state.role ? slugify(state.role) : null;
     if (!roleSlug) return [];
     if (meta && meta.field && meta.field !== 'interaction_workflow') return [];
@@ -682,7 +727,9 @@
         '4|role-' +
         (state.role ? slugify(state.role) : '') +
         '|workflow-' +
-        (state.interaction_workflow ? slugify(state.interaction_workflow) : '')
+        (state.interaction_workflow ? slugify(state.interaction_workflow) : '') +
+        '|examples-' +
+        (state.interaction_examples ? slugify(state.interaction_examples) : '')
       );
     }
     var base = canonicalSelBase(state, step) || '';
