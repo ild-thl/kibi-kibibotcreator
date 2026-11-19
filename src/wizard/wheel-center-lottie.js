@@ -1523,6 +1523,13 @@
           BASE + 'transitions/from-step-' + pad2(fromStep) + '-sel-' + canonBase23 + '-to-step-' + pad2(toStep) + '.json'
         );
       }
+    } else if (fromStep === 4 && toStep === 5 && state) {
+      var canonBase45 = canonicalSelBase(state, 4);
+      if (canonBase45) {
+        pushContext(
+          BASE + 'transitions/from-step-' + pad2(fromStep) + '-sel-' + canonBase45 + '-to-step-' + pad2(toStep) + '.json'
+        );
+      }
     } else if (fromStep !== 0 && lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
       pushContext(
         BASE +
