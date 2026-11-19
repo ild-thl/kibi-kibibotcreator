@@ -621,6 +621,29 @@
     return 'role-' + slugify(state.role) + '__workflow-' + slugify(state.interaction_workflow);
   }
 
+  function step4ExamplesEndUrl(examplesSlug) {
+    if (!examplesSlug) return null;
+    return BASE + 'step-04/sel-examples-' + examplesSlug + '.svg';
+  }
+
+  /** Endzustand-URL nach Schritt-4-Morph (Beispiele → SVG, Workflow → sel-JSON). */
+  function step4MorphEndStateUrl(morphUrl, state) {
+    if (!morphUrl || typeof morphUrl !== 'string') return null;
+    if (morphUrl.indexOf('/sel-from-examples-') !== -1) {
+      var fromMorph = endStateUrlFromMorphUrl(morphUrl);
+      if (fromMorph) return fromMorph.replace(/\.json$/i, '.svg');
+      if (state && state.interaction_examples) {
+        return step4ExamplesEndUrl(slugify(state.interaction_examples));
+      }
+      return null;
+    }
+    var fromWf = endStateUrlFromMorphUrl(morphUrl);
+    if (fromWf) return fromWf;
+    return step4RoleWorkflowBase(state)
+      ? BASE + 'step-04/sel-' + step4RoleWorkflowBase(state) + '.json'
+      : null;
+  }
+
   /** Morph-Kandidaten für „Soll Dein Avatar mit Beispielen arbeiten?“ (unabhängig von Rolle). */
   function step4ExamplesSelectionCandidates(state, meta) {
     var prefix = BASE + 'step-04/';
@@ -655,10 +678,8 @@
       }
     }
 
-    /*
-     * Erste Beispiele-Auswahl: keine eigenen Endzustand-JSONs – aktuelles Wheel behalten
-     * (Rolle/Workflow bzw. Schritt-3-Carry-over). Morphs greifen erst beim Umschalten.
-     */
+    /* Erste Beispiele-Auswahl: statischer Endzustand (SVG). */
+    push(step4ExamplesEndUrl(nextEx));
     return out;
   }
 
@@ -713,9 +734,14 @@
   }
 
   function step4RestoreCandidates(state) {
+    var out = [];
+    if (state && state.interaction_examples) {
+      var exUrl = step4ExamplesEndUrl(slugify(state.interaction_examples));
+      if (exUrl) out.push(exUrl);
+    }
     var base = step4RoleWorkflowBase(state);
-    if (!base) return [];
-    return [BASE + 'step-04/sel-' + base + '.json'];
+    if (base) out.push(BASE + 'step-04/sel-' + base + '.json');
+    return out;
   }
 
   /** Fingerprint der Auswahl für einen Schritt (gleiche Auswahl → gleiche „letzte“ Grafik wieder möglich). */
@@ -769,7 +795,7 @@
      * Endzustand merken (nicht die Morph-URL), damit kein zweites Intro folgt.
      */
     if (stepNum === 4 && url.indexOf('/sel-from-') !== -1) {
-      var endUrl = step4RestoreCandidates(state)[0];
+      var endUrl = step4MorphEndStateUrl(url, state);
       if (endUrl) {
         lastWheelMediaByStep[4] = { url: endUrl, fp: stepWheelFingerprint(4, state) };
       }
@@ -1310,7 +1336,10 @@
           }
         } catch (eHold) {}
         if (wrap === getActiveWheelAvatar() && root) {
-          var endUrl = endStateUrlFromMorphUrl(url);
+          var endUrl =
+            state.currentStep === 4
+              ? step4MorphEndStateUrl(url, state)
+              : endStateUrlFromMorphUrl(url);
           if (endUrl) rememberCompletedStepWheelVisual(state.currentStep, state, endUrl, root);
         }
         return;
