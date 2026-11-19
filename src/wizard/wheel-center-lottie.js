@@ -613,12 +613,26 @@
   }
 
   /**
-   * Schritt 4: Wheel hängt an Rolle (Schritt 3) + Arbeitsweise (oben).
-   * Beispiele (unten): Morph beim Wechsel zwischen den drei Optionen.
+   * Schritt 4: Rolle (Schritt 3) + Arbeitsweise (oben) + optional Beispiele (unten).
+   * Gemeinsame Auswahl → Kombi-SVG sel-role-…__workflow-…__examples-….svg
    */
   function step4RoleWorkflowBase(state) {
     if (!state || !state.role || !state.interaction_workflow) return null;
     return 'role-' + slugify(state.role) + '__workflow-' + slugify(state.interaction_workflow);
+  }
+
+  function step4RoleWorkflowExamplesBase(state, workflowSlug, examplesSlug) {
+    var roleSlug = state && state.role ? slugify(state.role) : null;
+    var wf = workflowSlug || (state && state.interaction_workflow ? slugify(state.interaction_workflow) : null);
+    var ex = examplesSlug || (state && state.interaction_examples ? slugify(state.interaction_examples) : null);
+    if (!roleSlug || !wf || !ex) return null;
+    return 'role-' + roleSlug + '__workflow-' + wf + '__examples-' + ex;
+  }
+
+  function step4CombinedEndUrl(state, workflowSlug, examplesSlug) {
+    var base = step4RoleWorkflowExamplesBase(state, workflowSlug, examplesSlug);
+    if (!base) return null;
+    return BASE + 'step-04/sel-' + base + '.svg';
   }
 
   function step4ExamplesEndUrl(examplesSlug) {
@@ -626,9 +640,18 @@
     return BASE + 'step-04/sel-examples-' + examplesSlug + '.svg';
   }
 
-  /** Endzustand-URL nach Schritt-4-Morph (Beispiele → SVG, Workflow → sel-JSON). */
+  function step4RoleWorkflowEndUrl(state, workflowSlug) {
+    var roleSlug = state && state.role ? slugify(state.role) : null;
+    var wf = workflowSlug || (state && state.interaction_workflow ? slugify(state.interaction_workflow) : null);
+    if (!roleSlug || !wf) return null;
+    return BASE + 'step-04/sel-role-' + roleSlug + '__workflow-' + wf + '.json';
+  }
+
+  /** Endzustand-URL nach Schritt-4-Morph (Kombi-SVG wenn oben+unten gesetzt). */
   function step4MorphEndStateUrl(morphUrl, state) {
     if (!morphUrl || typeof morphUrl !== 'string') return null;
+    var combined = step4CombinedEndUrl(state);
+    if (combined) return combined;
     if (morphUrl.indexOf('/sel-from-examples-') !== -1) {
       var fromMorph = endStateUrlFromMorphUrl(morphUrl);
       if (fromMorph) return fromMorph.replace(/\.json$/i, '.svg');
@@ -639,9 +662,7 @@
     }
     var fromWf = endStateUrlFromMorphUrl(morphUrl);
     if (fromWf) return fromWf;
-    return step4RoleWorkflowBase(state)
-      ? BASE + 'step-04/sel-' + step4RoleWorkflowBase(state) + '.json'
-      : null;
+    return step4RoleWorkflowEndUrl(state);
   }
 
   /** Morph-Kandidaten für „Soll Dein Avatar mit Beispielen arbeiten?“ (unabhängig von Rolle). */
@@ -660,6 +681,8 @@
       out.push(u);
     }
 
+    var combined = step4CombinedEndUrl(state, null, nextEx);
+
     if (meta && Object.prototype.hasOwnProperty.call(meta, 'previousValue')) {
       var prevEx =
         meta.previousValue == null || meta.previousValue === ''
@@ -674,11 +697,17 @@
             nextEx +
             '.json'
         );
+        /* Nach Morph: Kombi-Endzustand, falls Arbeitsweise bereits gewählt. */
+        if (combined) push(combined);
         return out;
       }
     }
 
-    /* Erste Beispiele-Auswahl: statischer Endzustand (SVG). */
+    /* Erste Beispiele-Auswahl: Kombi-SVG wenn Workflow gesetzt, sonst nur Beispiele-SVG. */
+    if (combined) {
+      push(combined);
+      return out;
+    }
     push(step4ExamplesEndUrl(nextEx));
     return out;
   }
@@ -705,13 +734,14 @@
       out.push(u);
     }
 
+    var combined = step4CombinedEndUrl(state, nextWf, null);
+
     if (meta && Object.prototype.hasOwnProperty.call(meta, 'previousValue')) {
       var prevWf =
         meta.previousValue == null || meta.previousValue === ''
           ? null
           : slugify(meta.previousValue);
       if (prevWf && prevWf !== nextWf) {
-        /* Umschalten: nur Morph – Endzustand steckt bereits im Morph, kein zweites Intro. */
         push(
           prefix +
             'sel-from-role-' +
@@ -724,23 +754,31 @@
             nextWf +
             '.json'
         );
+        /* Nach Morph: Kombi-Endzustand, falls Beispiele bereits gewählt. */
+        if (combined) push(combined);
         return out;
       }
     }
 
-    /* Erste Auswahl der Arbeitsweise: Endzustand-Animation. */
-    push(prefix + 'sel-role-' + roleSlug + '__workflow-' + nextWf + '.json');
+    /* Erste Arbeitsweise: Kombi-SVG wenn Beispiele gesetzt, sonst Role+Workflow-Animation. */
+    if (combined) {
+      push(combined);
+      return out;
+    }
+    push(step4RoleWorkflowEndUrl(state, nextWf));
     return out;
   }
 
   function step4RestoreCandidates(state) {
     var out = [];
+    var combined = step4CombinedEndUrl(state);
+    if (combined) out.push(combined);
     if (state && state.interaction_examples) {
       var exUrl = step4ExamplesEndUrl(slugify(state.interaction_examples));
       if (exUrl) out.push(exUrl);
     }
-    var base = step4RoleWorkflowBase(state);
-    if (base) out.push(BASE + 'step-04/sel-' + base + '.json');
+    var wfUrl = step4RoleWorkflowEndUrl(state);
+    if (wfUrl) out.push(wfUrl);
     return out;
   }
 
