@@ -1273,6 +1273,10 @@
 
   function tryPlayIndex(state, urls, index, wrap) {
     if (index >= urls.length) {
+      if (state && state.currentStep === 8) {
+        restoreWheelCenterAvatar(state);
+        return;
+      }
       if (shouldClearWheelAfterTransition(state)) {
         clearWheelCenterToInnenkreis(wrap);
       } else {
@@ -1380,6 +1384,11 @@
               : endStateUrlFromMorphUrl(url);
           if (endUrl) rememberCompletedStepWheelVisual(state.currentStep, state, endUrl, root);
         }
+        return;
+      }
+      /* Schritt 8: nach Übergang Avatar im Wheel zeigen. */
+      if (state && state.currentStep === 8) {
+        if (wrap === getActiveWheelAvatar()) restoreWheelCenterAvatar(state);
         return;
       }
       /* Nur das Wheel leeren, das noch aktiv ist – nicht ein altes Wrap nach Step-Sprung. */
@@ -1580,6 +1589,13 @@
       if (canonBase67) {
         pushContext(
           BASE + 'transitions/from-step-' + pad2(fromStep) + '-sel-' + canonBase67 + '-to-step-' + pad2(toStep) + '.json'
+        );
+      }
+    } else if (fromStep === 7 && toStep === 8 && state) {
+      var canonBase78 = canonicalSelBase(state, 7);
+      if (canonBase78) {
+        pushContext(
+          BASE + 'transitions/from-step-' + pad2(fromStep) + '-sel-' + canonBase78 + '-to-step-' + pad2(toStep) + '.json'
         );
       }
     } else if (fromStep !== 0 && lastResolvedWheelMedia && lastResolvedWheelMedia.step === fromStep && lastResolvedWheelMedia.base) {
@@ -1815,6 +1831,22 @@
       return;
     }
     if (cur === 8) {
+      /*
+       * Schritt 8: zuerst Übergang (z. B. 7→8 je Privacy-Auswahl), danach Avatar.
+       * Ohne passende Transition weiterhin sofort Avatar.
+       */
+      if (
+        from !== 8 &&
+        !shouldSkipWheelAnimations(state) &&
+        !isFileProtocol()
+      ) {
+        var transToAvatar = transitionCandidates(from, 8, state);
+        if (transToAvatar.length) {
+          wheelAnimDebug('step8_transition_then_avatar', { from: from, urls: transToAvatar });
+          playCandidateUrls(state, transToAvatar, from);
+          return;
+        }
+      }
       restoreWheelCenterAvatar(state);
       return;
     }
